@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stitchify – Schedule</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<style>
+:root{
+  --primary:#0c7bb3;--primary-lt:#e8f4fb;
+  --accent:#a75c9a;--accent-lt:#f3e8fb;
+  --gradient:linear-gradient(135deg,#0c7bb3,#a75c9a);
+  --green:#22c55e;--green-soft:#dcfce7;
+  --red:#e74c3c;--red-soft:#fdf0ef;
+  --orange:#f59e0b;--orange-soft:#fff8e8;
+  --white:#fff;--bg:#f4f6fa;--border:#e0e7ef;
+  --text-main:#1a2340;--text-mid:#4a4a6a;--text-light:#9aaac4;
+  --shadow:0 2px 16px rgba(12,123,179,0.07);
+  --shadow-md:0 4px 24px rgba(12,123,179,0.11);
+  --shadow-lg:0 8px 36px rgba(12,123,179,0.15);
+  --radius:16px;--radius-lg:22px;
+  --font-display:'Playfair Display',serif;
+  --font-body:'DM Sans',sans-serif;
+  --font-accent:'Outfit',sans-serif;
+  --tr:all 0.22s ease;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text-main);min-height:100vh}
+
+/* ── UNIFIED HEADER ── */
+.header{
+  background:var(--white);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:56px;gap:16px;
+}
+.brand{font-size:22px;font-weight:700;letter-spacing:1.5px;font-family:var(--font-display);white-space:nowrap;flex-shrink:0}
+.brand-s{color:var(--primary)}.brand-i{color:var(--accent)}
+.header-nav{display:flex;align-items:center;gap:2px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.header-nav::-webkit-scrollbar{display:none}
+.nav-link{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;text-decoration:none;color:var(--text-mid);font-size:12px;font-weight:600;white-space:nowrap;transition:var(--tr)}
+.nav-link i{font-size:13px}
+.nav-link:hover{background:var(--primary-lt);color:var(--primary)}
+.nav-link.active{background:var(--gradient);color:white}
+
+/* ── PAGE HERO ── */
+.page-hero{
+  background:var(--gradient);
+  padding:28px 48px;
+}
+.page-hero h1{font-family:var(--font-display);font-size:28px;font-weight:700;color:#fff}
+.page-hero p{font-size:13px;color:rgba(255,255,255,0.8);margin-top:4px}
+
+/* ── LAYOUT ── */
+.sched-layout{
+  display:grid;
+  grid-template-columns:264px 1fr 260px;
+  gap:16px;
+  padding:24px 32px 48px;
+  max-width:1400px;
+  margin:0 auto;
+  align-items:start;
+}
+
+/* ── CARD ── */
+.card{
+  background:var(--white);border-radius:var(--radius);
+  border:1px solid var(--border);box-shadow:var(--shadow);
+  padding:18px 16px;transition:box-shadow .2s;
+}
+.card:hover{box-shadow:var(--shadow-md)}
+.card-title{
+  font-size:10px;font-weight:800;color:var(--text-light);
+  text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;
+  font-family:var(--font-accent);
+}
+
+/* ── CALENDAR ── */
+.cal-col{display:flex;flex-direction:column;gap:12px}
+.cal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-month-lbl{font-size:15px;font-weight:800;color:var(--text-main);font-family:var(--font-accent)}
+.cal-nav{display:flex;gap:6px}
+.cal-nav button{
+  width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);
+  background:var(--white);cursor:pointer;color:var(--text-mid);font-size:10px;
+  display:flex;align-items:center;justify-content:center;transition:var(--tr);
+}
+.cal-nav button:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.cal-wk{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:4px}
+.cal-wk span{font-size:10px;font-weight:800;color:var(--text-light);padding:3px 0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-day{
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  border-radius:9px;font-size:12px;font-weight:500;cursor:pointer;
+  transition:var(--tr);position:relative;
+}
+.cal-day:hover:not(.empty){background:var(--primary-lt);transform:scale(1.08);z-index:2}
+.cal-day.empty{pointer-events:none;color:var(--text-light);opacity:.4}
+.cal-day.today{background:var(--gradient);color:#fff;font-weight:900;box-shadow:0 3px 10px rgba(12,123,179,.28)}
+.cal-day.has-slot::after{
+  content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
+  width:4px;height:4px;border-radius:50%;background:var(--primary);
+}
+.cal-day.has-busy::after{background:var(--red)}
+.cal-day.has-pickup::after{background:var(--orange)}
+.cal-day.has-free::after{background:var(--green)}
+.cal-day.selected{outline:2.5px solid var(--primary);outline-offset:1px;font-weight:800}
+
+/* Legend */
+.cal-legend{
+  display:flex;flex-direction:column;gap:7px;
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--border);
+}
+.leg-item{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--text-mid)}
+.leg-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.leg-count{
+  margin-left:auto;font-size:11px;font-weight:700;color:var(--text-main);
+  background:var(--bg);padding:2px 8px;border-radius:10px;
+}
+
+/* Add button */
+.add-slot-btn{
+  width:100%;padding:13px;border-radius:14px;
+  background:var(--gradient);border:none;color:#fff;
+  font-size:13px;font-weight:700;cursor:pointer;transition:var(--tr);
+  font-family:var(--font-body);display:flex;align-items:center;justify-content:center;gap:7px;
+}
+.add-slot-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(167,92,154,.32)}
+
+/* ── DAY DETAIL ── */
+.day-detail-card{padding:22px;min-height:440px}
+.dd-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);
+}
+.dd-date-big{font-size:38px;font-weight:900;color:var(--text-main);line-height:1;font-family:var(--font-accent)}
+.dd-month-yr{font-size:12px;color:var(--text-light);font-weight:600;margin-top:4px}
+.dd-today-badge{
+  background:var(--gradient);color:#fff;
+  font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px;
+}
+
+/* Timeline */
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-row{display:flex;gap:14px;min-height:60px;position:relative}
+.tl-row:not(:last-child)::before{
+  content:'';position:absolute;left:38px;top:40px;bottom:0;
+  width:2px;background:var(--border);z-index:0;
+}
+.tl-time{
+  font-size:10px;font-weight:700;color:var(--text-light);
+  width:50px;flex-shrink:0;padding-top:14px;text-align:right;
+}
+.tl-dot-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0;padding-top:11px;z-index:1}
+.tl-dot{
+  width:14px;height:14px;border-radius:50%;border:2px solid var(--white);
+}
+.tl-dot.busy   {background:var(--red);   box-shadow:0 0 0 3px rgba(231,76,60,.14)}
+.tl-dot.free   {background:var(--green); box-shadow:0 0 0 3px rgba(34,197,94,.14)}
+.tl-dot.order  {background:var(--primary);box-shadow:0 0 0 3px rgba(12,123,179,.14)}
+.tl-dot.pickup {background:var(--orange);box-shadow:0 0 0 3px rgba(245,158,11,.14)}
+.tl-content{
+  flex:1;padding:9px 14px 9px 12px;border-radius:12px;
+  margin-bottom:9px;cursor:pointer;transition:var(--tr);position:relative;
+}
+.tl-content:hover{transform:translateX(4px);box-shadow:var(--shadow-md)}
+.tl-content.busy  {background:var(--red-soft);  border-left:3px solid var(--red)}
+.tl-content.free  {background:var(--green-soft); border-left:3px solid var(--green)}
+.tl-content.order {background:var(--primary-lt); border-left:3px solid var(--primary)}
+.tl-content.pickup{background:var(--orange-soft);border-left:3px solid var(--orange)}
+.tl-label{font-size:13px;font-weight:700;color:var(--text-main)}
+.tl-sub  {font-size:11px;color:var(--text-mid);margin-top:2px}
+.tl-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px;margin-top:6px;
+}
+.tl-badge.busy  {background:#fde8e8;color:var(--red)}
+.tl-badge.free  {background:#d5f5e3;color:#16a34a}
+.tl-badge.order {background:#d6eaf8;color:var(--primary)}
+.tl-badge.pickup{background:#fef3e2;color:#b45309}
+.tl-del{
+  position:absolute;right:10px;top:10px;
+  width:22px;height:22px;border-radius:6px;
+  background:transparent;border:none;cursor:pointer;
+  color:var(--text-light);font-size:11px;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:var(--tr);
+}
+.tl-content:hover .tl-del{opacity:1}
+.tl-del:hover{background:#fee2e2;color:var(--red)}
+
+/* Empty state */
+.empty-state{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;min-height:280px;gap:10px;text-align:center;
+}
+.empty-state i{font-size:40px;color:var(--text-light);opacity:.4}
+.empty-state p{font-size:14px;font-weight:700;color:var(--text-mid)}
+.empty-state span{font-size:12px;color:var(--text-light);line-height:1.6}
+
+/* ── RIGHT COLUMN ── */
+.right-col{display:flex;flex-direction:column;gap:14px}
+
+/* Summary stats */
+.sum-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.sum-row:last-child{border-bottom:none}
+.sum-label{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;color:var(--text-main)}
+.sum-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.sum-val{font-size:18px;font-weight:900;color:var(--text-main);font-family:var(--font-accent)}
+
+/* Upcoming list */
+.upcoming-list{display:flex;flex-direction:column;gap:8px}
+.up-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:12px;
+  background:var(--bg);border:1px solid var(--border);
+  border-left:3px solid var(--border);transition:var(--tr);
+}
+.up-item:hover{background:var(--white);box-shadow:var(--shadow-md);transform:translateX(2px)}
+.up-item.free  {border-left-color:var(--green)}
+.up-item.busy  {border-left-color:var(--red)}
+.up-item.pickup{border-left-color:var(--orange)}
+.up-item.order {border-left-color:var(--primary)}
+.up-icon{
+  width:34px;height:34px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;
+}
+.up-icon.free  {background:var(--green-soft);color:#16a34a}
+.up-icon.busy  {background:var(--red-soft);color:var(--red)}
+.up-icon.pickup{background:var(--orange-soft);color:#b45309}
+.up-icon.order {background:var(--primary-lt);color:var(--primary)}
+.up-name{font-size:12px;font-weight:700;color:var(--text-main)}
+.up-meta{font-size:10px;color:var(--text-light);margin-top:2px;font-weight:600}
+
+/* ── MODAL ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;background:rgba(26,35,64,.42);
+  z-index:500;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:var(--white);border-radius:var(--radius-lg);
+  padding:24px 26px;width:100%;max-width:420px;
+  box-shadow:0 20px 60px rgba(0,0,0,.18);
+}
+.modal h3{font-size:16px;font-weight:800;color:var(--text-main);margin-bottom:3px}
+.modal-sub{font-size:12px;color:var(--text-light);margin-bottom:18px}
+.m-label{
+  font-size:10px;font-weight:800;color:var(--text-mid);
+  text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px;
+}
+.m-input{
+  width:100%;padding:9px 13px;border:1.5px solid var(--border);
+  border-radius:10px;font-family:var(--font-body);font-size:13px;
+  color:var(--text-main);background:var(--bg);outline:none;
+  margin-bottom:14px;transition:var(--tr);
+}
+.m-input:focus{border-color:var(--primary);background:var(--white);box-shadow:0 0 0 3px rgba(12,123,179,.08)}
+.type-toggle{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.tt-btn{
+  flex:1;padding:8px 4px;border-radius:10px;
+  border:1.5px solid var(--border);background:var(--bg);
+  font-family:var(--font-body);font-size:11px;font-weight:700;
+  cursor:pointer;transition:var(--tr);color:var(--text-mid);white-space:nowrap;min-width:70px;
+}
+.tt-btn:hover:not(.active){border-color:var(--primary);color:var(--primary);background:var(--white)}
+.tt-btn.active.free  {border-color:var(--green);  background:var(--green-soft);  color:#16a34a}
+.tt-btn.active.busy  {border-color:var(--red);    background:var(--red-soft);    color:var(--red)}
+.tt-btn.active.order {border-color:var(--primary);background:var(--primary-lt);  color:var(--primary)}
+.tt-btn.active.pickup{border-color:var(--orange); background:var(--orange-soft); color:#b45309}
+.modal-actions{display:flex;gap:10px;margin-top:4px}
+.btn-cancel{
+  flex:1;padding:11px;border-radius:12px;border:1.5px solid var(--border);
+  background:var(--white);font-family:var(--font-body);font-size:13px;font-weight:700;
+  color:var(--text-mid);cursor:pointer;transition:var(--tr);
+}
+.btn-cancel:hover{background:var(--bg)}
+.btn-save{
+  flex:2;padding:11px;border-radius:12px;border:none;
+  background:var(--gradient);font-family:var(--font-body);font-size:13px;font-weight:700;
+  color:#fff;cursor:pointer;transition:var(--tr);
+}
+.btn-save:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(167,92,154,.3)}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  background:var(--text-main);color:#fff;padding:11px 22px;border-radius:50px;
+  z-index:9999;opacity:0;pointer-events:none;transition:opacity .3s;
+  font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;
+}
+.toast.show{opacity:1}
+
+@media(max-width:1100px){
+  .sched-layout{grid-template-columns:240px 1fr;padding:20px 20px 48px}
+  .right-col{grid-column:1/-1}
+}
+@media(max-width:700px){
+  .header{padding:0 16px}
+  .nav-link span{display:none}
+  .nav-link{padding:6px 10px}
+  .page-hero{padding:24px 20px}
+  .sched-layout{grid-template-columns:1fr;padding:16px 16px 48px}
+}
+</style>
+</head>
+<body>
+
+<!-- Unified Header -->
+<header class="header">
+  <div class="brand"><span class="brand-s">Stitch</span><span class="brand-i">ify</span></div>
+  <nav class="header-nav">
+    <a class="nav-link" href="/tailor"><i class="fas fa-home"></i><span>Home</span></a>
+    <a class="nav-link" href="/tailor/orders"><i class="fas fa-box"></i><span>Orders</span></a>
+    <a class="nav-link" href="/tailor/chat"><i class="fas fa-comment-dots"></i><span>Chat</span></a>
+    <a class="nav-link active" href="/tailor/schedule"><i class="fas fa-calendar"></i><span>Schedule</span></a>
+    <a class="nav-link" href="/tailor/profile"><i class="fas fa-user"></i><span>Profile</span></a>
+  </nav>
+</header>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <h1>Schedule &amp; Availability</h1>
+  <p>Manage your time, slots, and upcoming events</p>
+</div>
+
+<!-- Main Layout -->
+<div class="sched-layout">
+
+  <!-- COL 1: Calendar -->
+  <div class="cal-col">
+    <div class="card">
+      <div class="cal-hdr">
+        <div class="cal-month-lbl" id="cal-lbl"></div>
+        <div class="cal-nav">
+          <button onclick="chgMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+          <button onclick="chgMonth(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+      <div class="cal-wk">
+        <span>S</span><span>M</span><span>T</span><span>W</span>
+        <span>T</span><span>F</span><span>S</span>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div class="cal-legend">
+        <div class="leg-item"><div class="leg-dot" style="background:var(--gradient)"></div><span>Today</span></div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div><span>Available</span><span class="leg-count" id="lc-free">0</span></div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div><span>Busy</span><span class="leg-count" id="lc-busy">0</span></div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--orange)"></div><span>Pickup</span><span class="leg-count" id="lc-pickup">0</span></div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--primary)"></div><span>Order</span><span class="leg-count" id="lc-order">0</span></div>
+      </div>
+    </div>
+    <button class="add-slot-btn" onclick="openAddModal()">
+      <i class="fas fa-plus"></i> Add Slot / Block Time
+    </button>
+  </div>
+
+  <!-- COL 2: Day Detail -->
+  <div>
+    <div class="card day-detail-card">
+      <div class="dd-hdr">
+        <div class="dd-date-wrap">
+          <div class="dd-date-big" id="dd-date-big">—</div>
+          <div class="dd-month-yr" id="dd-month-yr">Select a day</div>
+        </div>
+        <div class="dd-today-badge" id="dd-today-badge" style="display:none">Today</div>
+      </div>
+      <div class="timeline" id="day-timeline">
+        <div class="empty-state">
+          <i class="fas fa-calendar-day"></i>
+          <p>No events yet</p>
+          <span>Click a date to view its slots,<br/>or add a new slot below.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COL 3: Summary + Upcoming -->
+  <div class="right-col">
+
+    <div class="card">
+      <div class="card-title">This Month</div>
+      <div class="sum-row">
+        <div class="sum-label"><div class="sum-dot" style="background:var(--green)"></div>Available</div>
+        <div class="sum-val" id="sum-free">0</div>
+      </div>
+      <div class="sum-row">
+        <div class="sum-label"><div class="sum-dot" style="background:var(--red)"></div>Busy</div>
+        <div class="sum-val" id="sum-busy">0</div>
+      </div>
+      <div class="sum-row">
+        <div class="sum-label"><div class="sum-dot" style="background:var(--orange)"></div>Pickups</div>
+        <div class="sum-val" id="sum-pickup">0</div>
+      </div>
+      <div class="sum-row">
+        <div class="sum-label"><div class="sum-dot" style="background:var(--primary)"></div>Orders</div>
+        <div class="sum-val" id="sum-order">0</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Upcoming Slots</div>
+      <div class="upcoming-list" id="upcoming-list">
+        <div style="text-align:center;padding:28px 0;color:var(--text-light);font-size:12px">
+          No upcoming slots
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ADD SLOT MODAL -->
+<div class="modal-overlay" id="add-modal" onclick="handleOverlayClick(event,'add-modal')">
+  <div class="modal">
+    <h3>Add Slot</h3>
+    <div class="modal-sub">Block time or mark your availability</div>
+
+    <label class="m-label">Type</label>
+    <div class="type-toggle" id="add-type-row">
+      <button class="tt-btn active free"   onclick="setType('add','free',this)">✅ Available</button>
+      <button class="tt-btn"              onclick="setType('add','busy',this)">🔴 Busy</button>
+      <button class="tt-btn"              onclick="setType('add','pickup',this)">🟠 Pickup</button>
+      <button class="tt-btn"              onclick="setType('add','order',this)">🔵 Order</button>
+    </div>
+    <input type="hidden" id="add-type" value="free"/>
+
+    <label class="m-label">Date</label>
+    <input type="date" class="m-input" id="add-date"/>
+
+    <label class="m-label">Time</label>
+    <input type="time" class="m-input" id="add-time" value="10:00"/>
+
+    <label class="m-label">Label</label>
+    <input type="text" class="m-input" id="add-label" placeholder="e.g. Customer pickup / Blocked"/>
+
+    <label class="m-label">Note (optional)</label>
+    <input type="text" class="m-input" id="add-note" placeholder="Any extra detail…"/>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('add-modal')">Cancel</button>
+      <button class="btn-save"   onclick="saveSlot()">Save Slot</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT SLOT MODAL -->
+<div class="modal-overlay" id="edit-modal" onclick="handleOverlayClick(event,'edit-modal')">
+  <div class="modal">
+    <h3>Edit Slot</h3>
+    <div class="modal-sub">Update or delete this slot</div>
+
+    <label class="m-label">Type</label>
+    <div class="type-toggle" id="edit-type-row">
+      <button class="tt-btn" data-type="free"   onclick="setType('edit','free',this)">✅ Available</button>
+      <button class="tt-btn" data-type="busy"   onclick="setType('edit','busy',this)">🔴 Busy</button>
+      <button class="tt-btn" data-type="pickup" onclick="setType('edit','pickup',this)">🟠 Pickup</button>
+      <button class="tt-btn" data-type="order"  onclick="setType('edit','order',this)">🔵 Order</button>
+    </div>
+    <input type="hidden" id="edit-type"/>
+
+    <label class="m-label">Time</label>
+    <input type="text" class="m-input" id="edit-time" placeholder="e.g. 10:00 AM"/>
+
+    <label class="m-label">Label</label>
+    <input type="text" class="m-input" id="edit-label"/>
+
+    <label class="m-label">Note</label>
+    <input type="text" class="m-input" id="edit-note"/>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" style="color:var(--red);border-color:#fecaca" onclick="deleteSlot()">
+        <i class="fas fa-trash"></i> Delete
+      </button>
+      <button class="btn-save" onclick="updateSlot()">Update</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span id="toast-icon">✅</span><span id="toast-msg">Done!</span>
+</div>
+
+<script>
+/* ── AUTH ── */
+const T = localStorage.getItem('token');
+const U = JSON.parse(localStorage.getItem('user') || '{}');
+if (!T || !U.id) window.location.href = '/stitchify_auth/login.html';
+
+/* ── CONSTANTS ── */
+const MONTHS    = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const TYPE_ICONS  = { free:'fa-check-circle', busy:'fa-ban', order:'fa-scissors', pickup:'fa-store' };
+const TYPE_LABELS = { free:'Available', busy:'Busy', order:'Order', pickup:'Pickup' };
+const STORE_KEY   = 'stitchify_sched_v1';
+
+/* ── STATE ── */
+const today = new Date();
+let cY = today.getFullYear(), cM = today.getMonth(), selDay = today.getDate();
+let editDay = null, editIdx = null;
+
+/* ── STORAGE ── */
+function loadEvents() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch { return {}; }
+}
+function saveEvents(ev) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(ev));
+}
+
+/* dayKey: "YYYY-MM-DD" */
+function dayKey(y, m, d) {
+  return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+}
+function eventsForDay(y, m, d) {
+  return (loadEvents()[dayKey(y, m, d)] || []);
+}
+function dominantType(evs) {
+  if (!evs.length) return null;
+  for (const t of ['busy','pickup','order','free']) {
+    if (evs.some(e => e.type === t)) return t;
+  }
+  return null;
+}
+
+/* ── CALENDAR ── */
+function buildCal() {
+  document.getElementById('cal-lbl').textContent = `${MONTHS[cM]} ${cY}`;
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+  const first = new Date(cY, cM, 1).getDay();
+  const days  = new Date(cY, cM+1, 0).getDate();
+  const allEv = loadEvents();
+
+  // Legend counts for this month
+  let counts = { free:0, busy:0, pickup:0, order:0 };
+
+  for (let i = 0; i < first; i++) {
+    const e = document.createElement('div'); e.className = 'cal-day empty'; grid.appendChild(e);
+  }
+  for (let d = 1; d <= days; d++) {
+    const isToday = d === today.getDate() && cM === today.getMonth() && cY === today.getFullYear();
+    const isSel   = d === selDay;
+    const key     = dayKey(cY, cM, d);
+    const evs     = allEv[key] || [];
+    const dom     = dominantType(evs);
+    if (dom) counts[dom]++;
+
+    let cls = 'cal-day';
+    if (isToday) cls += ' today';
+    else if (dom) cls += ` has-slot has-${dom}`;
+    if (isSel) cls += ' selected';
+
+    const el = document.createElement('div');
+    el.className = cls;
+    el.textContent = d;
+    el.onclick = () => loadDay(d);
+    grid.appendChild(el);
+  }
+
+  document.getElementById('lc-free').textContent   = counts.free;
+  document.getElementById('lc-busy').textContent   = counts.busy;
+  document.getElementById('lc-pickup').textContent = counts.pickup;
+  document.getElementById('lc-order').textContent  = counts.order;
+
+  updateSummary(counts);
+  updateUpcoming();
+}
+
+function updateSummary(counts) {
+  document.getElementById('sum-free').textContent   = counts.free;
+  document.getElementById('sum-busy').textContent   = counts.busy;
+  document.getElementById('sum-pickup').textContent = counts.pickup;
+  document.getElementById('sum-order').textContent  = counts.order;
+}
+
+function updateUpcoming() {
+  const ul = document.getElementById('upcoming-list');
+  const allEv = loadEvents();
+  const todayStr = dayKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+  // Collect all future slots (next 30 days)
+  const upcoming = [];
+  const futureDate = new Date(today);
+  for (let i = 0; i <= 30; i++) {
+    const fd = new Date(futureDate);
+    fd.setDate(futureDate.getDate() + i);
+    const k = dayKey(fd.getFullYear(), fd.getMonth(), fd.getDate());
+    const evs = allEv[k] || [];
+    evs.forEach(ev => {
+      upcoming.push({ ...ev, date: fd, key: k,
+        dateLabel: `${MONTHS[fd.getMonth()].slice(0,3)} ${fd.getDate()}` });
+    });
+  }
+  upcoming.sort((a,b) => a.date - b.date);
+  const slice = upcoming.slice(0, 6);
+
+  if (!slice.length) {
+    ul.innerHTML = `<div style="text-align:center;padding:28px 0;color:var(--text-light);font-size:12px">No upcoming slots</div>`;
+    return;
+  }
+  ul.innerHTML = slice.map(ev => `
+    <div class="up-item ${ev.type}">
+      <div class="up-icon ${ev.type}"><i class="fas ${TYPE_ICONS[ev.type]}"></i></div>
+      <div>
+        <div class="up-name">${ev.label || TYPE_LABELS[ev.type]}</div>
+        <div class="up-meta">${ev.dateLabel} · ${ev.time}${ev.sub ? ' · ' + ev.sub : ''}</div>
+      </div>
+    </div>`).join('');
+}
+
+/* ── DAY DETAIL ── */
+function loadDay(d) {
+  selDay = d;
+  buildCal();
+
+  const dow   = new Date(cY, cM, d).getDay();
+  const isToday = d === today.getDate() && cM === today.getMonth() && cY === today.getFullYear();
+  document.getElementById('dd-date-big').textContent = d;
+  document.getElementById('dd-month-yr').textContent = `${DAYS_FULL[dow]}, ${MONTHS[cM]} ${cY}`;
+  document.getElementById('dd-today-badge').style.display = isToday ? 'block' : 'none';
+
+  const evs = eventsForDay(cY, cM, d);
+  const tl  = document.getElementById('day-timeline');
+
+  if (!evs.length) {
+    tl.innerHTML = `<div class="empty-state">
+      <i class="fas fa-calendar-day"></i>
+      <p>No slots for this day</p>
+      <span>Click "Add Slot" to schedule<br/>your availability or block time.</span>
+    </div>`;
+    return;
+  }
+
+  tl.innerHTML = evs.map((ev, idx) => `
+    <div class="tl-row">
+      <div class="tl-time">${ev.time}</div>
+      <div class="tl-dot-wrap"><div class="tl-dot ${ev.type}"></div></div>
+      <div class="tl-content ${ev.type}" onclick="openEditModal(${d},${idx})">
+        <div class="tl-label">${ev.label || TYPE_LABELS[ev.type]}</div>
+        ${ev.sub ? `<div class="tl-sub">${ev.sub}</div>` : ''}
+        <div style="margin-top:6px">
+          <span class="tl-badge ${ev.type}">
+            <i class="fas ${TYPE_ICONS[ev.type]}"></i> ${TYPE_LABELS[ev.type]}
+          </span>
+        </div>
+        <button class="tl-del" onclick="event.stopPropagation();quickDelete(${d},${idx})" title="Delete">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>`).join('');
+}
+
+/* ── MONTH NAV ── */
+function chgMonth(dir) {
+  cM += dir;
+  if (cM > 11) { cM = 0; cY++; }
+  if (cM < 0)  { cM = 11; cY--; }
+  // Reset selected day to 1 when switching months (unless same month as today)
+  if (cM === today.getMonth() && cY === today.getFullYear()) selDay = today.getDate();
+  else selDay = 1;
+  buildCal();
+  loadDay(selDay);
+}
+
+/* ── TYPE TOGGLE ── */
+function setType(mode, type, btn) {
+  document.getElementById(`${mode}-type`).value = type;
+  document.querySelectorAll(`#${mode}-type-row .tt-btn`).forEach(b => b.className = 'tt-btn');
+  btn.className = `tt-btn active ${type}`;
+}
+
+/* ── ADD MODAL ── */
+function openAddModal() {
+  const mm = String(cM+1).padStart(2,'0'), dd = String(selDay).padStart(2,'0');
+  document.getElementById('add-date').value  = `${cY}-${mm}-${dd}`;
+  document.getElementById('add-time').value  = '10:00';
+  document.getElementById('add-label').value = '';
+  document.getElementById('add-note').value  = '';
+  document.getElementById('add-type').value  = 'free';
+  document.querySelectorAll('#add-type-row .tt-btn').forEach((b,i) => {
+    b.className = i === 0 ? 'tt-btn active free' : 'tt-btn';
+  });
+  openModal('add-modal');
+}
+
+function saveSlot() {
+  const type  = document.getElementById('add-type').value;
+  const date  = document.getElementById('add-date').value;
+  const time  = document.getElementById('add-time').value;
+  const label = document.getElementById('add-label').value.trim();
+  const note  = document.getElementById('add-note').value.trim();
+
+  if (!date)  { showToast('⚠️','Please select a date'); return; }
+  if (!label) { showToast('⚠️','Please add a label'); return; }
+
+  const [yr, mo, dy] = date.split('-').map(Number);
+  const [h, mi] = time.split(':').map(Number);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const h12  = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  const timeLabel = `${h12}:${String(mi).padStart(2,'0')} ${ampm}`;
+
+  const allEv = loadEvents();
+  const key   = dayKey(yr, mo-1, dy);
+  if (!allEv[key]) allEv[key] = [];
+  allEv[key].push({ type, time: timeLabel, label, sub: note });
+  // Sort by time string (simple sort)
+  allEv[key].sort((a,b) => a.time.localeCompare(b.time));
+  saveEvents(allEv);
+
+  closeModal('add-modal');
+  if (mo-1 === cM && yr === cY) { selDay = dy; loadDay(dy); }
+  else buildCal();
+  showToast('✅', `Slot saved!`);
+}
+
+/* ── EDIT MODAL ── */
+function openEditModal(d, idx) {
+  editDay = d; editIdx = idx;
+  const ev = eventsForDay(cY, cM, d)[idx];
+  if (!ev) return;
+  document.getElementById('edit-type').value  = ev.type;
+  document.getElementById('edit-time').value  = ev.time;
+  document.getElementById('edit-label').value = ev.label || '';
+  document.getElementById('edit-note').value  = ev.sub   || '';
+  document.querySelectorAll('#edit-type-row .tt-btn').forEach(b => {
+    const t = b.getAttribute('data-type');
+    b.className = t === ev.type ? `tt-btn active ${t}` : 'tt-btn';
+  });
+  openModal('edit-modal');
+}
+
+function updateSlot() {
+  if (editDay === null) return;
+  const type  = document.getElementById('edit-type').value;
+  const time  = document.getElementById('edit-time').value.trim();
+  const label = document.getElementById('edit-label').value.trim();
+  const sub   = document.getElementById('edit-note').value.trim();
+  if (!label) { showToast('⚠️','Please add a label'); return; }
+  if (!time)  { showToast('⚠️','Please add a time');  return; }
+
+  const allEv = loadEvents();
+  const key   = dayKey(cY, cM, editDay);
+  if (allEv[key] && allEv[key][editIdx] !== undefined) {
+    allEv[key][editIdx] = { type, time, label, sub };
+    saveEvents(allEv);
+  }
+  closeModal('edit-modal');
+  loadDay(selDay);
+  showToast('✏️','Slot updated!');
+}
+
+function deleteSlot() {
+  if (!confirm('Delete this slot?')) return;
+  quickDelete(editDay, editIdx);
+  closeModal('edit-modal');
+}
+
+function quickDelete(d, idx) {
+  const allEv = loadEvents();
+  const key   = dayKey(cY, cM, d);
+  if (allEv[key]) {
+    allEv[key].splice(idx, 1);
+    if (!allEv[key].length) delete allEv[key];
+    saveEvents(allEv);
+  }
+  loadDay(selDay);
+  showToast('🗑️','Slot deleted');
+}
+
+/* ── MODAL HELPERS ── */
+function openModal(id)  { document.getElementById(id).classList.add('open') }
+function closeModal(id) { document.getElementById(id).classList.remove('open') }
+function handleOverlayClick(e, id) { if (e.target === document.getElementById(id)) closeModal(id) }
+
+/* ── TOAST ── */
+function showToast(icon, msg) {
+  document.getElementById('toast-icon').textContent = icon;
+  document.getElementById('toast-msg').textContent  = msg;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ── INIT ── */
+buildCal();
+loadDay(today.getDate());
+</script>
+</body>
+</html>

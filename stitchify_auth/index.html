@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Stitchify — Bespoke Tailoring by India's Master Artisans</title>
+<meta name="description" content="Commission bespoke lehengas, designer blouses and royal sherwanis from India's most skilled master tailors. Verified artisans, perfect fit, real-time tracking." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --background:#fbf9f4; --foreground:#141d28; --paper:#fbf9f4; --paper-soft:#f3efe8; --paper-deep:#ebe5db;
+  --card:#ffffff; --muted:#ebe5db; --muted-foreground:#525c6a;
+  --primary:#0c7bb3; --primary-foreground:#fbf9f4; --primary-deep:#095e8a; --primary-glow:#3aa9e0;
+  --secondary:#f2bae8; --secondary-foreground:#141d28; --pink:#e89fd4;
+  --gold:#c2a259; --border:#e1dccf;
+  --gradient-brand:linear-gradient(145deg,#0c7bb3,#095e8a);
+  --gradient-soft:radial-gradient(circle at 20% 30%,#f1f7fb 0%,#ebe5db 100%);
+  --gradient-hero:linear-gradient(135deg,#fbf9f4 0%,#eaf2f9 100%);
+  --shadow-soft:0 2px 14px rgba(20,29,40,.05);
+  --shadow-elegant:0 18px 50px -20px rgba(9,94,138,.25);
+  --shadow-brand:0 12px 40px -12px rgba(12,123,179,.45);
+  --shadow-pink:0 0 0 5px rgba(242,186,232,.3),0 0 0 10px rgba(12,123,179,.06);
+  --font-serif:'Cormorant Garamond','Playfair Display',Georgia,serif;
+  --font-sans:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --radius:.5rem;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--background);color:var(--foreground);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--font-serif);letter-spacing:-.02em;line-height:1.1}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.eyebrow{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.35em;text-transform:uppercase;color:var(--primary)}
+.italic{font-style:italic}
+.text-primary{color:var(--primary)}.text-pink{color:var(--pink)}
+
+/* ========= BUTTONS ========= */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.7rem 1.4rem;border-radius:var(--radius);font-weight:600;font-size:.85rem;cursor:pointer;border:1px solid transparent;font-family:var(--font-sans);transition:all .25s ease;text-decoration:none;letter-spacing:.02em}
+.btn-lg{padding:.95rem 2rem;font-size:.95rem}
+.btn-sm{padding:.55rem 1.1rem;font-size:.8rem}
+.btn-hero{background:var(--gradient-brand);color:var(--primary-foreground)}
+.btn-hero:hover{box-shadow:var(--shadow-brand);transform:translateY(-2px)}
+.btn-ink{background:var(--foreground);color:var(--background)}
+.btn-ink:hover{background:var(--primary)}
+.btn-ghost{background:transparent;color:var(--foreground)}
+.btn-ghost:hover{background:var(--muted)}
+.btn-outline{background:transparent;border-color:var(--border);color:var(--foreground)}
+.btn-outline:hover{border-color:var(--foreground);background:var(--foreground);color:var(--background)}
+.btn-pink{background:var(--secondary);color:var(--secondary-foreground)}
+.btn-pink:hover{background:var(--pink)}
+.btn-outline-light{background:transparent;border-color:rgba(242,186,232,.4);color:var(--primary-foreground)}
+.btn-outline-light:hover{background:var(--secondary);color:var(--secondary-foreground);border-color:var(--secondary)}
+
+/* ========= SPLASH ========= */
+.splash{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:var(--gradient-soft);transition:opacity .7s ease}
+.splash.hidden{opacity:0;pointer-events:none}
+.splash-orbs{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.splash-orbs .orb{position:absolute;border-radius:50%;filter:blur(100px)}
+.splash-orbs .orb1{width:480px;height:480px;background:var(--primary);opacity:.08;top:-100px;left:-100px;animation:orb1 12s ease-in-out infinite alternate}
+.splash-orbs .orb2{width:380px;height:380px;background:var(--secondary);opacity:.18;bottom:-80px;right:-80px;animation:orb2 10s ease-in-out infinite alternate}
+@keyframes orb1{0%{transform:translate(0,0) scale(1)}100%{transform:translate(50px,40px) scale(1.2)}}
+@keyframes orb2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-30px,-50px) scale(1.15)}}
+.splash-inner{position:relative;z-index:10;text-align:center;padding:0 2rem}
+.brand-icon{width:100px;height:100px;border-radius:28px;background:var(--gradient-brand);display:flex;align-items:center;justify-content:center;margin:0 auto 28px;box-shadow:var(--shadow-pink),var(--shadow-brand);animation:iconEntrance 1s cubic-bezier(.34,1.56,.64,1) .2s both;position:relative}
+.brand-icon::after{content:'';position:absolute;inset:0;border-radius:28px;border:2px solid var(--secondary);opacity:.5;animation:iconRing 2.8s ease-out 1.2s infinite}
+.brand-icon svg{width:58px;height:58px;animation:iconFloat 3s ease-in-out infinite;filter:drop-shadow(0 2px 8px rgba(0,0,0,.18))}
+@keyframes iconEntrance{from{opacity:0;transform:scale(.2) rotate(-200deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes iconRing{0%{transform:scale(1);opacity:.5}100%{transform:scale(2);opacity:0}}
+@keyframes iconFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-4px) rotate(1.5deg)}}
+.splash-title{display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.splash-letter{font-family:var(--font-serif);font-size:clamp(48px,9vw,88px);font-weight:900;line-height:1;letter-spacing:-2px;display:inline-block;opacity:0}
+.splash-letter.blue{color:var(--primary);text-shadow:0 0 30px rgba(12,123,179,.45)}
+.splash-letter.pink{color:var(--pink);text-shadow:0 0 30px rgba(232,159,212,.5)}
+@keyframes letterDrop{0%{opacity:0;transform:translateY(-80px) rotateX(90deg) scale(.4)}65%{transform:translateY(12px) rotateX(-12deg) scale(1.06)}100%{opacity:1;transform:translateY(0) rotateX(0) scale(1)}}
+.splash-letter:nth-child(1){animation:letterDrop .65s cubic-bezier(.34,1.56,.64,1) .40s both}
+.splash-letter:nth-child(2){animation:letterDrop .65s cubic-bezier(.34,1.56,.64,1) .52s both}
+.splash-letter:nth-child(3){animation:letterDrop .65s cubic-bezier(.34,1.56,.64,1) .64s both}
+.splash-letter:nth-child(4){animation:letterDrop .65s cubic-bezier(.34,1.56,.64,1) .76s both}
+.splash-letter:nth-child(5){animation:letterDrop .65s cubic-bezier(.34,1.56,.64,1) .88s both}
+.splash-letter:nth-child(6){animation:letterDrop .65s cubic-bezier(.34,1.56,.64,1) 1.00s both}
+.splash-letter:nth-child(7){animation:letterDrop .65s cubic-bezier(.34,1.56,.64,1) 1.12s both}
+.splash-letter:nth-child(8){animation:letterDrop .65s cubic-bezier(.34,1.56,.64,1) 1.24s both}
+.splash-letter:nth-child(9){animation:letterDrop .65s cubic-bezier(.34,1.56,.64,1) 1.36s both}
+.splash-tag{font-family:var(--font-mono);font-size:11px;color:var(--muted-foreground);letter-spacing:.5em;text-transform:uppercase;font-weight:500;opacity:0;animation:tagIn 1s ease-out 2s forwards}
+@keyframes tagIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ========= NAV ========= */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;height:64px;display:flex;align-items:center;transition:all .3s ease}
+.nav.scrolled{background:rgba(251,249,244,.85);backdrop-filter:blur(10px);box-shadow:var(--shadow-soft);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;width:100%;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.brand-mark{width:36px;height:36px;border-radius:10px;background:var(--gradient-brand);display:inline-flex;align-items:center;justify-content:center;box-shadow:var(--shadow-pink)}
+.brand-mark svg{width:60%;height:60%}
+.nav-logo .name{font-family:var(--font-serif);font-size:1.5rem;font-weight:700;letter-spacing:-.02em}
+.nav-links{display:flex;gap:36px;list-style:none}
+.nav-links a{font-size:.85rem;font-weight:500;color:var(--muted-foreground);transition:color .2s}
+.nav-links a:hover{color:var(--primary)}
+.nav-actions{display:flex;align-items:center;gap:8px}
+.mobile-btn{display:none;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--foreground)}
+.mobile-menu{display:none;background:var(--background);border-top:1px solid var(--border);padding:16px 24px}
+.mobile-menu.open{display:block}
+.mobile-menu a{display:block;padding:8px 0;font-size:.9rem;color:var(--muted-foreground)}
+.mobile-menu .btn{width:100%;margin-top:8px}
+
+/* ========= HERO ========= */
+.hero{padding:120px 24px 80px;background:var(--gradient-hero);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-80px;left:-80px;width:420px;height:420px;border-radius:50%;background:rgba(12,123,179,.1);filter:blur(120px);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-130px;right:-80px;width:380px;height:380px;border-radius:50%;background:rgba(242,186,232,.4);filter:blur(120px);pointer-events:none}
+.hero-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center;position:relative}
+.hero-left{animation:fadeInUp .8s ease-out both}
+.hero-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--primary)}
+.hero h1{font-family:var(--font-serif);font-size:clamp(2.6rem,5vw,4.5rem);font-weight:700;margin-bottom:24px;text-wrap:balance}
+.hero p{font-size:1.1rem;color:var(--muted-foreground);margin-bottom:32px;max-width:520px;line-height:1.7}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px}
+.trust-strip{display:flex;align-items:center;gap:24px;margin-top:40px;font-size:.78rem;color:var(--muted-foreground)}
+.stars{display:flex;gap:3px;color:var(--gold)}
+.stars + span{font-weight:700;color:var(--foreground);margin-left:4px}
+.divider{width:1px;height:16px;background:var(--border)}
+
+.hero-right{position:relative;animation:fadeInUp .8s ease-out .15s both}
+.hero-imgs{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1.3fr .8fr;gap:12px;height:580px}
+.hero-img{border-radius:12px;overflow:hidden;background:var(--paper-deep);box-shadow:var(--shadow-elegant)}
+.hero-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.hero-img:hover img{transform:scale(1.04)}
+.hero-img:first-child{grid-row:span 2}
+.hero-quote{position:absolute;bottom:-24px;left:-24px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;max-width:260px;box-shadow:var(--shadow-elegant)}
+.hero-quote p{font-family:var(--font-serif);font-style:italic;font-size:15px;line-height:1.4;color:rgba(20,29,40,.85);margin-bottom:6px}
+.hero-quote span{font-size:11px;font-weight:600;color:var(--muted-foreground)}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+
+/* ========= MARQUEE ========= */
+.marquee{background:var(--foreground);color:var(--background);padding:14px 0;overflow:hidden;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08)}
+.marquee-track{display:flex;white-space:nowrap;animation:marquee 35s linear infinite;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.3em}
+.marquee-track span{display:inline-flex;align-items:center;gap:32px;margin:0 32px}
+.marquee-track .dot{color:var(--pink)}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ========= SECTIONS ========= */
+.section{padding:96px 24px}
+.bg-soft{background:var(--paper-soft)}
+.bg-ink{background:var(--foreground);color:var(--background);position:relative;overflow:hidden}
+.bg-ink::before{content:'';position:absolute;top:50%;left:0;width:400px;height:400px;border-radius:50%;background:rgba(12,123,179,.2);filter:blur(140px);transform:translateY(-50%);pointer-events:none}
+.bg-ink::after{content:'';position:absolute;bottom:0;right:0;width:400px;height:400px;border-radius:50%;background:rgba(232,159,212,.15);filter:blur(140px);pointer-events:none}
+.sec-head{display:flex;flex-direction:column;gap:8px}
+.sec-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:56px}
+.sec-title{font-size:clamp(2rem,3.6vw,3rem);font-weight:700}
+.sec-line{width:48px;height:2px;background:var(--pink);margin-top:16px}
+.sec-center{text-align:center;max-width:640px;margin:0 auto 56px}
+.sec-center .sec-line{margin-left:auto;margin-right:auto}
+
+/* ========= PORTFOLIO ========= */
+.port-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+.port-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all .3s ease}
+.port-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-elegant)}
+.port-img{height:280px;overflow:hidden;background:var(--paper-deep);position:relative}
+.port-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease}
+.port-card:hover .port-img img{transform:scale(1.05)}
+.port-badge{position:absolute;top:12px;right:12px;padding:5px 12px;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;border-radius:20px;color:var(--primary)}
+.port-info{padding:20px}
+.port-info .cat{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--pink);margin-bottom:6px}
+.port-info h4{font-size:1.25rem;font-weight:600;margin-bottom:0}
+.port-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.port-row .price{font-size:15px;font-weight:700;color:var(--primary)}
+.port-row i{color:var(--muted-foreground);transition:all .25s}
+.port-card:hover .port-row i{color:var(--primary);transform:translateX(4px)}
+
+/* ========= FEATURES ========= */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.feat-card{padding:28px;background:var(--card);border:1px solid var(--border);border-radius:12px;transition:all .3s ease}
+.feat-card:hover{border-color:var(--primary);box-shadow:var(--shadow-elegant)}
+.feat-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.feat-num{font-family:var(--font-mono);font-size:12px;font-weight:600;letter-spacing:.18em;color:var(--pink)}
+.feat-icon{width:44px;height:44px;border-radius:10px;background:var(--gradient-brand);display:flex;align-items:center;justify-content:center;color:var(--primary-foreground);transition:transform .3s}
+.feat-card:hover .feat-icon{transform:scale(1.1)}
+.feat-card h3{font-size:1.25rem;font-weight:600;margin-bottom:8px}
+.feat-card p{font-size:.88rem;color:var(--muted-foreground);line-height:1.6}
+
+/* ========= PROCESS ========= */
+.process-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;position:relative}
+.process-item{text-align:center;position:relative}
+.process-num{width:80px;height:80px;border:1px solid rgba(232,159,212,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-serif);font-size:1.6rem;font-weight:700;color:var(--pink);background:var(--foreground);margin:0 auto 20px;position:relative;z-index:2}
+.process-item h3{font-size:1.6rem;font-weight:600;margin-bottom:10px;color:var(--background)}
+.process-item p{font-size:.9rem;color:rgba(255,255,255,.7);max-width:240px;margin:0 auto}
+.process-item:not(:last-child)::after{content:'';position:absolute;top:40px;left:calc(50% + 50px);width:calc(100% - 100px);height:1px;background:linear-gradient(to right,rgba(232,159,212,.4),transparent)}
+
+/* ========= STATS ========= */
+.stats-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card)}
+.stat{text-align:center;padding:40px 16px;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-num{font-family:var(--font-serif);font-size:clamp(2.2rem,4vw,3rem);font-weight:700;color:var(--primary)}
+.stat-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--muted-foreground);margin-top:8px}
+
+/* ========= CTA ========= */
+.cta-wrap{max-width:900px;margin:0 auto;padding:64px 48px;background:var(--gradient-brand);border-radius:20px;text-align:center;position:relative;overflow:hidden;box-shadow:var(--shadow-brand)}
+.cta-wrap::before{content:'';position:absolute;top:-40px;right:-40px;width:280px;height:280px;border-radius:50%;background:rgba(242,186,232,.3);filter:blur(60px)}
+.cta-wrap::after{content:'';position:absolute;bottom:-40px;left:-40px;width:240px;height:240px;border-radius:50%;background:rgba(232,159,212,.3);filter:blur(60px)}
+.cta-inner{position:relative;z-index:1}
+.cta-eyebrow{font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:.4em;color:var(--secondary);margin-bottom:16px}
+.cta-wrap h2{font-size:clamp(2rem,3.6vw,3rem);font-weight:700;color:var(--primary-foreground);margin-bottom:16px}
+.cta-wrap p{color:rgba(251,249,244,.85);margin-bottom:32px;max-width:520px;margin-left:auto;margin-right:auto}
+.cta-btns{display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+
+/* ========= FOOTER ========= */
+.footer{background:var(--foreground);color:rgba(251,249,244,.7);padding:64px 24px 24px}
+.footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px}
+.footer-brand p{font-size:.9rem;color:rgba(251,249,244,.6);max-width:380px;line-height:1.7;margin:16px 0 20px}
+.footer .name .pri{color:var(--primary-glow)}
+.footer .name .pnk{color:var(--pink)}
+.socials{display:flex;gap:10px}
+.socials a{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);transition:all .25s}
+.socials a:hover{background:var(--primary);border-color:var(--primary);color:var(--primary-foreground)}
+.footer h4{color:var(--background);font-size:1.1rem;margin-bottom:14px}
+.footer .col a{display:flex;align-items:center;gap:8px;font-size:.85rem;padding:5px 0;transition:color .2s}
+.footer .col a:hover{color:var(--pink)}
+.footer-bottom{max-width:1200px;margin:48px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:12px;color:rgba(251,249,244,.5)}
+.footer-bottom .heart{color:var(--pink)}
+
+/* ========= RESPONSIVE ========= */
+@media (max-width:900px){
+  .nav-links{display:none}
+  .nav-actions .btn:not(.btn-hero){display:none}
+  .mobile-btn{display:block}
+  .hero-grid{grid-template-columns:1fr;gap:48px}
+  .hero-right{max-width:520px;margin:0 auto;width:100%}
+  .hero-imgs{height:480px}
+  .hero-quote{display:none}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:none}
+  .stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--border)}
+  .process-grid{grid-template-columns:1fr;gap:48px}
+  .process-item:not(:last-child)::after{display:none}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .footer-brand{grid-column:1/-1}
+  .section{padding:72px 24px}
+  .cta-wrap{padding:48px 24px}
+}
+@media (max-width:520px){
+  .hero{padding:104px 20px 64px}
+  .hero-imgs{height:380px}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ============== SPLASH ============== -->
+<div class="splash" id="splash">
+  <div class="splash-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+  </div>
+  <div class="splash-inner">
+    <div class="brand-icon">
+      <svg viewBox="0 0 64 64" fill="none" stroke="#f2bae8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="14" y1="50" x2="46" y2="18" stroke="#fbf9f4" stroke-width="2.6"/>
+        <circle cx="46" cy="18" r="3" fill="#f2bae8" stroke="#f2bae8"/>
+        <path d="M14 50 C 8 46, 12 40, 18 42 S 26 50, 22 54 S 12 56, 10 50"/>
+        <path d="M30 34 q -4 -2 -6 2"/>
+      </svg>
+    </div>
+    <div class="splash-title">
+      <span class="splash-letter blue">S</span>
+      <span class="splash-letter blue">t</span>
+      <span class="splash-letter blue">i</span>
+      <span class="splash-letter blue">t</span>
+      <span class="splash-letter blue">c</span>
+      <span class="splash-letter blue">h</span>
+      <span class="splash-letter pink">i</span>
+      <span class="splash-letter pink">f</span>
+      <span class="splash-letter pink">y</span>
+    </div>
+    <div class="splash-tag">Design · Connect · Create</div>
+  </div>
+</div>
+
+<!-- ============== NAV ============== -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <span class="brand-mark">
+        <svg viewBox="0 0 64 64" fill="none" stroke="#f2bae8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="14" y1="50" x2="46" y2="18" stroke="#fbf9f4" stroke-width="3"/>
+          <circle cx="46" cy="18" r="3" fill="#f2bae8" stroke="#f2bae8"/>
+          <path d="M14 50 C 8 46, 12 40, 18 42 S 26 50, 22 54 S 12 56, 10 50"/>
+        </svg>
+      </span>
+      <span class="name"><span class="text-primary">Stitch</span><span class="text-pink">ify</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#artisans">Artisans</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a class="btn btn-ghost btn-sm" href="/login-page">Sign In</a>
+      <a class="btn btn-hero btn-sm" href="/register-page">Get Started <i class="fa-solid fa-arrow-right"></i></a>
+      <button class="mobile-btn" id="mobileBtn" aria-label="menu"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#gallery">Gallery</a>
+    <a href="#features">Features</a>
+    <a href="#process">Process</a>
+    <a href="#artisans">Artisans</a>
+    <a class="btn btn-hero" href="/register-page">Get Started</a>
+  </div>
+</header>
+
+<!-- ============== HERO - FIXED HIGH-QUALITY WORKING IMAGES ============== -->
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="eyebrow hero-eyebrow">Since 2024 — Bespoke Tailoring</div>
+      <h1>Heritage craftsmanship for the modern <span class="italic text-primary">connoisseur</span>.</h1>
+      <p>India's most skilled master tailors create bespoke sarees, lehengas, designer blouses, and royal sherwanis — each piece a living testament to generations of artistry.</p>
+      <div class="hero-btns">
+        <a class="btn btn-hero btn-lg" href="/register-page?role=customer"><i class="fa-solid fa-scissors"></i> Find a Tailor</a>
+        <a class="btn btn-outline btn-lg" href="/register-page?role=tailor">Join as Artisan <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      <div class="trust-strip">
+        <div class="stars">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+          <span>4.9</span>
+        </div>
+        <div class="divider"></div>
+        <span>Trusted by <strong style="color:var(--foreground)">50,000+</strong> patrons</span>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-imgs">
+        <div class="hero-img"><img src="https://images.pexels.com/photos/14443556/pexels-photo-14443556.jpeg?auto=compress&cs=tinysrgb&w=800&h=1100&fit=crop" alt="Traditional red bridal saree with gold embroidery" loading="eager"></div>
+        <div class="hero-img"><img src="https://images.pexels.com/photos/3812923/pexels-photo-3812923.jpeg?auto=compress&cs=tinysrgb&w=600&h=500&fit=crop" alt="Master artisan doing intricate hand embroidery" loading="eager"></div>
+        <div class="hero-img"><img src="https://images.pexels.com/photos/7751420/pexels-photo-7751420.jpeg?auto=compress&cs=tinysrgb&w=600&h=500&fit=crop" alt="Luxurious silk saree with traditional zari work" loading="eager"></div>
+      </div>
+      <div class="hero-quote">
+        <p>"The fit was absolute perfection. Every detail meticulously crafted."</p>
+        <span>— Ananya Sharma, Mumbai</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== MARQUEE ============== -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>Bespoke Sarees <i class="dot">✦</i></span>
+    <span>Designer Blouses <i class="dot">✦</i></span>
+    <span>Bridal Lehengas <i class="dot">✦</i></span>
+    <span>Royal Sherwanis <i class="dot">✦</i></span>
+    <span>Hand Embroidery <i class="dot">✦</i></span>
+    <span>Custom Tailoring <i class="dot">✦</i></span>
+    <span>Bespoke Sarees <i class="dot">✦</i></span>
+    <span>Designer Blouses <i class="dot">✦</i></span>
+    <span>Bridal Lehengas <i class="dot">✦</i></span>
+    <span>Royal Sherwanis <i class="dot">✦</i></span>
+    <span>Hand Embroidery <i class="dot">✦</i></span>
+    <span>Custom Tailoring <i class="dot">✦</i></span>
+  </div>
+</div>
+
+<!-- ============== PORTFOLIO (FIXED PEXELS IMAGES - SAREE, LEHENGA, BLOUSE, SHERWANI) ============== -->
+<section id="gallery" class="section bg-soft">
+  <div class="container">
+    <div class="sec-row">
+      <div class="sec-head">
+        <div class="eyebrow">Curated Collection</div>
+        <h2 class="sec-title">Bespoke Stitching<br><span class="italic text-primary">Masterpieces</span></h2>
+        <div class="sec-line"></div>
+      </div>
+      <a class="btn btn-ink btn-sm" href="#">View All <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="port-grid" id="portGrid"></div>
+  </div>
+</section>
+
+<!-- ============== FEATURES ============== -->
+<section id="features" class="section">
+  <div class="container">
+    <div class="sec-center">
+      <div class="eyebrow">Why Stitchify</div>
+      <h2 class="sec-title">The Artisan <span class="italic text-primary">Advantage</span></h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="feat-grid" id="featGrid"></div>
+  </div>
+</section>
+
+<!-- ============== PROCESS ============== -->
+<section id="process" class="section bg-ink">
+  <div class="container" style="position:relative">
+    <div class="sec-center">
+      <div class="eyebrow" style="color:var(--pink)">The Process</div>
+      <h2 class="sec-title" style="color:var(--background)">From Vision to <span class="italic text-pink">Creation</span></h2>
+    </div>
+    <div class="process-grid">
+      <div class="process-item"><div class="process-num">I</div><h3>Discover</h3><p>Find your artisan by craft, region and aesthetic sensibility.</p></div>
+      <div class="process-item"><div class="process-num">II</div><h3>Collaborate</h3><p>Co-design your piece — share references, measurements and fabric.</p></div>
+      <div class="process-item"><div class="process-num">III</div><h3>Receive</h3><p>Your masterpiece arrives, fitted to perfection. Guaranteed.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== STATS ============== -->
+<section id="artisans" class="section" style="padding:80px 24px">
+  <div class="stats-grid">
+    <div class="stat"><div class="stat-num">8,500+</div><div class="stat-lbl">Verified Artisans</div></div>
+    <div class="stat"><div class="stat-num">1.2M+</div><div class="stat-lbl">Garments Crafted</div></div>
+    <div class="stat"><div class="stat-num">50K+</div><div class="stat-lbl">Happy Patrons</div></div>
+    <div class="stat"><div class="stat-num">4.9</div><div class="stat-lbl">Average Rating</div></div>
+  </div>
+</section>
+
+<!-- ============== CTA ============== -->
+<section class="section" style="padding:48px 24px 96px">
+  <div class="cta-wrap">
+    <div class="cta-inner">
+      <div class="cta-eyebrow">Begin Your Journey</div>
+      <h2>Ready to commission your <span class="italic" style="color:var(--secondary)">masterpiece</span>?</h2>
+      <p>Join thousands of discerning patrons who found their perfect artisan on Stitchify.</p>
+      <div class="cta-btns">
+        <a class="btn btn-pink btn-lg" href="/register-page?role=customer">Find Your Artisan <i class="fa-solid fa-arrow-right"></i></a>
+        <a class="btn btn-outline-light btn-lg" href="/register-page?role=tailor">List Your Atelier</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FOOTER ============== -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo"><span class="brand-mark"><svg viewBox="0 0 64 64" fill="none" stroke="#f2bae8" stroke-width="3"><line x1="14" y1="50" x2="46" y2="18" stroke="#fbf9f4" stroke-width="3"/><circle cx="46" cy="18" r="3" fill="#f2bae8"/></svg></span><span class="name"><span class="pri">Stitch</span><span class="pnk">ify</span></span></div>
+      <p>Connecting discerning patrons with India's finest tailoring artisans since 2024.</p>
+      <div class="socials"><a href="#"><i class="fa-brands fa-instagram"></i></a><a href="#"><i class="fa-brands fa-facebook-f"></i></a><a href="#"><i class="fa-brands fa-twitter"></i></a></div>
+    </div>
+    <div class="col"><h4>Explore</h4><a href="#">Sarees</a><a href="#">Lehengas</a><a href="#">Blouses</a><a href="#">Sherwanis</a><a href="#">Bridal</a></div>
+    <div class="col"><h4>Contact</h4><a href="mailto:artisans@stitchify.in"><i class="fa-solid fa-envelope"></i> artisans@stitchify.in</a><a href="tel:+919876543210"><i class="fa-solid fa-phone"></i> +91 98765 43210</a></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 Stitchify. All rights reserved.</span><span>Crafted with <span class="heart">♥</span> in India</span></div>
+</footer>
+
+<script>
+// Splash screen
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const s = document.getElementById('splash');
+    if(s) {
+      s.classList.add('hidden');
+      setTimeout(() => s.remove(), 800);
+    }
+  }, 3000);
+});
+
+// Nav scroll
+const navEl = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  if(navEl) navEl.classList.toggle('scrolled', window.scrollY > 24);
+});
+
+// Mobile menu
+const mb = document.getElementById('mobileBtn');
+const mm = document.getElementById('mobileMenu');
+if(mb && mm) {
+  mb.addEventListener('click', () => mm.classList.toggle('open'));
+  mm.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mm.classList.remove('open')));
+}
+
+// PORTFOLIO DATA - All working high-res Pexels images (fashion & traditional wear)
+const PORTFOLIO = [
+  { img: 'https://images.pexels.com/photos/18343134/pexels-photo-18343134/free-photo-of-woman-in-traditional-indian-saree-at-palace.jpeg?auto=compress&cs=tinysrgb&w=600&h=560&fit=crop', title: 'Banarasi Silk Saree', cat: 'Traditional Saree', price: '₹ 1,25,000', badge: 'Bestseller' },
+  { img: 'https://images.pexels.com/photos/17763933/pexels-photo-17763933/free-photo-of-bridal-lehenga-with-gold-embroidery.jpeg?auto=compress&cs=tinysrgb&w=600&h=560&fit=crop', title: 'Royal Kanchipuram Saree', cat: 'Bridal Saree', price: '₹ 2,10,000', badge: 'Limited' },
+  { img: 'https://images.pexels.com/photos/10917229/pexels-photo-10917229.jpeg?auto=compress&cs=tinysrgb&w=600&h=560&fit=crop', title: 'Ruby Tapestry Lehenga', cat: 'Bridal Couture', price: '₹ 1,85,000', badge: null },
+  { img: 'https://images.pexels.com/photos/17351927/pexels-photo-17351927/free-photo-of-designer-indian-blouse-with-embroidery.jpeg?auto=compress&cs=tinysrgb&w=600&h=560&fit=crop', title: 'Gulabi Zardozi Blouse', cat: 'Designer Blouse', price: '₹ 38,000', badge: 'New' },
+  { img: 'https://images.pexels.com/photos/14016555/pexels-photo-14016555.jpeg?auto=compress&cs=tinysrgb&w=600&h=560&fit=crop', title: 'Onyx Silk Sherwani', cat: 'Menswear', price: '₹ 95,000', badge: null },
+  { img: 'https://images.pexels.com/photos/14333210/pexels-photo-14333210.jpeg?auto=compress&cs=tinysrgb&w=600&h=560&fit=crop', title: 'Handloom Patola Saree', cat: 'Heritage Saree', price: '₹ 1,55,000', badge: 'Artisan Edit' }
+];
+
+const portGrid = document.getElementById('portGrid');
+if(portGrid) {
+  portGrid.innerHTML = PORTFOLIO.map(p => `
+    <article class="port-card">
+      <div class="port-img"><img src="${p.img}" alt="${p.title}" loading="lazy">${p.badge ? `<span class="port-badge">${p.badge}</span>` : ''}</div>
+      <div class="port-info"><div class="cat">${p.cat}</div><h4>${p.title}</h4><div class="port-row"><span class="price">${p.price}</span><i class="fa-solid fa-arrow-right"></i></div></div>
+    </article>
+  `).join('');
+}
+
+// Features data
+const FEATURES = [
+  {num:'01', icon:'fa-wand-magic-sparkles', title:'Virtual Measurement', desc:'AI-guided video sessions capture millimetre-perfect measurements from your home.'},
+  {num:'02', icon:'fa-comments', title:'Direct Artisan Chat', desc:'Talk threads, fabrics and silhouettes in real time with your master tailor.'},
+  {num:'03', icon:'fa-truck-fast', title:'Live Order Tracking', desc:'Follow your garment from first cut to your doorstep with stage-by-stage updates.'},
+  {num:'04', icon:'fa-shield-halved', title:'Absolute Guarantee', desc:'Not perfect? Free alterations or a full refund. Every order is fully insured.'},
+];
+const featGrid = document.getElementById('featGrid');
+if(featGrid) {
+  featGrid.innerHTML = FEATURES.map(f => `
+    <div class="feat-card"><div class="feat-top"><span class="feat-num">${f.num}</span><div class="feat-icon"><i class="fa-solid ${f.icon}"></i></div></div><h3>${f.title}</h3><p>${f.desc}</p></div>
+  `).join('');
+}
+</script>
+</body>
+</html>

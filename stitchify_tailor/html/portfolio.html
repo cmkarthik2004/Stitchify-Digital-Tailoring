@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stitchify – My Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Sora:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<style>
+:root {
+  --primary:#0c7bb3;--primary-dk:#095e8a;--primary-lt:#e8f4fb;
+  --accent:#a75c9a;--accent-lt:#f3e8fb;
+  --gradient:linear-gradient(135deg,#0c7bb3,#a75c9a);
+  --white:#fff;--bg:#f4f6fa;--border:#e0e7ef;
+  --text:#1a1a2e;--text-mid:#4a4a6a;--text-light:#9aaac4;
+  --success:#16a34a;--danger:#ef4444;
+  --shadow:0 4px 20px rgba(12,123,179,0.10);
+  --radius:16px;--radius-sm:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+.brand-bar{text-align:center;padding:14px 0 4px;background:var(--white)}
+.brand-name{font-size:36px;font-weight:700;letter-spacing:3px;font-family:'Playfair Display',serif}
+.brand-stitch{color:var(--primary)}.brand-ify{color:var(--accent)}
+
+.navbar{display:flex;align-items:center;justify-content:space-between;padding:8px 32px;background:var(--white);border-bottom:1px solid var(--border);gap:16px;position:sticky;top:0;z-index:100}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 14px;border-radius:12px;text-decoration:none;cursor:pointer;transition:background .2s;font-size:10px;font-weight:600;text-transform:uppercase;color:#9ca3af}
+.nav-item i{font-size:16px}
+.nav-item:hover{background:var(--primary-lt);color:var(--primary)}
+.nav-item.active{color:var(--accent);font-weight:700}
+.nav-item.active::after{content:'';display:block;width:20px;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:2px}
+
+.page-content{max-width:1200px;margin:0 auto;padding:30px 32px}
+.page-header{margin-bottom:30px}
+.page-header h1{font-size:28px;font-weight:700;color:var(--text)}
+.page-header p{color:var(--text-light);margin-top:4px}
+
+/* Upload Card */
+.upload-card{background:var(--white);border-radius:var(--radius);padding:30px;border:2px dashed var(--border);margin-bottom:30px;transition:all .3s;cursor:pointer;text-align:center}
+.upload-card:hover{border-color:var(--primary);background:var(--primary-lt)}
+.upload-card i{font-size:48px;color:var(--primary);margin-bottom:12px}
+.upload-card h3{font-size:18px;margin-bottom:8px}
+.upload-card p{color:var(--text-light);font-size:13px}
+.upload-card input[type="file"]{display:none}
+
+/* Form Card */
+.form-card{background:var(--white);border-radius:var(--radius);padding:24px;border:1px solid var(--border);margin-bottom:24px}
+.form-card h3{font-size:18px;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--text-mid);margin-bottom:6px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--primary)}
+.form-group textarea{resize:vertical;min-height:80px}
+
+/* Preview */
+.preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:16px}
+.preview-item{background:var(--white);border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border);position:relative}
+.preview-item img{width:100%;height:200px;object-fit:cover}
+.preview-item .remove-btn{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:var(--danger);color:white;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* Portfolio Grid */
+.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.portfolio-card{background:var(--white);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);transition:all .3s}
+.portfolio-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.portfolio-img{height:220px;background-size:cover;background-position:center;position:relative}
+.portfolio-img .badge{position:absolute;top:12px;right:12px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;background:rgba(255,255,255,0.95)}
+.portfolio-info{padding:16px}
+.portfolio-info h4{font-size:15px;font-weight:700;margin-bottom:4px}
+.portfolio-info p{font-size:12px;color:var(--text-light);margin-bottom:8px}
+.portfolio-meta{display:flex;gap:16px;font-size:12px;color:var(--text-mid);margin-bottom:8px}
+.portfolio-meta span{display:flex;align-items:center;gap:4px}
+.portfolio-actions{display:flex;gap:8px;margin-top:12px}
+.portfolio-actions button{flex:1;padding:8px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+.btn-edit{background:var(--primary-lt);color:var(--primary)}
+.btn-edit:hover{background:var(--primary);color:white}
+.btn-delete{background:#fee2e2;color:var(--danger)}
+.btn-delete:hover{background:var(--danger);color:white}
+.btn-add{background:var(--gradient);color:white;padding:12px 24px;border-radius:50px;font-size:14px;font-weight:600;border:none;cursor:pointer;width:100%;margin-top:16px}
+.btn-save{background:var(--success);color:white;padding:12px 24px;border-radius:50px;font-size:14px;font-weight:600;border:none;cursor:pointer;margin-top:16px}
+
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--text);color:white;padding:12px 24px;border-radius:50px;z-index:9999;opacity:0;transition:opacity .3s;font-weight:500}
+.toast.show{opacity:1}
+
+@media(max-width:768px){.form-grid{grid-template-columns:1fr}.page-content{padding:20px 16px}}
+</style>
+</head>
+<body>
+
+<div class="brand-bar">
+  <div class="brand-name"><span class="brand-stitch">Stitch</span><span class="brand-ify">ify</span></div>
+</div>
+
+<nav class="navbar">
+  <div class="nav-links">
+    <a class="nav-item" href="/tailor"><i class="fas fa-home"></i>Home</a>
+    <a class="nav-item" href="/tailor/orders"><i class="fas fa-box"></i>Orders</a>
+    <a class="nav-item" href="/tailor/chat"><i class="fas fa-comment-dots"></i>Chat</a>
+    <a class="nav-item active" href="/tailor/portfolio"><i class="fas fa-images"></i>Portfolio</a>
+    <a class="nav-item" href="/tailor/profile"><i class="fas fa-user"></i>Profile</a>
+  </div>
+</nav>
+
+<div class="page-content">
+  <div class="page-header">
+    <h1><i class="fas fa-images"></i> My Portfolio</h1>
+    <p>Upload your work samples, set prices, and attract more customers</p>
+  </div>
+
+  <!-- Upload & Add Form -->
+  <div class="form-card" id="uploadForm">
+    <h3 id="formTitle">Add New Work</h3>
+    <input type="hidden" id="editId" value=""/>
+    
+    <!-- Image Upload -->
+    <div class="upload-card" onclick="document.getElementById('imageInput').click()">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <h3>Click to Upload Photos</h3>
+      <p>JPG, PNG or WebP • Max 10MB each</p>
+      <input type="file" id="imageInput" accept="image/*" multiple onchange="handleImageUpload(this)"/>
+    </div>
+    <div class="preview-grid" id="previewGrid"></div>
+    
+    <div class="form-grid" style="margin-top:20px">
+      <div class="form-group"><label>Work Title *</label><input type="text" id="title" placeholder="e.g. Bridal Lehenga with Zardozi"/></div>
+      <div class="form-group"><label>Category *</label>
+        <select id="category">
+          <option value="">Select category</option>
+          <option>Bridal Wear</option><option>Party Wear</option><option>Formal Wear</option>
+          <option>Casual Wear</option><option>Ethnic Wear</option><option>Men's Wear</option>
+          <option>Women's Wear</option><option>Kids Wear</option><option>Alterations</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Gender</label>
+        <select id="gender"><option value="">Select</option><option>Female</option><option>Male</option><option>Kids</option><option>Unisex</option></select>
+      </div>
+      <div class="form-group"><label>Fabric Type</label>
+        <select id="fabric"><option value="">Select fabric</option><option>Silk</option><option>Cotton</option><option>Velvet</option><option>Linen</option><option>Georgette</option><option>Chiffon</option><option>Net</option><option>Organza</option></select>
+      </div>
+      <div class="form-group"><label>Price (Rs.) *</label><input type="number" id="price" placeholder="e.g. 5000"/></div>
+      <div class="form-group"><label>Estimated Days</label><input type="number" id="days" placeholder="e.g. 7" value="7"/></div>
+      <div class="form-group"><label>Fittings Required</label>
+        <select id="fittings"><option value="1">1 fitting</option><option value="2" selected>2 fittings</option><option value="3">3 fittings</option></select>
+      </div>
+      <div class="form-group"><label>Complexity Level</label>
+        <select id="complexity"><option>Simple</option><option selected>Medium</option><option>High</option><option>Luxury</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea id="desc" placeholder="Describe your work, materials used, special techniques..."></textarea></div>
+    
+    <button class="btn-add" onclick="savePortfolioItem()"><i class="fas fa-plus"></i> <span id="submitLabel">Add to Portfolio</span></button>
+  </div>
+
+  <!-- Portfolio Display -->
+  <div class="form-card">
+    <h3>Published Works (<span id="portfolioCount">0</span>)</h3>
+    <div class="portfolio-grid" id="portfolioGrid">
+      <div style="text-align:center;padding:40px;grid-column:1/-1;color:var(--text-light)">Loading portfolio...</div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const token=localStorage.getItem('token'),user=JSON.parse(localStorage.getItem('user')||'{}');
+if(!token||!user.id)window.location.href='/';
+let uploadedImages=[],portfolioItems=[],editingId=null;
+
+// Handle image upload
+function handleImageUpload(input){
+  const files=input.files;
+  for(let i=0;i<files.length;i++){
+    const file=files[i];
+    if(file.size>10*1024*1024){showToast('File too large: '+file.name);continue}
+    const reader=new FileReader();
+    reader.onload=function(e){
+      uploadedImages.push({name:file.name,data:e.target.result});
+      renderPreviews();
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function renderPreviews(){
+  document.getElementById('previewGrid').innerHTML=uploadedImages.map((img,i)=>`
+    <div class="preview-item">
+      <img src="${img.data}" alt="${img.name}"/>
+      <button class="remove-btn" onclick="removeImage(${i})">&times;</button>
+    </div>
+  `).join('');
+}
+
+function removeImage(i){uploadedImages.splice(i,1);renderPreviews()}
+
+// Save portfolio item
+async function savePortfolioItem(){
+  const title=document.getElementById('title').value.trim();
+  const category=document.getElementById('category').value;
+  const price=parseInt(document.getElementById('price').value)||0;
+  
+  if(!title){showToast('Please enter a title');return}
+  if(!category){showToast('Please select a category');return}
+  if(!price||price<1){showToast('Please enter a valid price');return}
+  if(uploadedImages.length===0&&!editingId){showToast('Please upload at least one image');return}
+  
+  const item={
+    tailor_id:user.id,
+    title,
+    category,
+    sub_category:category,
+    gender:document.getElementById('gender').value,
+    fabric_type:document.getElementById('fabric').value,
+    price_range:`Rs.${price.toLocaleString('en-IN')}`,
+    price:price,
+    estimated_days:parseInt(document.getElementById('days').value)||7,
+    fittings_required:parseInt(document.getElementById('fittings').value)||2,
+    complexity_level:document.getElementById('complexity').value,
+    description:document.getElementById('desc').value,
+    images:uploadedImages.map(img=>img.data),
+    emoji:'',
+    bg_gradient:'linear-gradient(140deg,#e8f4fb,#f2bae8)',
+    tags:[category.toLowerCase().replace(/\s/g,'_')],
+    likes:0,
+    saves:0,
+    is_visible:true
+  };
+  
+  try{
+    const url=editingId?`/api/tailor/portfolio/${editingId}/update`:'/api/tailor/portfolio/add';
+    const method=editingId?'PUT':'POST';
+    
+    const r=await fetch(url,{method,headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`},body:JSON.stringify(item)});
+    if(r.ok){
+      showToast(editingId?'Portfolio updated!':'Portfolio added!');
+      resetForm();
+      await fetchPortfolio();
+    }else{showToast('Failed to save')}
+  }catch(e){showToast('Error saving')}
+}
+
+function resetForm(){
+  document.getElementById('editId').value='';
+  document.getElementById('title').value='';
+  document.getElementById('category').value='';
+  document.getElementById('gender').value='';
+  document.getElementById('fabric').value='';
+  document.getElementById('price').value='';
+  document.getElementById('days').value='7';
+  document.getElementById('fittings').value='2';
+  document.getElementById('complexity').value='Medium';
+  document.getElementById('desc').value='';
+  document.getElementById('submitLabel').textContent='Add to Portfolio';
+  document.getElementById('formTitle').textContent='Add New Work';
+  uploadedImages=[];
+  editingId=null;
+  renderPreviews();
+}
+
+// Fetch portfolio
+async function fetchPortfolio(){
+  try{
+    const r=await fetch(`/api/tailor/portfolio/${user.id}`,{headers:{Authorization:`Bearer ${token}`}});
+    if(r.ok){portfolioItems=await r.json();renderPortfolio()}
+  }catch(e){}
+}
+
+function renderPortfolio(){
+  const grid=document.getElementById('portfolioGrid');
+  document.getElementById('portfolioCount').textContent=portfolioItems.length;
+  if(!portfolioItems.length){grid.innerHTML='<div style="text-align:center;padding:40px;grid-column:1/-1;color:var(--text-light)">No portfolio items yet. Upload your first work!</div>';return}
+  
+  grid.innerHTML=portfolioItems.map(item=>`
+    <div class="portfolio-card">
+      <div class="portfolio-img" style="background-image:url('${item.images&&item.images[0]?item.images[0]:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22><rect fill=%22%23e8f4fb%22 width=%22300%22 height=%22200%22/><text x=%22150%22 y=%22110%22 text-anchor=%22middle%22 font-size=%2240%22>🧵</text></svg>'}')">
+        <span class="badge" style="background:${getBadgeColor(item.category)};color:white">${item.category}</span>
+      </div>
+      <div class="portfolio-info">
+        <h4>${item.title}</h4>
+        <p>${item.description?item.description.substring(0,60)+'...':'No description'}</p>
+        <div class="portfolio-meta">
+          <span><i class="fas fa-tag"></i> ${item.price_range||'N/A'}</span>
+          <span><i class="fas fa-clock"></i> ${item.estimated_days||7}d</span>
+        </div>
+        <div class="portfolio-meta">
+          <span><i class="fas fa-heart"></i> ${item.likes||0} likes</span>
+          <span><i class="fas fa-bookmark"></i> ${item.saves||0} saves</span>
+        </div>
+        <div class="portfolio-actions">
+          <button class="btn-edit" onclick="editItem('${item._id}')"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn-delete" onclick="deleteItem('${item._id}')"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getBadgeColor(cat){
+  const colors={Bridal:'#be185d','Party Wear':'#dc2626','Formal Wear':'#1d4ed8','Casual Wear':'#059669','Ethnic Wear':'#b45309',"Men's Wear":'#0c7bb3',"Women's Wear":'#7c3aed','Kids Wear':'#f59e0b',Alterations:'#6366f1'};
+  return colors[cat]||'#0c7bb3';
+}
+
+function editItem(id){
+  const item=portfolioItems.find(p=>p._id===id);
+  if(!item)return;
+  document.getElementById('editId').value=id;
+  document.getElementById('title').value=item.title||'';
+  document.getElementById('category').value=item.category||'';
+  document.getElementById('gender').value=item.gender||'';
+  document.getElementById('fabric').value=item.fabric_type||'';
+  document.getElementById('price').value=item.price||'';
+  document.getElementById('days').value=item.estimated_days||7;
+  document.getElementById('fittings').value=item.fittings_required||2;
+  document.getElementById('complexity').value=item.complexity_level||'Medium';
+  document.getElementById('desc').value=item.description||'';
+  document.getElementById('submitLabel').textContent='Update Portfolio';
+  document.getElementById('formTitle').textContent='Edit Work';
+  editingId=id;
+  uploadedImages=item.images?item.images.map(data=>({name:'existing',data})):[];
+  renderPreviews();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function deleteItem(id){
+  if(!confirm('Delete this portfolio item?'))return;
+  try{
+    const r=await fetch(`/api/tailor/portfolio/${id}/delete`,{method:'DELETE',headers:{Authorization:`Bearer ${token}`}});
+    if(r.ok){showToast('Deleted!');await fetchPortfolio()}else{showToast('Failed to delete')}
+  }catch(e){showToast('Error')}
+}
+
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
+
+fetchPortfolio();
+</script>
+</body>
+</html>

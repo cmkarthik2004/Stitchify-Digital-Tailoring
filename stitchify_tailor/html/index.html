@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stitchify – Tailor Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Sora:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<style>
+:root {
+  --primary:#0c7bb3;--primary-dk:#095e8a;--primary-lt:#e8f4fb;
+  --accent:#a75c9a;--accent-lt:#f3e8fb;
+  --gradient:linear-gradient(135deg,#0c7bb3,#a75c9a);
+  --gradient-h:linear-gradient(90deg,#0c7bb3,#a75c9a);
+  --success:#16a34a;--warning:#f59e0b;--danger:#ef4444;
+  --white:#fff;--bg:#f4f6fa;--border:#e0e7ef;
+  --text:#1a1a2e;--text-main:#1a2340;--text-mid:#4a4a6a;--text-light:#9aaac4;
+  --shadow:0 4px 20px rgba(12,123,179,0.08);--shadow-lg:0 12px 40px rgba(12,123,179,0.14);
+  --radius-sm:10px;--radius:16px;--radius-lg:22px;
+  --font-display:'Playfair Display',serif;
+  --font-body:'DM Sans','Sora',sans-serif;
+  --font-accent:'Outfit',sans-serif;
+  --tr:all 0.25s ease;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+
+/* ── HEADER: single unified bar ── */
+.header{
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:56px;gap:16px;
+}
+.brand{
+  font-size:22px;font-weight:700;letter-spacing:1.5px;
+  font-family:var(--font-display);white-space:nowrap;flex-shrink:0;
+}
+.brand-s{color:var(--primary)}.brand-i{color:var(--accent)}
+
+.header-nav{
+  display:flex;align-items:center;gap:2px;flex-wrap:nowrap;overflow-x:auto;
+  scrollbar-width:none;
+}
+.header-nav::-webkit-scrollbar{display:none}
+.nav-link{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:8px;
+  text-decoration:none;color:var(--text-mid);
+  font-size:12px;font-weight:600;
+  white-space:nowrap;transition:var(--tr);
+}
+.nav-link i{font-size:13px}
+.nav-link:hover{background:var(--primary-lt);color:var(--primary)}
+.nav-link.active{background:var(--gradient);color:white}
+
+/* HERO */
+.hero{
+  background:linear-gradient(120deg,#0c7bb3 0%,#1591cc 40%,#a75c9a 100%);
+  padding:48px 56px;
+  position:relative;overflow:hidden;
+}
+.hero::after{
+  content:'';position:absolute;right:-80px;top:-80px;
+  width:320px;height:320px;
+  background:rgba(255,255,255,0.04);border-radius:50%;
+}
+.hero-info{z-index:1;position:relative;}
+.hero-shop{
+  background:rgba(255,255,255,0.18);color:#fff;
+  font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  border-radius:15px;padding:4px 12px;display:inline-block;margin-bottom:10px;
+  border:1px solid rgba(255,255,255,0.2);
+}
+.hero h1{font-family:var(--font-display);font-size:36px;font-weight:700;color:#fff;line-height:1.15}
+.hero p{font-size:13px;color:rgba(255,255,255,0.8);margin-top:4px;max-width:400px}
+
+/* CONTENT */
+.content{padding:28px 48px;max-width:1400px;margin:0 auto}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:var(--white);border-radius:var(--radius);padding:20px;border:1px solid var(--border);display:flex;align-items:center;gap:14px;transition:var(--tr);cursor:pointer}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.stat-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.stat-icon.blue{background:var(--primary-lt);color:var(--primary)}
+.stat-icon.purple{background:var(--accent-lt);color:var(--accent)}
+.stat-icon.green{background:#f0fdf4;color:var(--success)}
+.stat-icon.orange{background:#fffbeb;color:var(--warning)}
+.stat-info h3{font-size:22px;font-weight:700;color:var(--text-main);font-family:var(--font-accent)}
+.stat-info p{font-size:11px;color:var(--text-light);margin-top:2px}
+
+/* SECTION */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sec-title{font-size:18px;font-weight:700;color:var(--text-main);font-family:var(--font-accent);display:flex;align-items:center;gap:8px}
+.sec-link{font-size:12px;color:var(--primary);font-weight:600;text-decoration:none;background:var(--primary-lt);padding:5px 12px;border-radius:8px;transition:var(--tr)}
+.sec-link:hover{background:var(--primary);color:white}
+
+/* MY WORK GRID */
+.work-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:32px}
+.work-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);transition:var(--tr);cursor:pointer}
+.work-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.work-img{height:200px;background:linear-gradient(135deg,var(--primary-lt),var(--accent-lt));position:relative;overflow:hidden}
+.work-img img{width:100%;height:100%;object-fit:cover}
+.work-img .fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--primary);opacity:0.2}
+.work-badge{position:absolute;top:10px;right:10px;padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;text-transform:uppercase;background:rgba(255,255,255,0.95);color:var(--primary)}
+.work-body{padding:14px 16px}
+.work-body h4{font-size:15px;font-weight:700;color:var(--text-main);margin-bottom:2px}
+.work-body .cat{font-size:10px;color:var(--primary);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.work-meta{display:flex;gap:12px;margin-bottom:6px}
+.work-meta span{font-size:11px;color:var(--text-mid);display:flex;align-items:center;gap:3px}
+.work-price{font-size:14px;font-weight:700;color:var(--primary)}
+.work-actions{display:flex;gap:6px;margin-top:10px}
+.work-actions button{flex:1;padding:7px 0;border-radius:16px;font-size:11px;font-weight:600;cursor:pointer;border:none;transition:var(--tr);font-family:var(--font-body)}
+.btn-edit{background:var(--primary-lt);color:var(--primary)}.btn-edit:hover{background:var(--primary);color:white}
+.btn-del{background:#fee2e2;color:var(--danger)}.btn-del:hover{background:var(--danger);color:white}
+
+.empty{text-align:center;padding:50px;grid-column:1/-1;color:var(--text-light)}
+.empty i{font-size:40px;margin-bottom:10px;opacity:0.4}
+.empty h3{font-size:16px;color:var(--text-mid);margin-bottom:6px}
+.btn-add{display:inline-flex;align-items:center;gap:5px;padding:9px 22px;border-radius:50px;background:var(--gradient);color:white;font-size:12px;font-weight:600;border:none;cursor:pointer;margin-top:12px;font-family:var(--font-body);text-decoration:none}
+
+.footer{background:var(--text-main);color:#8899aa;padding:20px 32px;text-align:center;font-size:11px;margin-top:32px}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--text-main);color:#fff;padding:10px 22px;border-radius:50px;z-index:9999;opacity:0;pointer-events:none;transition:opacity .3s;font-size:13px;font-weight:500}
+.toast.show{opacity:1}
+
+@media(max-width:900px){
+  .header{padding:0 16px}
+  .nav-link span{display:none}/* icon-only on small screens */
+  .nav-link{padding:6px 10px}
+  .hero{padding:32px 24px}
+  .content{padding:20px 16px}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .work-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .stats-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Single unified header -->
+<header class="header">
+  <div class="brand"><span class="brand-s">Stitch</span><span class="brand-i">ify</span></div>
+  <nav class="header-nav">
+    <a class="nav-link active" href="/tailor"><i class="fas fa-home"></i><span>Home</span></a>
+    <a class="nav-link" href="/tailor/orders"><i class="fas fa-box"></i><span>Orders</span></a>
+    <a class="nav-link" href="/tailor/chat"><i class="fas fa-comment-dots"></i><span>Chat</span></a>
+    <a class="nav-link" href="/tailor/schedule"><i class="fas fa-calendar"></i><span>Schedule</span></a>
+    <a class="nav-link" href="/tailor/profile"><i class="fas fa-user"></i><span>Profile</span></a>
+  </nav>
+</header>
+
+<!-- Hero: welcome text only, no stats -->
+<div class="hero">
+  <div class="hero-info">
+    <span class="hero-shop" id="heroShop">My Studio</span>
+    <h1 id="heroName">Welcome back!</h1>
+    <p id="heroLoc">Manage your designs and orders</p>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card" onclick="location.href='/tailor/orders'"><div class="stat-icon blue"><i class="fas fa-clock"></i></div><div class="stat-info"><h3 id="statPending">0</h3><p>Pending Orders</p></div></div>
+    <div class="stat-card" onclick="location.href='/tailor/orders'"><div class="stat-icon green"><i class="fas fa-check-circle"></i></div><div class="stat-info"><h3 id="statCompleted">0</h3><p>Completed</p></div></div>
+    <div class="stat-card" onclick="location.href='/tailor/orders'"><div class="stat-icon orange"><i class="fas fa-box"></i></div><div class="stat-info"><h3 id="statTotal">0</h3><p>Total Orders</p></div></div>
+    <div class="stat-card" onclick="location.href='/tailor/portfolio'"><div class="stat-icon purple"><i class="fas fa-images"></i></div><div class="stat-info"><h3 id="statPortfolio">0</h3><p>My Portfolio</p></div></div>
+  </div>
+
+  <!-- MY PORTFOLIO -->
+  <div class="sec-head">
+    <div class="sec-title"><i class="fas fa-palette"></i> My Portfolio</div>
+    <a class="sec-link" href="/tailor/portfolio">Manage All</a>
+  </div>
+  <div class="work-grid" id="myWorkGrid">
+    <div class="empty"><i class="fas fa-spinner fa-pulse"></i><h3>Loading your portfolio...</h3></div>
+  </div>
+
+</div>
+
+<footer class="footer"><p>&copy; 2025 Stitchify. All rights reserved.</p></footer>
+<div id="toast" class="toast"></div>
+
+<script>
+const T=localStorage.getItem('token'),U=JSON.parse(localStorage.getItem('user')||'{}');
+if(!T||!U.id)location.href='/stitchify_auth/login.html';
+
+let myWork=[];
+
+async function api(u,o={}){
+  try{const r=await fetch(u,{...o,headers:{...o.headers,Authorization:'Bearer '+T}});const d=await r.json();return{ok:r.ok,data:d}}
+  catch(e){console.error('API Error:',u,e);return{ok:false,data:null}}
+}
+
+async function loadProfile(){
+  const r=await api('/api/tailor/profile/'+U.id);
+  if(r.ok&&r.data){
+    const p=r.data;
+    document.getElementById('heroShop').textContent=p.shop_name||'My Studio';
+    document.getElementById('heroName').textContent='Welcome, '+(p.owner_name||'Tailor')+'!';
+    document.getElementById('heroLoc').textContent=p.location||'Manage your designs and orders';
+  }
+}
+
+async function loadMyWork(){
+  const r=await api('/api/tailor/portfolio/'+U.id);
+  if(r.ok&&Array.isArray(r.data)&&r.data.length){
+    myWork=r.data;
+    document.getElementById('statPortfolio').textContent=myWork.length;
+    renderMyWork();
+  }else{
+    document.getElementById('myWorkGrid').innerHTML='<div class="empty"><i class="fas fa-images"></i><h3>No work uploaded yet</h3><p style="font-size:13px">Go to Portfolio page to add your designs</p><a href="/tailor/portfolio" class="btn-add"><i class="fas fa-plus"></i> Upload Work</a></div>';
+  }
+}
+
+async function loadStats(){
+  const r=await api('/api/tailor/stats/'+U.id);
+  if(r.ok&&r.data){
+    document.getElementById('statPending').textContent=r.data.pending_orders||0;
+    document.getElementById('statCompleted').textContent=r.data.completed_orders||0;
+    document.getElementById('statTotal').textContent=r.data.total_orders||0;
+  }
+}
+
+function renderMyWork(){
+  document.getElementById('myWorkGrid').innerHTML=myWork.slice(0,6).map(item=>{
+    const img=item.images&&item.images[0]&&item.images[0].length>100;
+    return`<div class="work-card" onclick="location.href='/tailor/portfolio'">
+      <div class="work-img">
+        ${img?`<img src="${item.images[0]}" alt="${item.title||'Design'}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
+        <div class="fallback" style="${img?'display:none':'display:flex'}"><i class="fas fa-tshirt"></i></div>
+        <span class="work-badge">${item.category||'Design'}</span>
+      </div>
+      <div class="work-body">
+        <h4>${item.title||'Untitled'}</h4>
+        <div class="cat">${item.category||'General'}</div>
+        <div class="work-meta">
+          <span><i class="fas fa-clock"></i> ${item.estimated_days||7}d</span>
+          <span><i class="fas fa-heart"></i> ${item.likes||0}</span>
+          <span><i class="fas fa-bookmark"></i> ${item.saves||0}</span>
+        </div>
+        <div class="work-price">${item.price_range||'Price on request'}</div>
+        <div class="work-actions">
+          <button class="btn-edit" onclick="event.stopPropagation();location.href='/tailor/portfolio'"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn-del" onclick="event.stopPropagation();deleteItem('${item._id}')"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function deleteItem(id){
+  if(!confirm('Delete this item?'))return;
+  const r=await api('/api/tailor/portfolio/'+id+'/delete',{method:'DELETE'});
+  if(r.ok){toast('Deleted!');await loadMyWork();await loadStats();}else{toast('Failed')}
+}
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+
+(async()=>{
+  await loadProfile();
+  await loadMyWork();
+  await loadStats();
+})();
+</script>
+</body>
+</html>

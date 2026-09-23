@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stitchify — Verify Email</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Montserrat:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #0c7bb3; --blue-dk: #095e8a; --blue-lt: #e0f2fb;
+      --pink: #f2bae8; --pink-dk: #e89fd4; --mid: #4a5568; --char: #0d1b2a;
+      --input-bg: #f4f8fc; --input-border: #cde4f0;
+    }
+    body {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #eef4fb 0%, #fce8f8 100%);
+      font-family: 'DM Sans', sans-serif; padding: 20px;
+    }
+    .blob-pink { position:fixed;top:-40px;right:-40px;width:200px;height:200px;background:var(--pink);border-radius:50%;opacity:.65;filter:blur(50px);z-index:0;pointer-events:none; }
+    .blob-blue { position:fixed;bottom:-50px;left:-50px;width:220px;height:220px;background:var(--blue);border-radius:50%;opacity:.45;filter:blur(50px);z-index:0;pointer-events:none; }
+    .card {
+      position:relative; z-index:1; background:#fff; border-radius:28px; padding:48px 44px;
+      box-shadow:0 30px 80px rgba(12,123,179,.18), 0 8px 24px rgba(242,186,232,.2);
+      width:100%; max-width:440px; text-align:center;
+      animation: cardIn .6s cubic-bezier(0.34,1.2,0.64,1) both;
+    }
+    @keyframes cardIn { from{opacity:0;transform:translateY(30px) scale(.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+    .logo { font-size:42px; margin-bottom:16px; }
+    h2 { font-family:'Montserrat',sans-serif; font-size:24px; font-weight:800; color:var(--blue); margin-bottom:8px; }
+    .subtitle { color:var(--mid); font-size:14px; margin-bottom:16px; line-height:1.6; }
+    .email-badge {
+      display:inline-block; background:var(--blue-lt); color:var(--blue-dk);
+      font-weight:700; font-size:13px; padding:6px 16px; border-radius:20px;
+      margin-bottom:28px; word-break:break-all;
+    }
+    .otp-row { display:flex; gap:10px; justify-content:center; margin-bottom:24px; }
+    .otp-row input {
+      width:52px; height:60px; text-align:center; font-size:26px; font-weight:800;
+      color:var(--char); background:var(--input-bg); border:2px solid var(--input-border);
+      border-radius:12px; outline:none; transition:border-color .2s, box-shadow .2s;
+      font-family:'Nunito',sans-serif;
+    }
+    .otp-row input:focus { border-color:var(--blue); background:#fff; box-shadow:0 4px 14px rgba(12,123,179,.14); }
+    .otp-row input.filled { border-color:var(--blue); }
+    .btn {
+      width:100%; background:linear-gradient(135deg,#0c7bb3 0%,#a78fe8 60%,#f2bae8 100%);
+      color:#fff; border:none; border-radius:30px; padding:14px;
+      font-family:'Nunito',sans-serif; font-size:14px; font-weight:800;
+      letter-spacing:1.8px; text-transform:uppercase; cursor:pointer;
+      box-shadow:0 6px 22px rgba(12,123,179,.3); transition:all .3s;
+    }
+    .btn:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 10px 30px rgba(12,123,179,.4); }
+    .btn:disabled { opacity:.6; cursor:not-allowed; }
+    .resend-row { margin-top:18px; font-size:13px; color:var(--mid); }
+    .resend-link { color:var(--blue); font-weight:700; cursor:pointer; display:inline; }
+    .resend-link:hover:not(.disabled) { text-decoration:underline; }
+    .resend-link.disabled { color:#bbb; cursor:not-allowed; }
+    .timer { font-size:12px; color:#aaa; margin-top:8px; min-height:18px; }
+    .msg { margin-top:16px; padding:10px 16px; border-radius:10px; font-size:13px; font-weight:600; display:none; }
+    .msg.success { background:#e7f9f0; color:#1a7a4a; display:block; }
+    .msg.error   { background:#fdecea; color:#c0392b; display:block; }
+    .back-link { margin-top:22px; font-size:13px; color:var(--mid); }
+    .back-link a { color:var(--blue); font-weight:700; text-decoration:none; }
+    .back-link a:hover { text-decoration:underline; }
+    @media(max-width:480px){
+      .card{padding:36px 24px;}
+      .otp-row input{width:42px;height:52px;font-size:22px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="blob-pink"></div>
+  <div class="blob-blue"></div>
+
+  <div class="card">
+    <div class="logo">✉️</div>
+    <h2>Check Your Email</h2>
+    <p class="subtitle">We sent a 6-digit verification code to</p>
+    <div class="email-badge" id="emailDisplay">loading…</div>
+
+    <div class="otp-row" id="otpRow">
+      <input type="tel" maxlength="1" class="otp-digit" autocomplete="one-time-code"/>
+      <input type="tel" maxlength="1" class="otp-digit"/>
+      <input type="tel" maxlength="1" class="otp-digit"/>
+      <input type="tel" maxlength="1" class="otp-digit"/>
+      <input type="tel" maxlength="1" class="otp-digit"/>
+      <input type="tel" maxlength="1" class="otp-digit"/>
+    </div>
+
+    <button class="btn" id="verifyBtn" onclick="verifyOtp()">Verify Email</button>
+
+    <div class="resend-row">
+      Didn't get the code?
+      <span class="resend-link" id="resendLink" onclick="resendOtp()">Resend OTP</span>
+    </div>
+    <div class="timer" id="timerDisplay"></div>
+
+    <div class="msg" id="msg"></div>
+    <div class="back-link"><a href="index.html">← Back to Login</a></div>
+  </div>
+
+  <script>
+    // ── Config (change if your backend runs on a different port) ──
+    const API_BASE = 'http://localhost:5000/api';
+
+    // ── Read email from URL — e.g. verify-email.html?email=user@example.com ──
+    const params = new URLSearchParams(window.location.search);
+    const email  = params.get('email') || '';
+    document.getElementById('emailDisplay').textContent = email || '(unknown email)';
+
+    // ── OTP digit inputs ──────────────────────────────────────
+    const digits = Array.from(document.querySelectorAll('.otp-digit'));
+
+    digits.forEach((inp, i) => {
+      // Only allow numbers
+      inp.addEventListener('input', () => {
+        // Strip non-digits and keep only the last character typed
+        inp.value = inp.value.replace(/\D/g, '').slice(-1);
+        inp.classList.toggle('filled', inp.value !== '');
+        // Auto-advance to next box
+        if (inp.value && i < digits.length - 1) {
+          digits[i + 1].focus();
+        }
+      });
+
+      // Backspace goes to previous box
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Backspace' && inp.value === '' && i > 0) {
+          digits[i - 1].focus();
+          digits[i - 1].value = '';
+          digits[i - 1].classList.remove('filled');
+        }
+        // Submit on Enter if all filled
+        if (e.key === 'Enter') verifyOtp();
+      });
+
+      // Handle paste (e.g. user copies "482910" from their email)
+      inp.addEventListener('paste', e => {
+        e.preventDefault();
+        const pasted = (e.clipboardData || window.clipboardData)
+          .getData('text').replace(/\D/g, '').slice(0, 6);
+        pasted.split('').forEach((ch, j) => {
+          if (digits[j]) {
+            digits[j].value = ch;
+            digits[j].classList.add('filled');
+          }
+        });
+        // FIX: clamp focus index to max index (5), not paste length
+        const focusIdx = Math.min(pasted.length, digits.length - 1);
+        digits[focusIdx].focus();
+      });
+    });
+
+    function getOtpValue() {
+      return digits.map(d => d.value).join('');
+    }
+
+    // ── Message helper ────────────────────────────────────────
+    function showMsg(text, type) {
+      const el = document.getElementById('msg');
+      el.textContent = text;
+      el.className = 'msg ' + type;
+    }
+
+    // ── Verify OTP ────────────────────────────────────────────
+    async function verifyOtp() {
+      const otp = getOtpValue();
+      if (otp.length < 6) {
+        showMsg('Please enter all 6 digits.', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('verifyBtn');
+      btn.disabled = true;
+      btn.textContent = 'Verifying…';
+
+      try {
+        const res  = await fetch(API_BASE + '/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, otp })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          showMsg('✅ Email verified! Redirecting to login…', 'success');
+          setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+        } else {
+          showMsg(data.error || 'Verification failed. Try again.', 'error');
+          btn.disabled = false;
+          btn.textContent = 'Verify Email';
+        }
+      } catch (err) {
+        showMsg('Network error — is the backend running?', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Verify Email';
+      }
+    }
+
+    // ── Resend OTP with 60-second cooldown ───────────────────
+    let cooldownSeconds = 0;
+    let cooldownTimer   = null;
+
+    function startCooldown(seconds) {
+      cooldownSeconds = seconds;
+      const link    = document.getElementById('resendLink');
+      const timerEl = document.getElementById('timerDisplay');
+
+      link.classList.add('disabled');
+
+      clearInterval(cooldownTimer);
+
+      // FIX: update display immediately, THEN start interval
+      timerEl.textContent = 'Resend available in ' + cooldownSeconds + 's';
+
+      cooldownTimer = setInterval(() => {
+        cooldownSeconds--;
+        if (cooldownSeconds <= 0) {
+          clearInterval(cooldownTimer);
+          timerEl.textContent = '';
+          link.classList.remove('disabled');
+          cooldownSeconds = 0;
+        } else {
+          timerEl.textContent = 'Resend available in ' + cooldownSeconds + 's';
+        }
+      }, 1000);
+    }
+
+    async function resendOtp() {
+      if (cooldownSeconds > 0) return;   // guard — link is visually disabled too
+      if (!email) {
+        showMsg('Email address is missing. Go back and sign up again.', 'error');
+        return;
+      }
+
+      try {
+        const res  = await fetch(API_BASE + '/resend-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          showMsg('New OTP sent! Check your inbox.', 'success');
+          startCooldown(60);
+          // Clear all digit boxes so user types fresh
+          digits.forEach(d => { d.value = ''; d.classList.remove('filled'); });
+          digits[0].focus();
+        } else {
+          showMsg(data.error || 'Could not resend OTP.', 'error');
+        }
+      } catch (err) {
+        showMsg('Network error — is the backend running?', 'error');
+      }
+    }
+
+    // Auto-focus first input on load
+    digits[0].focus();
+  </script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stitchify – Manage Designs</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{--primary:#0c7bb3;--accent:#a75c9a;--gradient:linear-gradient(135deg,#0c7bb3,#a75c9a);--white:#fff;--bg:#f4f6fa;--border:#e0e7ef;--text:#1a1a2e;--text-mid:#4a4a6a;--radius:16px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text)}
+.header{background:var(--white);padding:16px 32px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:28px;font-weight:700;font-family:'Playfair Display',serif}.brand-s{color:var(--primary)}.brand-i{color:var(--accent)}
+.nav{display:flex;gap:8px}
+.nav a{padding:8px 16px;text-decoration:none;color:var(--text-mid);border-radius:20px}
+.nav a.active{background:var(--gradient);color:white}
+.container{max-width:1200px;margin:0 auto;padding:32px}
+.form-card{background:var(--white);border-radius:var(--radius);padding:24px;margin-bottom:32px;border:1px solid var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-weight:600;margin-bottom:6px;font-size:13px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:inherit}
+.upload-area{border:2px dashed var(--border);border-radius:var(--radius);padding:40px;text-align:center;cursor:pointer;margin-bottom:16px}
+.upload-area:hover{border-color:var(--primary);background:var(--bg)}
+.preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:12px;margin-top:16px}
+.preview-item{position:relative;border-radius:8px;overflow:hidden}
+.preview-item img{width:100%;height:100px;object-fit:cover}
+.preview-item .remove{position:absolute;top:4px;right:4px;background:red;color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px}
+.btn-submit{background:var(--gradient);color:white;padding:12px 24px;border:none;border-radius:50px;font-weight:600;cursor:pointer;width:100%}
+.designs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-top:20px}
+.design-card{background:var(--white);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.design-img{height:200px;background-size:cover;background-position:center;position:relative}
+.design-info{padding:16px}
+.design-info h3{font-size:16px;margin-bottom:4px}
+.design-info .price{color:var(--primary);font-weight:700;margin-top:8px}
+.design-actions{display:flex;gap:8px;margin-top:12px}
+.design-actions button{flex:1;padding:8px;border-radius:20px;border:none;cursor:pointer}
+.btn-edit{background:#e8f4fb;color:var(--primary)}
+.btn-delete{background:#fee2e2;color:#ef4444}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:white;padding:12px 24px;border-radius:50px;z-index:9999;opacity:0;transition:opacity .3s}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand"><span class="brand-s">Stitch</span><span class="brand-i">ify</span></div>
+  <div class="nav">
+    <a href="/tailor">Home</a>
+    <a href="/tailor/orders">Orders</a>
+    <a href="/tailor/chat">Chat</a>
+    <a href="/tailor/designs" class="active">Designs</a>
+    <a href="/tailor/profile">Profile</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="form-card">
+    <h2 style="margin-bottom:20px"><i class="fas fa-plus-circle"></i> Add New Design</h2>
+    
+    <div class="upload-area" onclick="document.getElementById('imageInput').click()">
+      <i class="fas fa-cloud-upload-alt" style="font-size:48px;color:var(--primary)"></i>
+      <p>Click to upload design images</p>
+      <small>JPG, PNG (Max 5MB each)</small>
+      <input type="file" id="imageInput" accept="image/*" multiple style="display:none" onchange="handleImages(this)">
+    </div>
+    <div class="preview-grid" id="previewGrid"></div>
+    
+    <div class="form-grid">
+      <div class="form-group"><label>Design Title *</label><input type="text" id="title" placeholder="e.g., Royal Bridal Lehenga"></div>
+      <div class="form-group"><label>Category *</label>
+        <select id="category">
+          <option value="">Select</option>
+          <option>Bridal Wear</option><option>Party Wear</option><option>Formal Wear</option>
+          <option>Casual Wear</option><option>Ethnic Wear</option><option>Men's Wear</option>
+          <option>Women's Wear</option><option>Kids Wear</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Price (₹) *</label><input type="number" id="price" placeholder="e.g., 5000"></div>
+      <div class="form-group"><label>Estimated Days</label><input type="number" id="days" value="7"></div>
+      <div class="form-group"><label>Fabric Type</label>
+        <select id="fabric"><option>Silk</option><option>Cotton</option><option>Velvet</option><option>Linen</option><option>Georgette</option></select>
+      </div>
+      <div class="form-group"><label>Gender</label>
+        <select id="gender"><option>Female</option><option>Male</option><option>Kids</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea id="desc" rows="3" placeholder="Describe your design..."></textarea></div>
+    
+    <button class="btn-submit" onclick="saveDesign()"><i class="fas fa-save"></i> Save Design</button>
+  </div>
+
+  <h2><i class="fas fa-images"></i> My Designs <span id="designCount">(0)</span></h2>
+  <div class="designs-grid" id="designsGrid"></div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const token = localStorage.getItem('token');
+const user = JSON.parse(localStorage.getItem('user') || '{}');
+if (!token || !user.id) window.location.href = '/login-page';
+
+let uploadedImages = [];
+let designs = [];
+let editingId = null;
+
+function handleImages(input) {
+  const files = Array.from(input.files);
+  files.forEach(file => {
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('File too large: ' + file.name);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      uploadedImages.push({ name: file.name, data: e.target.result });
+      renderPreviews();
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function renderPreviews() {
+  document.getElementById('previewGrid').innerHTML = uploadedImages.map((img, i) => `
+    <div class="preview-item">
+      <img src="${img.data}" alt="${img.name}">
+      <div class="remove" onclick="removeImage(${i})">&times;</div>
+    </div>
+  `).join('');
+}
+
+function removeImage(i) {
+  uploadedImages.splice(i, 1);
+  renderPreviews();
+}
+
+async function saveDesign() {
+  const title = document.getElementById('title').value.trim();
+  const category = document.getElementById('category').value;
+  const price = parseInt(document.getElementById('price').value);
+  
+  if (!title) { showToast('Please enter a title'); return; }
+  if (!category) { showToast('Please select a category'); return; }
+  if (!price || price < 1) { showToast('Please enter a valid price'); return; }
+  if (uploadedImages.length === 0 && !editingId) { showToast('Please upload at least one image'); return; }
+  
+  const design = {
+    tailor_id: user.id,
+    title: title,
+    category: category,
+    price: price,
+    price_range: `₹${price.toLocaleString('en-IN')}`,
+    estimated_days: parseInt(document.getElementById('days').value) || 7,
+    fabric_type: document.getElementById('fabric').value,
+    gender: document.getElementById('gender').value,
+    description: document.getElementById('desc').value,
+    images: uploadedImages.map(img => img.data),
+    likes: 0,
+    saves: 0
+  };
+  
+  try {
+    const url = editingId ? `/api/tailor/portfolio/${editingId}/update` : '/api/tailor/portfolio/add';
+    const method = editingId ? 'PUT' : 'POST';
+    
+    const res = await fetch(url, {
+      method: method,
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify(design)
+    });
+    
+    if (res.ok) {
+      showToast(editingId ? 'Design updated!' : 'Design added!');
+      resetForm();
+      loadDesigns();
+    } else {
+      showToast('Failed to save design');
+    }
+  } catch (e) {
+    showToast('Error saving design');
+  }
+}
+
+function resetForm() {
+  document.getElementById('title').value = '';
+  document.getElementById('category').value = '';
+  document.getElementById('price').value = '';
+  document.getElementById('days').value = '7';
+  document.getElementById('fabric').value = 'Silk';
+  document.getElementById('gender').value = 'Female';
+  document.getElementById('desc').value = '';
+  uploadedImages = [];
+  editingId = null;
+  renderPreviews();
+}
+
+async function loadDesigns() {
+  try {
+    const res = await fetch(`/api/tailor/portfolio/${user.id}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) {
+      designs = await res.json();
+      renderDesigns();
+    }
+  } catch (e) {
+    console.error('Error loading designs:', e);
+  }
+}
+
+function renderDesigns() {
+  const grid = document.getElementById('designsGrid');
+  document.getElementById('designCount').textContent = `(${designs.length})`;
+  
+  if (designs.length === 0) {
+    grid.innerHTML = '<div style="text-align:center;padding:40px;grid-column:1/-1">No designs yet. Add your first design above!</div>';
+    return;
+  }
+  
+  grid.innerHTML = designs.map(d => `
+    <div class="design-card">
+      <div class="design-img" style="background-image:url('${d.images && d.images[0] ? d.images[0] : ''}')">
+        <div style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.7);color:white;padding:2px 8px;border-radius:12px;font-size:10px">${d.category || 'Design'}</div>
+      </div>
+      <div class="design-info">
+        <h3>${d.title || 'Untitled'}</h3>
+        <div class="price">${d.price_range || `₹${d.price?.toLocaleString('en-IN')}`}</div>
+        <div class="design-actions">
+          <button class="btn-edit" onclick="editDesign('${d._id}')"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn-delete" onclick="deleteDesign('${d._id}')"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function editDesign(id) {
+  const design = designs.find(d => d._id === id);
+  if (!design) return;
+  
+  editingId = id;
+  document.getElementById('title').value = design.title || '';
+  document.getElementById('category').value = design.category || '';
+  document.getElementById('price').value = design.price || '';
+  document.getElementById('days').value = design.estimated_days || 7;
+  document.getElementById('fabric').value = design.fabric_type || 'Silk';
+  document.getElementById('gender').value = design.gender || 'Female';
+  document.getElementById('desc').value = design.description || '';
+  uploadedImages = design.images ? design.images.map(img => ({ name: 'existing', data: img })) : [];
+  renderPreviews();
+  document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth' });
+}
+
+async function deleteDesign(id) {
+  if (!confirm('Delete this design?')) return;
+  try {
+    const res = await fetch(`/api/tailor/portfolio/${id}/delete`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) {
+      showToast('Design deleted!');
+      loadDesigns();
+    } else {
+      showToast('Failed to delete');
+    }
+  } catch (e) {
+    showToast('Error deleting');
+  }
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+loadDesigns();
+</script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:sans-serif}
+:root{
+  --teal:#1B6CA8;--teal2:#2196C4;--teal3:#E8F4FB;
+  --pink:#C850A0;--pink2:#E91E8C;
+  --wh:#ffffff;--bg:#F0F4F8;--bd:#D0E6F5;
+  --tx:#0D1B2A;
+  --gr:#10B981;--am:#F59E0B;--rd:#EF4444;
+  --suc:#D1FAE5;--suct:#065F46;
+  --wrn:#FEF3C7;--wrnt:#92400E;
+  --dan:#FEE2E2;--dant:#991B1B;
+}
+.app{width:100%;min-height:580px;display:flex;flex-direction:column;background:var(--bg)}
+.topbar{background:var(--wh);border-bottom:1px solid var(--bd);display:flex;align-items:center;height:52px;padding:0 12px;gap:2px;position:relative;z-index:60}
+.logo{font-size:18px;font-weight:700;color:var(--tx);flex:1;text-align:center;letter-spacing:.2px;pointer-events:none}
+.logo span{color:var(--teal2)}
+.nb{background:transparent;border:none;color:var(--teal);font-size:12px;padding:5px 9px;border-radius:20px;cursor:pointer;white-space:nowrap;font-weight:500}
+.nb:hover{background:var(--teal3)}
+.nb.on{background:var(--teal);color:#fff}
+.hbg{background:transparent;border:1.5px solid var(--bd);color:var(--teal);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:15px;flex-shrink:0}
+.hbg:hover{background:var(--teal3)}
+
+.drawer{position:absolute;top:52px;right:0;width:220px;background:var(--wh);border-left:1px solid var(--bd);border-bottom:1px solid var(--bd);border-radius:0 0 0 14px;z-index:55;display:none;flex-direction:column;padding:8px 0;box-shadow:-4px 4px 16px rgba(27,108,168,.10)}
+.drawer.on{display:flex}
+.di{display:flex;align-items:center;gap:12px;padding:11px 20px;font-size:14px;font-weight:600;color:var(--teal);cursor:pointer;border:none;background:transparent;width:100%;text-align:left}
+.di:hover{background:var(--teal3)}
+.di.on{background:var(--teal);color:#fff;border-radius:0}
+.di-icon{font-size:16px;width:20px;text-align:center}
+
+.body{flex:1;padding:14px;position:relative;overflow:hidden}
+.pg{display:none}.pg.on{display:block}
+.sec{font-size:14px;font-weight:700;color:var(--tx);margin-bottom:12px}
+
+.ag{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-bottom:18px;border:1.5px solid var(--bd);border-radius:14px;overflow:hidden}
+.ac{background:var(--wh);padding:16px 8px;text-align:center;cursor:pointer;transition:background .15s;border-right:1px solid var(--bd)}
+.ac:last-child{border-right:none}
+.ac:hover{background:var(--teal3)}
+.av{width:52px;height:52px;border-radius:50%;background:var(--teal3);border:2.5px solid var(--teal2);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:var(--teal);margin:0 auto 9px}
+.an{font-size:12.5px;font-weight:700;color:var(--tx)}
+.ar{font-size:11px;color:var(--teal2);margin-top:2px}
+
+.rjbox{background:var(--wh);border:1px solid var(--bd);border-radius:14px;padding:16px}
+.rjr{display:flex;gap:0;margin-top:10px;border:1.5px solid var(--bd);border-radius:10px;overflow:hidden}
+.rjb{flex:1;padding:10px;background:var(--teal3);border:none;border-right:1px solid var(--bd);color:var(--teal);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s,color .15s}
+.rjb:last-child{border-right:none}
+.rjb:hover{background:var(--teal);color:#fff}
+
+.ov{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(27,108,168,.18);z-index:40;display:none;align-items:center;justify-content:center}
+.ov.on{display:flex}
+.md{background:#fff;border-radius:18px;padding:22px;width:300px;border:1.5px solid var(--bd);max-height:94%;overflow-y:auto}
+.mc{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.mx{background:transparent;border:none;font-size:18px;cursor:pointer;color:#aaa;padding:0;line-height:1}
+.mav{width:68px;height:68px;border-radius:50%;background:var(--teal3);border:3px solid var(--teal2);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:var(--teal);margin:0 auto 10px}
+.mn{font-size:16px;font-weight:700;text-align:center;color:var(--tx)}
+.mbg{display:block;width:fit-content;margin:6px auto 0;background:var(--teal3);color:var(--teal);font-size:11px;padding:3px 14px;border-radius:20px;font-weight:600}
+.mi{margin-top:12px;border-top:1px solid var(--bd);padding-top:10px}
+.ir{display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid #f0f4f8}
+.ir:last-child{border-bottom:none}
+.il{color:#888}.iv{color:var(--tx);font-weight:600}
+
+.tabs{display:flex;gap:0;margin-bottom:14px;border:1.5px solid var(--bd);border-radius:20px;overflow:hidden;width:fit-content}
+.tb{padding:7px 22px;border:none;background:transparent;font-size:13px;cursor:pointer;color:var(--teal);font-weight:600}
+.tb.on{background:var(--teal);color:#fff}
+.ml{display:flex;flex-direction:column;gap:0;border:1.5px solid var(--bd);border-radius:12px;overflow:hidden}
+.mr{background:var(--wh);padding:11px 13px;display:flex;align-items:center;gap:11px;cursor:pointer;border-bottom:1px solid var(--bd);transition:background .15s}
+.mr:last-child{border-bottom:none}
+.mr:hover{background:var(--teal3)}
+.mav2{width:40px;height:40px;border-radius:50%;background:var(--teal3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--teal);flex-shrink:0}
+.mi2{flex:1;min-width:0}
+.mn2{font-size:13px;font-weight:700;color:var(--tx)}
+.mm2{font-size:11.5px;color:#888;margin-top:2px}
+.pill{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600;flex-shrink:0}
+.pa{background:var(--suc);color:var(--suct)}
+.pw{background:var(--wrn);color:var(--wrnt)}
+.pb{background:var(--dan);color:var(--dant)}
+.mact{display:flex;gap:5px;flex-shrink:0}
+.bapp{background:var(--wrn);border:none;color:var(--wrnt);border-radius:20px;padding:5px 9px;font-size:11px;cursor:pointer;font-weight:600}
+.bapp:hover{background:var(--am);color:#fff}
+.brem{background:var(--dan);border:none;color:var(--dant);border-radius:20px;padding:5px 9px;font-size:11px;cursor:pointer;font-weight:600}
+.brem:hover{background:var(--rd);color:#fff}
+
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-bottom:16px;border:1.5px solid var(--bd);border-radius:12px;overflow:hidden}
+.sc{background:var(--wh);padding:13px;border-right:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+.sc:nth-child(3n){border-right:none}
+.sc:nth-child(4),.sc:nth-child(5),.sc:nth-child(6){border-bottom:none}
+.sl{font-size:11px;color:#888;margin-bottom:4px}
+.sv{font-size:20px;font-weight:700;color:var(--teal)}
+.sd{font-size:11px;margin-top:3px}
+.up{color:var(--gr)}.dn{color:var(--rd)}
+.ca{background:var(--wh);border:1.5px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:14px}
+.ct{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px}
+.bc{display:flex;align-items:flex-end;gap:6px;height:100px}
+.bw{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%;justify-content:flex-end}
+.br{width:100%;background:#7EC8E3;border-radius:4px 4px 0 0;cursor:pointer}
+.br:hover{background:var(--teal)}
+.bl2{font-size:10px;color:#888}
+.aur{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1.5px solid var(--bd);border-radius:12px;overflow:hidden}
+.auc{background:var(--wh);padding:12px;text-align:center;border-right:1px solid var(--bd)}
+.auc:last-child{border-right:none}
+.aun{font-size:19px;font-weight:700;color:var(--teal)}
+.aul{font-size:11px;color:#888;margin-top:3px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gr);margin-right:4px;animation:pu 1.2s infinite}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.3}}
+
+.fr{display:flex;gap:0;margin-bottom:14px;border:1.5px solid var(--bd);border-radius:20px;overflow:hidden;width:fit-content}
+.fb{padding:6px 14px;border:none;border-right:1px solid var(--bd);background:transparent;font-size:12px;cursor:pointer;color:var(--teal);font-weight:600}
+.fb:last-child{border-right:none}
+.fb.on{background:var(--teal);color:#fff}
+.rg{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-bottom:14px;border:1.5px solid var(--bd);border-radius:12px;overflow:hidden}
+.rc{background:var(--wh);padding:13px;border-right:1px solid var(--bd);border-bottom:1px solid var(--bd);cursor:pointer;transition:background .15s}
+.rc:nth-child(3n){border-right:none}
+.rc:nth-child(4),.rc:nth-child(5),.rc:nth-child(6){border-bottom:none}
+.rc:hover{background:var(--teal3)}
+.ri{font-size:18px;margin-bottom:5px}
+.rv{font-size:19px;font-weight:700;color:var(--teal)}
+.rl{font-size:11px;color:#888;margin-top:2px}
+.rs{font-size:11px;margin-top:2px}
+.rtbl{background:var(--wh);border:1.5px solid var(--bd);border-radius:12px;padding:14px;overflow-x:auto}
+.rtbl table{width:100%;border-collapse:collapse;font-size:12.5px;table-layout:fixed}
+.rtbl th{text-align:left;padding:7px 6px;color:#888;font-weight:600;border-bottom:1px solid var(--bd)}
+.rtbl td{padding:7px 6px;color:var(--tx);border-bottom:1px solid #f0f4f8}
+.rtbl tr:last-child td{border-bottom:none}
+
+.rvlist{display:flex;flex-direction:column;gap:0;border:1.5px solid var(--bd);border-radius:12px;overflow:hidden}
+.rvc{background:var(--wh);padding:12px 14px;border-bottom:1px solid var(--bd)}
+.rvc:last-child{border-bottom:none}
+
+.hero{background:var(--teal);border-radius:14px;padding:14px 16px 16px;margin-bottom:16px}
+.hero-sub{font-size:12px;color:rgba(255,255,255,.8);margin-bottom:2px}
+.hero-name{font-size:20px;font-weight:700;color:#fff;margin-bottom:10px}
+.hero-search{background:rgba(255,255,255,.95);border-radius:20px;padding:8px 14px;display:flex;align-items:center;gap:8px;font-size:13px;color:#aaa}
+.hero-loc{font-size:11.5px;color:rgba(255,255,255,.85);margin-top:8px}
+.exp{background:var(--tx);border-radius:14px;padding:14px 16px;margin-bottom:16px}
+.eb{background:var(--pink);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:7px}
+.et{font-size:15px;font-weight:700;color:#fff;margin-bottom:3px}
+.es{font-size:12px;color:rgba(255,255,255,.7);margin-bottom:10px}
+.ebtn{background:var(--pink);color:#fff;border:none;border-radius:20px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer}
+
+.mmd{background:#fff;border-radius:18px;padding:22px;width:320px;border:1.5px solid var(--bd);max-height:92%;overflow-y:auto}
+.mma{display:flex;gap:10px;margin-top:14px}
+.mmba{flex:1;padding:9px;background:var(--wrn);border:none;color:var(--wrnt);border-radius:20px;font-size:13px;font-weight:700;cursor:pointer}
+.mmba:hover{background:var(--am);color:#fff}
+.mmbr{flex:1;padding:9px;background:var(--pink2);border:none;color:#fff;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer}
+.mmbr:hover{background:var(--rd)}
+
+.toast{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:var(--teal);color:#fff;padding:9px 20px;border-radius:20px;font-size:13px;z-index:200;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;font-weight:600}
+.toast.on{opacity:1}
+</style>
+
+<div class="app" id="app">
+  <div class="topbar">
+    <nav style="display:flex;gap:1px;flex-wrap:nowrap">
+      <button class="nb on" onclick="gp('home',this)">Home</button>
+      <button class="nb" onclick="gp('manage',this)">Manage</button>
+      <button class="nb" onclick="gp('dashboard',this)">Dashboard</button>
+      <button class="nb" onclick="gp('report',this)">Report</button>
+      <button class="nb" onclick="gp('review',this)">Review</button>
+    </nav>
+    <div class="logo">Stitch<span>ify</span></div>
+    <button class="hbg" onclick="tgDrawer()" id="hbg-btn">&#9776;</button>
+
+    <div class="drawer" id="drawer">
+      <button class="di on" id="di-home" onclick="gp('home',document.querySelectorAll('.nb')[0]);tgDrawer()"><span class="di-icon">&#127968;</span>Home</button>
+      <button class="di" id="di-manage" onclick="gp('manage',document.querySelectorAll('.nb')[1]);tgDrawer()"><span class="di-icon">&#128101;</span>Manage</button>
+      <button class="di" id="di-dashboard" onclick="gp('dashboard',document.querySelectorAll('.nb')[2]);tgDrawer()"><span class="di-icon">&#128202;</span>Dashboard</button>
+      <button class="di" id="di-report" onclick="gp('report',document.querySelectorAll('.nb')[3]);tgDrawer()"><span class="di-icon">&#128196;</span>Report</button>
+      <button class="di" id="di-review" onclick="gp('review',document.querySelectorAll('.nb')[4]);tgDrawer()"><span class="di-icon">&#11088;</span>Review</button>
+      <div style="border-top:1px solid var(--bd);margin:6px 0"></div>
+      <div style="padding:8px 20px;font-size:11px;color:#aaa;font-weight:600">STITCHIFY ADMIN v3</div>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="pg on" id="pg-home">
+      <div class="hero">
+        <div class="hero-sub">Good morning</div>
+        <div class="hero-name">Admin Panel</div>
+        <div class="hero-search">&#128269; Search admins, orders, reports...</div>
+        <div class="hero-loc">&#128205; Bengaluru &nbsp;&#183;&nbsp; 5 Active Admins</div>
+      </div>
+      <div class="sec">Admin's Panel</div>
+      <div class="ag" id="ag"></div>
+      <div class="exp">
+        <span class="eb">STITCHIFY ADMIN</span>
+        <div class="et">Manage Tailors &amp; Customers</div>
+        <div class="es">Bengaluru &nbsp;&#183;&nbsp; 1,204 tailors &nbsp;&#183;&nbsp; Verified &amp; Trusted</div>
+        <button class="ebtn" onclick="gp('manage',document.querySelectorAll('.nb')[1])">Manage Now &#8594;</button>
+      </div>
+      <div class="rjbox">
+        <div class="sec" style="margin-bottom:0">Recently Joined</div>
+        <div class="rjr">
+          <button class="rjb" onclick="gp('manage',document.querySelectorAll('.nb')[1]);st('tailors')">+ Tailors</button>
+          <button class="rjb" onclick="gp('manage',document.querySelectorAll('.nb')[1]);st('customers')">Customers</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pg" id="pg-manage">
+      <div class="tabs">
+        <button class="tb on" id="tb-tailors" onclick="st('tailors')">Tailors</button>
+        <button class="tb" id="tb-customers" onclick="st('customers')">Customers</button>
+      </div>
+      <div class="ml" id="ml"></div>
+    </div>
+
+    <div class="pg" id="pg-dashboard">
+      <div class="sg">
+        <div class="sc"><div class="sl">Total Revenue</div><div class="sv">&#8377;1,84,500</div><div class="sd up">&#9650; 12% this month</div></div>
+        <div class="sc"><div class="sl">Total Orders</div><div class="sv">2,341</div><div class="sd up">&#9650; 8% this week</div></div>
+        <div class="sc"><div class="sl">Completed</div><div class="sv">1,987</div><div class="sd up">&#9650; 85% rate</div></div>
+        <div class="sc"><div class="sl">Cancelled</div><div class="sv">154</div><div class="sd dn">&#9660; 7% rate</div></div>
+        <div class="sc"><div class="sl">Registrations</div><div class="sv">312</div><div class="sd up">&#9650; 23 today</div></div>
+        <div class="sc"><div class="sl">Avg Rating</div><div class="sv">4.6 &#9733;</div><div class="sd up">&#9650; +0.2 this month</div></div>
+      </div>
+      <div class="ca">
+        <div class="ct">Monthly Orders — 2026</div>
+        <div class="bc" id="bc"></div>
+      </div>
+      <div class="aur">
+        <div class="auc"><div style="font-size:11px;color:#888"><span class="dot"></span>Live</div><div class="aun" id="lc">84</div><div class="aul">Active Users</div></div>
+        <div class="auc"><div class="aun">1,204</div><div class="aul">Total Tailors</div></div>
+        <div class="auc"><div class="aun">8,430</div><div class="aul">Customers</div></div>
+        <div class="auc"><div class="aun">47</div><div class="aul">Complaints</div></div>
+      </div>
+    </div>
+
+    <div class="pg" id="pg-report">
+      <div class="fr">
+        <button class="fb on" onclick="sf(this)">All Time</button>
+        <button class="fb" onclick="sf(this)">This Month</button>
+        <button class="fb" onclick="sf(this)">This Week</button>
+        <button class="fb" onclick="sf(this)">Today</button>
+      </div>
+      <div class="rg">
+        <div class="rc" onclick="toast('Revenue: Blouse &#8377;60k, Saree &#8377;45k, Lehenga &#8377;38k, Formals &#8377;28k')"><div class="ri">&#128176;</div><div class="rv">&#8377;1,84,500</div><div class="rl">Total Revenue</div><div class="rs up">&#9650; &#8377;18,200 vs last</div></div>
+        <div class="rc" onclick="toast('312 new: 204 customers, 108 tailors. Top: Bengaluru')"><div class="ri">&#128100;</div><div class="rv">312</div><div class="rl">New Registrations</div><div class="rs up">&#9650; 23 today</div></div>
+        <div class="rc" onclick="toast('1,987 completed. Avg delivery: 4.2 days')"><div class="ri">&#10003;</div><div class="rv">1,987</div><div class="rl">Online Completed</div><div class="rs up">&#9650; 85% of total</div></div>
+        <div class="rc" onclick="toast('154 cancelled: 60% customer, 40% tailor-declined')"><div class="ri">&#10005;</div><div class="rv">154</div><div class="rl">Cancelled Orders</div><div class="rs dn">&#9660; 7% rate</div></div>
+        <div class="rc" onclick="toast('Avg 4.6 stars from 1,890 reviews. 78% gave 5 stars')"><div class="ri">&#9733;</div><div class="rv">4.6 / 5</div><div class="rl">Average Rating</div><div class="rs up">&#9650; +0.2 this month</div></div>
+        <div class="rc" onclick="toast('47 active: 12 critical, 23 moderate, 12 minor')"><div class="ri">&#128203;</div><div class="rv">47</div><div class="rl">Active Complaints</div><div class="rs dn">12 critical</div></div>
+      </div>
+      <div class="rtbl">
+        <div class="ct">Recent Transactions</div>
+        <table>
+          <tr><th style="width:16%">Order</th><th style="width:22%">Customer</th><th style="width:20%">Tailor</th><th style="width:18%">Amount</th><th style="width:24%">Status</th></tr>
+          <tr><td>#2401</td><td>Priya S.</td><td>Tanuja</td><td>&#8377;1,200</td><td><span class="pill pa">Completed</span></td></tr>
+          <tr><td>#2400</td><td>Meena R.</td><td>Sania</td><td>&#8377;850</td><td><span class="pill pa">Completed</span></td></tr>
+          <tr><td>#2399</td><td>Kavya B.</td><td>Vidya</td><td>&#8377;2,100</td><td><span class="pill pw">Pending</span></td></tr>
+          <tr><td>#2398</td><td>Anita M.</td><td>Lavanya</td><td>&#8377;600</td><td><span class="pill pb">Cancelled</span></td></tr>
+          <tr><td>#2397</td><td>Rekha T.</td><td>Sai Krishna</td><td>&#8377;1,750</td><td><span class="pill pa">Completed</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="pg" id="pg-review">
+      <div class="sec">Customer Reviews</div>
+      <div class="rvlist" id="rvlist"></div>
+    </div>
+
+    <div class="ov" id="ov"></div>
+    <div class="toast" id="tst"></div>
+  </div>
+</div>
+
+<script>
+var AD=[
+  {n:"Tanuja",r:"Super Admin",e:"tanuja@stitchify.in",p:"+91 98765 00001",j:"Jan 2024",o:420,i:"TN"},
+  {n:"Sania",r:"Content Admin",e:"sania@stitchify.in",p:"+91 98765 00002",j:"Mar 2024",o:310,i:"SA"},
+  {n:"Vidya",r:"Support Admin",e:"vidya@stitchify.in",p:"+91 98765 00003",j:"Feb 2024",o:280,i:"VD"},
+  {n:"Sai Krishna",r:"Finance Admin",e:"saikrishna@stitchify.in",p:"+91 98765 00004",j:"Apr 2024",o:195,i:"SK"},
+  {n:"Lavanya",r:"Operations",e:"lavanya@stitchify.in",p:"+91 98765 00005",j:"May 2024",o:240,i:"LV"}
+];
+var TL=[
+  {n:"Ravi Kumar",m:"Blouse & Saree specialist",rt:4.8,s:"a",o:142,loc:"Bengaluru",p:"+91 90000 11111",j:"Dec 2023",c:0,i:"RK"},
+  {n:"Meera Devi",m:"Salwar & Suits",rt:4.5,s:"a",o:98,loc:"Mysuru",p:"+91 90000 22222",j:"Feb 2024",c:1,i:"MD"},
+  {n:"Arun Sharma",m:"Gents formals",rt:3.1,s:"w",o:45,loc:"Bengaluru",p:"+91 90000 33333",j:"Mar 2024",c:5,i:"AS"},
+  {n:"Preethi V.",m:"Kids & party wear",rt:4.9,s:"a",o:201,loc:"Bengaluru",p:"+91 90000 44444",j:"Jan 2024",c:0,i:"PV"},
+  {n:"Suresh B.",m:"Lehenga & bridal",rt:2.4,s:"b",o:22,loc:"Hubli",p:"+91 90000 55555",j:"Apr 2024",c:9,i:"SB"}
+];
+var CU=[
+  {n:"Priya Sharma",m:"23 orders completed",rt:5.0,s:"a",loc:"Bengaluru",p:"+91 80000 11111",j:"Nov 2023",c:0,o:23,i:"PS"},
+  {n:"Kavya Reddy",m:"8 orders, 1 complaint",rt:3.8,s:"w",loc:"Bengaluru",p:"+91 80000 22222",j:"Jan 2024",c:1,o:8,i:"KR"},
+  {n:"Anita Menon",m:"15 orders completed",rt:4.7,s:"a",loc:"Mysuru",p:"+91 80000 33333",j:"Dec 2023",c:0,o:15,i:"AM"},
+  {n:"Rohit K.",m:"Repeated complaints",rt:1.2,s:"b",loc:"Bengaluru",p:"+91 80000 44444",j:"Mar 2024",c:7,o:3,i:"RK"},
+  {n:"Sunita G.",m:"5 orders, new user",rt:4.2,s:"a",loc:"Hubli",p:"+91 80000 55555",j:"Apr 2024",c:0,o:5,i:"SG"}
+];
+var RV=[
+  {n:"Priya S.",rt:5,t:"Excellent work! Blouse fitted perfectly.",tl:"Tanuja",d:"Apr 7, 2026"},
+  {n:"Meena R.",rt:4,t:"Good stitching, delivered on time.",tl:"Sania",d:"Apr 6, 2026"},
+  {n:"Kavya B.",rt:3,t:"Average quality, took too long.",tl:"Vidya",d:"Apr 5, 2026"},
+  {n:"Anita M.",rt:5,t:"Beautiful work on my lehenga!",tl:"Lavanya",d:"Apr 4, 2026"},
+  {n:"Rekha T.",rt:4,t:"Very professional and neat stitching.",tl:"Sai Krishna",d:"Apr 3, 2026"}
+];
+var curTab="tailors";
+var drawerOpen=false;
+
+function tgDrawer(){
+  drawerOpen=!drawerOpen;
+  document.getElementById("drawer").classList.toggle("on",drawerOpen);
+}
+function closeDrawer(){
+  drawerOpen=false;
+  document.getElementById("drawer").classList.remove("on");
+}
+function updDrawer(id){
+  document.querySelectorAll(".di").forEach(function(d){d.classList.remove("on")});
+  var el=document.getElementById("di-"+id);
+  if(el) el.classList.add("on");
+}
+function gp(id,btn){
+  document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("on")});
+  document.querySelectorAll(".nb").forEach(function(b){b.classList.remove("on")});
+  var pg=document.getElementById("pg-"+id);
+  if(pg) pg.classList.add("on");
+  if(btn) btn.classList.add("on");
+  updDrawer(id);
+  co();
+}
+function st(tab){
+  curTab=tab;
+  document.getElementById("tb-tailors").classList.toggle("on",tab==="tailors");
+  document.getElementById("tb-customers").classList.toggle("on",tab==="customers");
+  rml();
+}
+function psc(s){return s==="a"?"pill pa":s==="w"?"pill pw":"pill pb"}
+function pst(s){return s==="a"?"Active":s==="w"?"Warning":"Poor"}
+function stars(n){var s="";for(var i=0;i<5;i++) s+=i<Math.floor(n)?"&#9733;":"&#9734;";return s}
+
+function radmins(){
+  var g=document.getElementById("ag");
+  if(!g) return;
+  g.innerHTML=AD.map(function(a,i){
+    return '<div class="ac" onclick="sap('+i+')">'
+      +'<div class="av">'+a.i+'</div>'
+      +'<div class="an">'+a.n+'</div>'
+      +'<div class="ar">'+a.r+'</div>'
+      +'</div>';
+  }).join("");
+}
+function sap(i){
+  var a=AD[i];
+  so('<div class="md">'
+    +'<div class="mc"><span style="font-size:11px;color:#888;font-weight:700;letter-spacing:.5px">ADMIN PROFILE</span>'
+    +'<button class="mx" onclick="co()">&#x2715;</button></div>'
+    +'<div class="mav">'+a.i+'</div>'
+    +'<div class="mn">'+a.n+'</div>'
+    +'<span class="mbg">'+a.r+'</span>'
+    +'<div class="mi">'
+    +'<div class="ir"><span class="il">Email</span><span class="iv" style="font-size:11.5px">'+a.e+'</span></div>'
+    +'<div class="ir"><span class="il">Phone</span><span class="iv">'+a.p+'</span></div>'
+    +'<div class="ir"><span class="il">Joined</span><span class="iv">'+a.j+'</span></div>'
+    +'<div class="ir"><span class="il">Orders Managed</span><span class="iv">'+a.o+'</span></div>'
+    +'</div></div>');
+}
+function rml(){
+  var data=curTab==="tailors"?TL:CU;
+  var ml=document.getElementById("ml");
+  if(!ml) return;
+  ml.innerHTML=data.map(function(m,i){
+    return '<div class="mr" onclick="smp('+i+')">'
+      +'<div class="mav2">'+m.i+'</div>'
+      +'<div class="mi2">'
+      +'<div class="mn2">'+m.n+'</div>'
+      +'<div class="mm2">'+m.m+' &bull; <span style="color:#F59E0B">'+stars(m.rt)+'</span> '+m.rt+'</div>'
+      +'</div>'
+      +'<span class="'+psc(m.s)+'">'+pst(m.s)+'</span>'
+      +'<div class="mact" onclick="event.stopPropagation()">'
+      +'<button class="bapp" onclick="toast(\'Appreciated '+m.n+' &#9733;\')">&#9733;</button>'
+      +'<button class="brem" onclick="toast(\''+m.n+' removed.\')">Remove</button>'
+      +'</div></div>';
+  }).join("");
+}
+function smp(i){
+  var data=curTab==="tailors"?TL:CU;
+  var m=data[i];
+  var ct=curTab==="tailors"?"TAILOR":"CUSTOMER";
+  so('<div class="mmd">'
+    +'<div class="mc"><span style="font-size:11px;color:#888;font-weight:700;letter-spacing:.5px">'+ct+' PROFILE</span>'
+    +'<button class="mx" onclick="co()">&#x2715;</button></div>'
+    +'<div class="mav" style="width:64px;height:64px;font-size:22px">'+m.i+'</div>'
+    +'<div class="mn">'+m.n+'</div>'
+    +'<span class="mbg">'+pst(m.s)+'</span>'
+    +'<div class="mi">'
+    +'<div class="ir"><span class="il">Location</span><span class="iv">'+m.loc+'</span></div>'
+    +'<div class="ir"><span class="il">Phone</span><span class="iv">'+m.p+'</span></div>'
+    +'<div class="ir"><span class="il">Joined</span><span class="iv">'+m.j+'</span></div>'
+    +'<div class="ir"><span class="il">Rating</span><span class="iv" style="color:#F59E0B">'+stars(m.rt)+' '+m.rt+'/5</span></div>'
+    +'<div class="ir"><span class="il">Orders</span><span class="iv">'+(m.o||"-")+'</span></div>'
+    +'<div class="ir"><span class="il">Complaints</span><span class="iv" style="'+(m.c>3?"color:#EF4444":"")+'">'+m.c+'</span></div>'
+    +'</div>'
+    +'<div class="mma">'
+    +'<button class="mmba" onclick="co();toast(\'Appreciated '+m.n+'! &#9733;\')">&#9733; Appreciate</button>'
+    +'<button class="mmbr" onclick="co();toast(\''+m.n+' removed.\')">Remove</button>'
+    +'</div></div>');
+}
+function rbc(){
+  var months=["Jan","Feb","Mar","Apr","May","Jun"];
+  var vals=[180,220,195,310,280,241];
+  var mx=Math.max.apply(null,vals);
+  var el=document.getElementById("bc");
+  if(!el) return;
+  el.innerHTML=months.map(function(m,i){
+    return '<div class="bw">'
+      +'<div class="br" style="height:'+Math.round(vals[i]/mx*100)+'%"></div>'
+      +'<div class="bl2">'+m+'</div>'
+      +'</div>';
+  }).join("");
+}
+function rrvs(){
+  var el=document.getElementById("rvlist");
+  if(!el) return;
+  el.innerHTML=RV.map(function(r){
+    var ini=r.n.split(" ").map(function(w){return w[0]}).join("");
+    return '<div class="rvc">'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">'
+      +'<div class="mav2">'+ini+'</div>'
+      +'<div><div style="font-size:13.5px;font-weight:700;color:var(--tx)">'+r.n+' <span style="color:#F59E0B;font-size:12px">'+stars(r.rt)+'</span></div>'
+      +'<div style="font-size:11.5px;color:#888">Tailor: '+r.tl+' &bull; '+r.d+'</div></div>'
+      +'</div>'
+      +'<div style="font-size:12.5px;color:var(--tx)">'+r.t+'</div>'
+      +'</div>';
+  }).join("");
+}
+function sf(btn){
+  document.querySelectorAll(".fb").forEach(function(b){b.classList.remove("on")});
+  btn.classList.add("on");
+}
+function so(html){
+  var ov=document.getElementById("ov");
+  ov.innerHTML=html;
+  ov.classList.add("on");
+}
+function co(){
+  var ov=document.getElementById("ov");
+  ov.classList.remove("on");
+  ov.innerHTML="";
+}
+var _ti=null;
+function toast(msg){
+  var t=document.getElementById("tst");
+  t.innerHTML=msg;
+  t.classList.add("on");
+  if(_ti) clearTimeout(_ti);
+  _ti=setTimeout(function(){t.classList.remove("on")},2800);
+}
+var lv=84;
+setInterval(function(){
+  lv+=Math.round((Math.random()-.5)*3);
+  lv=Math.max(70,Math.min(120,lv));
+  var el=document.getElementById("lc");
+  if(el) el.textContent=lv;
+},2000);
+
+document.getElementById("ov").addEventListener("click",function(e){if(e.target===this)co()});
+document.addEventListener("click",function(e){
+  if(drawerOpen && !e.target.closest("#drawer") && !e.target.closest("#hbg-btn")) closeDrawer();
+});
+
+radmins();rml();rbc();rrvs();
+</script>

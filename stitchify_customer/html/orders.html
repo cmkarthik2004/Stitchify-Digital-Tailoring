@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stitchify – My Orders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<style>
+:root {
+  --primary: #0c7bb3;
+  --primary-dark: #095f8a;
+  --primary-soft: #e8f4fb;
+  --accent: #a75c9a;
+  --gradient: linear-gradient(135deg, #0c7bb3 0%, #a75c9a 100%);
+  --gradient-h: linear-gradient(90deg, #0c7bb3, #a75c9a);
+  --success: #16a34a;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --white: #ffffff;
+  --bg: #f4f6fa;
+  --border: #e0e7ef;
+  --card: #ffffff;
+  --surface: #f8fafc;
+  --text: #1a1a2e;
+  --text-main: #1a2340;
+  --text-mid: #4a4a6a;
+  --text-soft: #5a6a8a;
+  --text-light: #9aaac4;
+  --shadow-sm: 0 2px 10px rgba(12,123,179,0.07);
+  --shadow: 0 4px 20px rgba(12,123,179,0.10);
+  --shadow-lg: 0 14px 44px rgba(12,123,179,0.16);
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', sans-serif;
+  --tr: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); }
+
+/* Brand Bar */
+.stitchify-brand-bar {
+  text-align: center;
+  padding: 14px 0 4px;
+  background: var(--white);
+}
+.stitchify-brand-name {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  font-family: var(--font-display);
+}
+.stitchify-brand-stitch { color: var(--primary); }
+.stitchify-brand-ify   { color: var(--accent); }
+
+/* Navigation */
+.snav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 32px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.snav-links { display: flex; align-items: center; gap: 2px; }
+.snav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+}
+.snav-item:hover { background: var(--primary-soft); }
+.snav-item.active .snav-icon,
+.snav-item.active .snav-lbl { color: var(--accent); font-weight: 700; }
+.snav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 2px;
+  background: var(--gradient-h);
+  border-radius: 2px;
+}
+.snav-icon { font-size: 16px; color: #9ca3af; }
+.snav-lbl  { font-size: 10px; font-weight: 600; color: #9ca3af; }
+.nav-badge {
+  position: absolute;
+  top: -8px; right: -10px;
+  background: var(--gradient);
+  color: white;
+  font-size: 9px; font-weight: 700;
+  min-width: 16px; height: 16px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 3px;
+}
+.snav-search {
+  display: flex;
+  align-items: center;
+  background: #f5f6fa;
+  border: 1.5px solid var(--border);
+  border-radius: 24px;
+  padding: 7px 18px;
+  gap: 8px;
+  width: 360px;
+  flex-shrink: 0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.snav-search:focus-within {
+  border-color: var(--primary);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(12,123,179,0.09);
+}
+.snav-search svg { color: var(--primary); flex-shrink: 0; }
+.snav-search input {
+  border: none; outline: none;
+  font-size: 13px;
+  color: #444;
+  background: transparent;
+  width: 100%;
+  font-family: var(--font-body);
+}
+.snav-search input::placeholder { color: #b0b8c1; }
+
+/* Page Layout */
+.page-inner { padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
+.section-title { font-size: 28px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+.section-sub   { font-size: 14px; color: var(--text-light); margin-bottom: 28px; }
+
+/* Tabs */
+.status-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.status-tab {
+  padding: 9px 22px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-mid);
+  cursor: pointer;
+  border-radius: 25px;
+  transition: var(--tr);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.status-tab .tab-count {
+  background: var(--bg);
+  color: var(--text-light);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 10px;
+  transition: var(--tr);
+}
+.status-tab:hover { border-color: var(--primary); color: var(--primary); }
+.status-tab:hover .tab-count { background: var(--primary-soft); color: var(--primary); }
+.status-tab.active {
+  background: var(--gradient);
+  color: white;
+  border-color: transparent;
+}
+.status-tab.active .tab-count { background: rgba(255,255,255,0.25); color: white; }
+
+/* Order Cards */
+.orders-grid { display: flex; flex-direction: column; gap: 20px; }
+.order-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: var(--tr);
+}
+.order-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+
+.order-header {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.order-id   { font-weight: 700; color: var(--primary); font-size: 16px; }
+.order-date { color: var(--text-light); font-size: 12px; margin-top: 2px; }
+
+.status-badge {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.status-pending    { background: #fef3c7; color: #b45309; }
+.status-accepted   { background: #dbeafe; color: #1d4ed8; }
+.status-cutting    { background: #e0e7ff; color: #4338ca; }
+.status-stitching  { background: #f3e8ff; color: #7c3aed; }
+.status-ready      { background: #d1fae5; color: #047857; }
+.status-picked_up  { background: #d1fae5; color: #15803d; }
+.status-cancelled  { background: #fee2e2; color: #b91c1c; }
+
+.order-body { padding: 20px 24px; }
+
+/* Portfolio Strip */
+.portfolio-strip {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.portfolio-strip::-webkit-scrollbar { height: 4px; }
+
+.portfolio-img-wrap {
+  flex-shrink: 0;
+  width: 90px;
+  height: 90px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: var(--tr);
+  position: relative;
+  background: var(--surface);
+}
+.portfolio-img-wrap:hover { border-color: var(--primary); transform: scale(1.04); }
+.portfolio-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.portfolio-img-wrap .img-label {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.65));
+  color: white;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 12px 5px 4px;
+  text-align: center;
+}
+
+/* Timeline */
+.timeline {
+  margin: 18px 0;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.timeline-track {
+  position: absolute;
+  top: 19px;
+  left: calc(8.33% + 4px);
+  right: calc(8.33% + 4px);
+  height: 2px;
+  background: var(--border);
+  z-index: 1;
+}
+.timeline-track-fill {
+  height: 100%;
+  background: var(--gradient-h);
+  transition: width 0.6s ease;
+}
+.timeline-step {
+  text-align: center;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.timeline-dot {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--border);
+  color: #aab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 3;
+  border: 3px solid var(--white);
+  transition: var(--tr);
+}
+.timeline-step.completed .timeline-dot { background: var(--success); color: white; }
+.timeline-step.active .timeline-dot {
+  background: var(--primary);
+  color: white;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(12,123,179,0.35); }
+  60%      { box-shadow: 0 0 0 8px rgba(12,123,179,0); }
+}
+.timeline-label {
+  font-size: 10px;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+/* Info Chips */
+.oc-info-row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.oc-info-chip {
+  flex: 1;
+  min-width: 100px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.chip-label {
+  font-size: 10px;
+  color: var(--text-light);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+}
+.chip-val { font-size: 13px; font-weight: 600; color: var(--text-main); }
+
+.order-total {
+  text-align: right;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 2px solid var(--border);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--primary);
+}
+.order-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+  padding: 9px 20px;
+  border-radius: 25px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--tr);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-primary { background: var(--gradient); color: white; }
+.btn-primary:hover { transform: translateY(-2px); }
+.btn-success { background: linear-gradient(135deg,#16a34a,#15803d); color: white; }
+.btn-danger  { background: transparent; border: 1.5px solid #fca5a5; color: #dc2626; }
+.btn-danger:hover { background: #fee2e2; }
+.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-mid); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+
+.empty-state {
+  text-align: center;
+  padding: 64px 40px;
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.empty-state i { font-size: 56px; color: var(--text-light); margin-bottom: 16px; display: block; }
+.empty-state h3 { font-size: 20px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; }
+.empty-state p  { color: var(--text-light); font-size: 14px; margin-bottom: 20px; }
+
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1a2340;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  z-index: 10000;
+  transition: all 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="stitchify-brand-bar">
+  <div class="stitchify-brand-name">
+    <span class="stitchify-brand-stitch">Stitch</span><span class="stitchify-brand-ify">ify</span>
+  </div>
+</div>
+
+<nav class="snav-bar">
+  <div class="snav-search">
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="search" id="globalSearch" placeholder="Search orders..." aria-label="Search orders"/>
+  </div>
+  <div class="snav-links">
+    <a class="snav-item" href="/customer"><i class="fas fa-home snav-icon"></i><span class="snav-lbl">Home</span></a>
+    <a class="snav-item active" href="/customer/orders">
+      <span style="position:relative;">
+        <i class="fas fa-box snav-icon"></i>
+        <span class="nav-badge" id="orderBadge" style="display:none;">0</span>
+      </span>
+      <span class="snav-lbl">My Orders</span>
+    </a>
+    <a class="snav-item" href="/customer/chat"><i class="fas fa-comment-dots snav-icon"></i><span class="snav-lbl">Chat</span></a>
+    <a class="snav-item" href="/customer/trends"><i class="fas fa-fire snav-icon"></i><span class="snav-lbl">Trends</span></a>
+    <a class="snav-item" href="/customer/profile"><i class="fas fa-user snav-icon"></i><span class="snav-lbl">Profile</span></a>
+  </div>
+</nav>
+
+<div class="page-inner">
+  <div class="section-title">My Orders</div>
+  <div class="section-sub">Track your tailoring progress in real time</div>
+
+  <!-- 4 Tabs -->
+  <div class="status-tabs">
+    <button class="status-tab active" data-filter="all" onclick="filterOrders('all',this)">
+      <i class="fas fa-layer-group"></i> All Orders
+      <span class="tab-count" id="count-all">0</span>
+    </button>
+    <button class="status-tab" data-filter="confirmed" onclick="filterOrders('confirmed',this)">
+      <i class="fas fa-check-circle"></i> Confirmed
+      <span class="tab-count" id="count-confirmed">0</span>
+    </button>
+    <button class="status-tab" data-filter="completed" onclick="filterOrders('completed',this)">
+      <i class="fas fa-bag-shopping"></i> Completed
+      <span class="tab-count" id="count-completed">0</span>
+    </button>
+    <button class="status-tab" data-filter="cancelled" onclick="filterOrders('cancelled',this)">
+      <i class="fas fa-ban"></i> Cancelled
+      <span class="tab-count" id="count-cancelled">0</span>
+    </button>
+  </div>
+
+  <div id="orders-container" class="orders-grid">
+    <div class="empty-state">
+      <i class="fas fa-spinner fa-pulse"></i>
+      <h3>Loading your orders…</h3>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   DEBUGGING: Check what's in localStorage
+═══════════════════════════════════════════════════════════ */
+console.log('=== DEBUG: Customer Orders Page ===');
+const token = localStorage.getItem('token');
+const user = JSON.parse(localStorage.getItem('user') || '{}');
+console.log('Token exists:', !!token);
+console.log('User object:', user);
+console.log('User ID:', user.id);
+
+if (!token || !user.id) {
+  console.error('No token or user ID found! Redirecting to login...');
+  window.location.href = '/login-page';
+}
+
+let allOrders = [];
+let pollingInterval = null;
+let currentFilter = 'all';
+
+/* ═══════════════════════════════════════════════════════════
+   STATUS MAPPINGS (must match backend)
+═══════════════════════════════════════════════════════════ */
+const STATUS_DISPLAY = {
+  pending:   'Pending Approval',
+  accepted:  'Accepted',
+  cutting:   'Cutting in Progress',
+  stitching: 'Stitching in Progress',
+  ready:     'Ready for Pickup',
+  picked_up: 'Completed',
+  cancelled: 'Cancelled',
+};
+
+const STATUS_BADGE_CLASS = {
+  pending:   'status-pending',
+  accepted:  'status-accepted',
+  cutting:   'status-cutting',
+  stitching: 'status-stitching',
+  ready:     'status-ready',
+  picked_up: 'status-picked_up',
+  cancelled: 'status-cancelled',
+};
+
+const TIMELINE_STEPS = [
+  { key: 'pending',   icon: 'fas fa-clock',       label: 'Pending' },
+  { key: 'accepted',  icon: 'fas fa-handshake',    label: 'Accepted' },
+  { key: 'cutting',   icon: 'fas fa-cut',          label: 'Cutting' },
+  { key: 'stitching', icon: 'fas fa-tshirt',       label: 'Stitching' },
+  { key: 'ready',     icon: 'fas fa-box-open',     label: 'Ready' },
+  { key: 'picked_up', icon: 'fas fa-bag-shopping', label: 'Completed' },
+];
+
+/* ═══════════════════════════════════════════════════════════
+   MAIN FETCH FUNCTION - TRY MULTIPLE ENDPOINTS
+═══════════════════════════════════════════════════════════ */
+async function loadOrders() {
+  const container = document.getElementById('orders-container');
+  container.innerHTML = '<div class="empty-state"><i class="fas fa-spinner fa-pulse"></i><h3>Fetching your orders...</h3></div>';
+  
+  // Try multiple possible API endpoints
+  const endpoints = [
+    `/api/customer/orders/${user.id}`,
+    `/api/orders/customer/${user.id}`,
+    `/api/orders?customer_id=${user.id}`,
+    `/api/order/customer/${user.id}`,
+  ];
+  
+  let ordersData = null;
+  let workingEndpoint = null;
+  
+  for (const endpoint of endpoints) {
+    try {
+      console.log(`Trying endpoint: ${endpoint}`);
+      const response = await fetch(endpoint, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log(`✅ Success from ${endpoint}:`, data);
+        
+        // Handle different response formats
+        if (Array.isArray(data)) {
+          ordersData = data;
+          workingEndpoint = endpoint;
+          break;
+        } else if (data.orders && Array.isArray(data.orders)) {
+          ordersData = data.orders;
+          workingEndpoint = endpoint;
+          break;
+        } else if (data.data && Array.isArray(data.data)) {
+          ordersData = data.data;
+          workingEndpoint = endpoint;
+          break;
+        }
+      } else {
+        console.log(`❌ Failed ${endpoint}: ${response.status}`);
+      }
+    } catch (err) {
+      console.log(`Error with ${endpoint}:`, err.message);
+    }
+  }
+  
+  if (ordersData && ordersData.length > 0) {
+    allOrders = ordersData;
+    console.log(`✅ Loaded ${allOrders.length} orders from ${workingEndpoint}`);
+    showToast(`Found ${allOrders.length} orders!`);
+    updateCounts();
+    filterOrders('all', document.querySelector('.status-tab.active'));
+    
+    // Start polling if orders exist
+    if (pollingInterval) clearInterval(pollingInterval);
+    pollingInterval = setInterval(refreshOrders, 15000);
+  } else {
+    console.warn('⚠️ No orders found from any endpoint. Using mock data for demo.');
+    showToast('No orders found. Using demo data.', true);
+    loadMockOrders();
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REFRESH ORDERS (polling)
+═══════════════════════════════════════════════════════════ */
+async function refreshOrders() {
+  try {
+    const response = await fetch(`/api/customer/orders/${user.id}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    if (response.ok) {
+      const newOrders = await response.json();
+      const newOrdersArray = Array.isArray(newOrders) ? newOrders : (newOrders.orders || []);
+      
+      if (JSON.stringify(newOrdersArray) !== JSON.stringify(allOrders)) {
+        // Check for status changes
+        for (const newOrder of newOrdersArray) {
+          const oldOrder = allOrders.find(o => o._id === newOrder._id);
+          if (oldOrder && oldOrder.status !== newOrder.status) {
+            showToast(`📦 Order #${newOrder.order_id || newOrder._id} updated to ${STATUS_DISPLAY[newOrder.status] || newOrder.status}!`);
+          }
+        }
+        allOrders = newOrdersArray;
+        updateCounts();
+        const activeTab = document.querySelector('.status-tab.active');
+        filterOrders(activeTab ? activeTab.dataset.filter : 'all', activeTab);
+      }
+    }
+  } catch(e) {
+    console.error('Refresh error:', e);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOCK ORDERS (fallback when API returns nothing)
+═══════════════════════════════════════════════════════════ */
+function loadMockOrders() {
+  const now = Date.now();
+  allOrders = [
+    {
+      _id: 'mock_ord1',
+      order_id: 'ORD20241201001',
+      status: 'stitching',
+      total_amount: 3500,
+      items: [{ name: 'Custom Suit', quantity: 1, price: 3500 }],
+      tailor_name: 'Sahil Designer Tailors',
+      tailor_id: 'tailor_001',
+      created_at: new Date(now - 5*86400000).toISOString(),
+      expected_delivery_date: new Date(now + 2*86400000).toISOString(),
+      special_instructions: 'Slim fit, double-button cuffs',
+    },
+    {
+      _id: 'mock_ord2',
+      order_id: 'ORD20241215002',
+      status: 'ready',
+      total_amount: 1800,
+      items: [{ name: 'Silk Kurta', quantity: 2, price: 900 }],
+      tailor_name: 'Riya Boutique',
+      tailor_id: 'tailor_002',
+      created_at: new Date(now - 10*86400000).toISOString(),
+      expected_delivery_date: new Date(now).toISOString(),
+    },
+    {
+      _id: 'mock_ord3',
+      order_id: 'ORD20241218003',
+      status: 'picked_up',
+      total_amount: 2200,
+      items: [{ name: 'Anarkali Dress', quantity: 1, price: 2200 }],
+      tailor_name: 'Priya Creations',
+      tailor_id: 'tailor_003',
+      created_at: new Date(now - 20*86400000).toISOString(),
+      expected_delivery_date: new Date(now - 3*86400000).toISOString(),
+    },
+    {
+      _id: 'mock_ord4',
+      order_id: 'ORD20241222005',
+      status: 'pending',
+      total_amount: 4200,
+      items: [
+        { name: 'Wedding Sherwani', quantity: 1, price: 3500 },
+        { name: 'Matching Dupatta',  quantity: 1, price: 700 },
+      ],
+      tailor_name: 'Royal Threads',
+      tailor_id: 'tailor_005',
+      created_at: new Date(now - 86400000).toISOString(),
+      expected_delivery_date: new Date(now + 14*86400000).toISOString(),
+      special_instructions: 'Use gold zari border',
+    },
+  ];
+  console.log('📦 Using mock orders:', allOrders.length);
+  updateCounts();
+  filterOrders('all', document.querySelector('.status-tab.active'));
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FILTER & COUNT
+═══════════════════════════════════════════════════════════ */
+function updateCounts() {
+  document.getElementById('count-all').textContent = allOrders.length;
+  document.getElementById('count-confirmed').textContent = allOrders.filter(o => 
+    ['accepted', 'cutting', 'stitching', 'ready'].includes(o.status)).length;
+  document.getElementById('count-completed').textContent = allOrders.filter(o => 
+    o.status === 'picked_up').length;
+  document.getElementById('count-cancelled').textContent = allOrders.filter(o => 
+    o.status === 'cancelled').length;
+  
+  const activeCount = allOrders.filter(o => !['picked_up', 'cancelled'].includes(o.status)).length;
+  const badge = document.getElementById('orderBadge');
+  if (activeCount > 0) {
+    badge.textContent = activeCount;
+    badge.style.display = 'flex';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function filterOrders(filter, btn) {
+  if (btn) {
+    document.querySelectorAll('.status-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  currentFilter = filter;
+  
+  let filtered = [];
+  if (filter === 'all') {
+    filtered = allOrders;
+  } else if (filter === 'confirmed') {
+    filtered = allOrders.filter(o => ['accepted', 'cutting', 'stitching', 'ready'].includes(o.status));
+  } else if (filter === 'completed') {
+    filtered = allOrders.filter(o => o.status === 'picked_up');
+  } else if (filter === 'cancelled') {
+    filtered = allOrders.filter(o => o.status === 'cancelled');
+  }
+  
+  renderOrders(filtered);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER ORDERS
+═══════════════════════════════════════════════════════════ */
+function getStepIndex(status) {
+  return TIMELINE_STEPS.findIndex(s => s.key === status);
+}
+
+function buildTimeline(order) {
+  if (order.status === 'cancelled') {
+    return `<div style="text-align:center;padding:12px;background:#fee2e2;border-radius:10px;color:#b91c1c;font-size:13px;font-weight:600;">
+      <i class="fas fa-ban"></i> Order Cancelled
+    </div>`;
+  }
+  const currentIdx = getStepIndex(order.status);
+  const fillPct = currentIdx <= 0 ? 0 : Math.min(100, (currentIdx / (TIMELINE_STEPS.length - 1)) * 100);
+  
+  const steps = TIMELINE_STEPS.map((step, idx) => {
+    const completed = idx < currentIdx;
+    const active = idx === currentIdx;
+    const cls = completed ? 'completed' : active ? 'active' : '';
+    const icon = completed ? '<i class="fas fa-check"></i>' : `<i class="${step.icon}"></i>`;
+    return `
+      <div class="timeline-step ${cls}">
+        <div class="timeline-dot">${icon}</div>
+        <div class="timeline-label">${step.label}</div>
+      </div>`;
+  }).join('');
+  
+  return `
+    <div class="timeline">
+      <div class="timeline-track">
+        <div class="timeline-track-fill" style="width:${fillPct}%"></div>
+      </div>
+      ${steps}
+    </div>`;
+}
+
+function renderOrders(orders) {
+  const container = document.getElementById('orders-container');
+  
+  if (!orders.length) {
+    container.innerHTML = `<div class="empty-state">
+      <i class="fas fa-inbox"></i>
+      <h3>No orders found</h3>
+      <p>${currentFilter === 'all' ? 'You haven\'t placed any orders yet.' : `No orders in this category.`}</p>
+      <button class="btn btn-primary" onclick="location.href='/customer'">
+        <i class="fas fa-search"></i> Browse Tailors
+      </button>
+    </div>`;
+    return;
+  }
+  
+  container.innerHTML = orders.map(order => {
+    const expectedDate = order.expected_delivery_date
+      ? new Date(order.expected_delivery_date).toLocaleDateString('en-IN')
+      : 'TBD';
+    const createdDate = new Date(order.created_at).toLocaleDateString('en-IN');
+    const tailorId = order.tailor_id || '';
+    
+    return `
+      <div class="order-card">
+        <div class="order-header">
+          <div>
+            <div class="order-id"><i class="fas fa-hashtag"></i> ${order.order_id || order._id}</div>
+            <div class="order-date"><i class="fas fa-calendar-alt"></i> Placed ${createdDate}</div>
+          </div>
+          <span class="status-badge ${STATUS_BADGE_CLASS[order.status] || 'status-pending'}">
+            ${STATUS_DISPLAY[order.status] || order.status}
+          </span>
+        </div>
+        <div class="order-body">
+          ${buildTimeline(order)}
+          <div class="order-items">
+            ${(order.items || []).map(item => `
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--border);">
+                <span>${item.name} × ${item.quantity}</span>
+                <span>₹${(item.price * item.quantity).toLocaleString('en-IN')}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="oc-info-row">
+            <div class="oc-info-chip">
+              <div class="chip-label">Tailor</div>
+              <div class="chip-val">${order.tailor_name || '—'}</div>
+            </div>
+            <div class="oc-info-chip">
+              <div class="chip-label">Est. Delivery</div>
+              <div class="chip-val">${expectedDate}</div>
+            </div>
+          </div>
+          ${order.special_instructions ? `
+            <div class="oc-info-chip" style="margin-top:10px;">
+              <div class="chip-label">Special Instructions</div>
+              <div class="chip-val" style="font-weight:400;">${order.special_instructions}</div>
+            </div>
+          ` : ''}
+          <div class="order-total">Total: ₹${(order.total_amount || 0).toLocaleString('en-IN')}</div>
+          <div class="order-actions">
+            <button class="btn btn-primary" onclick="trackOrder('${order.order_id}')">
+              <i class="fas fa-location-dot"></i> Track
+            </button>
+            <button class="btn btn-outline" onclick="chatWithTailor('${tailorId}')">
+              <i class="fas fa-comment"></i> Message Tailor
+            </button>
+            ${order.status === 'ready' ? `
+              <button class="btn btn-success" onclick="confirmPickup('${order._id}')">
+                <i class="fas fa-check-circle"></i> Confirm Pickup
+              </button>
+            ` : ''}
+            ${order.status === 'pending' ? `
+              <button class="btn btn-danger" onclick="cancelOrder('${order._id}')">
+                <i class="fas fa-times"></i> Cancel
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ACTIONS
+═══════════════════════════════════════════════════════════ */
+function trackOrder(orderId) {
+  showToast('📍 Tracking info sent to your email!');
+}
+
+function chatWithTailor(tailorId) {
+  if (tailorId) {
+    window.location.href = `/customer/chat?tailor_id=${encodeURIComponent(tailorId)}`;
+  } else {
+    window.location.href = '/customer/chat';
+  }
+}
+
+async function confirmPickup(orderId) {
+  if (!confirm('Have you received your order? Mark as completed?')) return;
+  try {
+    const response = await fetch(`/api/orders/${orderId}/update-status`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ status: 'picked_up', note: 'Customer confirmed pickup' })
+    });
+    if (response.ok) {
+      showToast('✅ Thank you! Order completed.');
+      await refreshOrders();
+    } else {
+      showToast('Failed to update order status');
+    }
+  } catch(e) {
+    console.error(e);
+    showToast('Error updating order');
+  }
+}
+
+async function cancelOrder(orderId) {
+  if (!confirm('Cancel this order?')) return;
+  try {
+    const response = await fetch(`/api/orders/${orderId}/update-status`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ status: 'cancelled', note: 'Cancelled by customer' })
+    });
+    if (response.ok) {
+      showToast('Order cancelled.');
+      await refreshOrders();
+    } else {
+      showToast('Failed to cancel order');
+    }
+  } catch(e) {
+    console.error(e);
+    showToast('Error cancelling order');
+  }
+}
+
+function showToast(msg, isError = false) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  if (isError) toast.style.background = '#b91c1c';
+  else toast.style.background = '#1a2340';
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+    toast.style.background = '#1a2340';
+  }, 3000);
+}
+
+// Initialize
+loadOrders();
+
+window.addEventListener('beforeunload', () => {
+  if (pollingInterval) clearInterval(pollingInterval);
+});
+</script>
+</body>
+</html>

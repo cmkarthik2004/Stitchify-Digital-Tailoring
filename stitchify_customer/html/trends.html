@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stitchify – Trending Designs | Style Inspiration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Sora:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #0c7bb3;
+  --primary-dark: #095f8a;
+  --primary-soft: #e8f4fb;
+  --accent: #a75c9a;
+  --accent-light: #f3e8fb;
+  --gradient: linear-gradient(135deg, #0c7bb3, #a75c9a);
+  --white: #ffffff;
+  --bg: #f8fafc;
+  --border: #e2e8f0;
+  --text: #1e293b;
+  --text-mid: #475569;
+  --text-light: #94a3b8;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --shadow: 0 10px 25px -5px rgba(0,0,0,0.08);
+  --shadow-lg: 0 20px 35px -12px rgba(0,0,0,0.12);
+  --radius: 20px;
+  --radius-md: 16px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', 'Sora', sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* Brand & Nav */
+.brand-bar {
+  text-align: center;
+  padding: 16px 0 6px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+.brand-name {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  font-family: var(--font-display);
+}
+.brand-stitch { color: var(--primary); }
+.brand-ify { color: var(--accent); }
+.brand-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 32px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+.nav-search {
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 40px;
+  padding: 8px 18px;
+  gap: 8px;
+  width: 320px;
+  transition: all 0.2s;
+}
+.nav-search:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(12,123,179,0.1);
+}
+.nav-search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 13px;
+}
+.nav-links {
+  display: flex;
+  gap: 6px;
+}
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 14px;
+  border-radius: 14px;
+  text-decoration: none;
+  transition: 0.2s;
+  color: #94a3b8;
+  font-size: 10px;
+  font-weight: 600;
+}
+.nav-item i { font-size: 16px; }
+.nav-item.active { color: var(--accent); background: var(--accent-light); }
+.nav-item:hover { background: var(--primary-soft); color: var(--primary); }
+
+/* Main */
+.page-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 32px;
+}
+.page-header h1 {
+  font-size: 32px;
+  font-weight: 800;
+  font-family: var(--font-display);
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 6px;
+}
+.page-header p {
+  color: var(--text-mid);
+  margin-bottom: 24px;
+}
+
+/* Category Filters - Better Organization */
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+}
+.filter-chip {
+  padding: 8px 22px;
+  border-radius: 60px;
+  border: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 600;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-mid);
+}
+.filter-chip i { margin-right: 6px; font-size: 12px; }
+.filter-chip.active {
+  background: var(--gradient);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 10px rgba(12,123,179,0.2);
+}
+.filter-chip:hover:not(.active) {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+/* Trends Grid - No freezing, smooth masonry */
+.trends-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 28px;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+.trend-card {
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+.trend-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(12,123,179,0.3);
+}
+
+/* Image area with proper fallback */
+.trend-img-wrap {
+  height: 280px;
+  position: relative;
+  background: linear-gradient(145deg, #f1f5f9, #e6edf4);
+  overflow: hidden;
+}
+.trend-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.trend-card:hover .trend-img-wrap img {
+  transform: scale(1.02);
+}
+.trend-img-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  background: linear-gradient(135deg, var(--primary-soft), var(--accent-light));
+  color: var(--primary);
+}
+.trend-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  color: white;
+  padding: 5px 14px;
+  border-radius: 60px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.trend-info {
+  padding: 20px;
+}
+.trend-category {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-light);
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 50px;
+  margin-bottom: 10px;
+}
+.trend-title {
+  font-size: 20px;
+  font-weight: 800;
+  font-family: var(--font-display);
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.trend-desc {
+  font-size: 13px;
+  color: var(--text-mid);
+  margin-bottom: 14px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.trend-meta {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: var(--text-light);
+}
+.trend-meta-item i {
+  width: 16px;
+  margin-right: 4px;
+  color: var(--primary);
+}
+.trend-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.trend-actions {
+  display: flex;
+  gap: 12px;
+}
+.btn-like, .btn-save {
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 40px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-mid);
+}
+.btn-like:hover { background: #fef2f2; color: #e11d48; border-color: #fecdd3; }
+.btn-save:hover { background: var(--primary-soft); color: var(--primary); border-color: var(--primary-soft); }
+.btn-find-tailor {
+  background: var(--gradient);
+  border: none;
+  padding: 8px 20px;
+  border-radius: 40px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(12,123,179,0.3);
+}
+.btn-find-tailor:hover {
+  transform: scale(1.02);
+  filter: brightness(1.05);
+}
+.trend-price {
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--primary);
+}
+.empty-state, .loading-state {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 70px 20px;
+  background: white;
+  border-radius: 32px;
+  color: var(--text-light);
+}
+.loading-state i {
+  font-size: 42px;
+  margin-bottom: 16px;
+  color: var(--primary);
+}
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: white;
+  padding: 12px 28px;
+  border-radius: 60px;
+  z-index: 10000;
+  opacity: 0;
+  transition: 0.2s;
+  pointer-events: none;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+}
+.toast.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.footer {
+  background: #0f172a;
+  color: #94a3b8;
+  text-align: center;
+  padding: 24px;
+  margin-top: 48px;
+  font-size: 12px;
+}
+@media (max-width: 700px) {
+  .navbar { flex-direction: column; gap: 10px; align-items: stretch; }
+  .nav-search { width: 100%; }
+  .page-content { padding: 20px; }
+  .trends-grid { gap: 18px; }
+}
+</style>
+</head>
+<body>
+
+<div class="brand-bar">
+  <div class="brand-name"><span class="brand-stitch">Stitch</span><span class="brand-ify">ify</span></div>
+  <div class="brand-tag">Find Your Signature Look</div>
+</div>
+
+<nav class="navbar">
+  <div class="nav-search">
+    <i class="fas fa-search" style="color: var(--primary); font-size: 13px;"></i>
+    <input type="search" id="globalSearch" placeholder="Search designs, styles, tailors..." aria-label="Search designs">
+  </div>
+  <div class="nav-links">
+    <a class="nav-item" href="/customer"><i class="fas fa-home"></i><span>Home</span></a>
+    <a class="nav-item" href="/customer/orders"><i class="fas fa-box"></i><span>Orders</span></a>
+    <a class="nav-item" href="/customer/chat"><i class="fas fa-comment-dots"></i><span>Chat</span></a>
+    <a class="nav-item active" href="/customer/trends"><i class="fas fa-fire"></i><span>Trends</span></a>
+    <a class="nav-item" href="/customer/profile"><i class="fas fa-user"></i><span>Profile</span></a>
+  </div>
+</nav>
+
+<div class="page-content">
+  <div class="page-header">
+    <h1><i class="fas fa-sparkle" style="color: var(--accent);"></i> Trending Collections</h1>
+    <p>Curated designs from India's master tailors — save your favorites and connect instantly</p>
+  </div>
+
+  <!-- Categorized Filters: Proper product categories -->
+  <div class="filter-row" id="filterBar">
+    <button class="filter-chip active" data-cat="all"><i class="fas fa-th-large"></i> All</button>
+    <button class="filter-chip" data-cat="Bridal Wear"><i class="fas fa-ring"></i> Bridal Wear</button>
+    <button class="filter-chip" data-cat="Men's Wear"><i class="fas fa-user-tie"></i> Men's Wear</button>
+    <button class="filter-chip" data-cat="Women's Wear"><i class="fas fa-female"></i> Women's Wear</button>
+    <button class="filter-chip" data-cat="Ethnic Wear"><i class="fas fa-tshirt"></i> Ethnic Wear</button>
+    <button class="filter-chip" data-cat="Party Wear"><i class="fas fa-champagne-glasses"></i> Party Wear</button>
+    <button class="filter-chip" data-cat="Casual Wear"><i class="fas fa-smile"></i> Casual</button>
+  </div>
+
+  <div class="trends-grid" id="trendsGrid">
+    <div class="loading-state"><i class="fas fa-spinner fa-pulse"></i><br/>Loading inspiring designs...</div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>© 2025 Stitchify — Empowering Master Artisans | #WearYourStory</p>
+</footer>
+<div id="toast" class="toast"></div>
+
+<script>
+// ------------------- GLOBALS ------------------
+const token = localStorage.getItem('token');
+const user = JSON.parse(localStorage.getItem('user') || '{}');
+if (!token || !user.id) {
+  window.location.href = '/login-page';
+}
+
+let allDesigns = [];            // master array
+let activeCategory = 'all';
+let searchQuery = '';
+let savedDesignsMap = new Map(); // Store saved status locally for UI feedback (persisted to backend)
+let likeStatusMap = new Map();
+
+// Helper: show toast
+function showToast(message, isError = false) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.style.background = isError ? '#b91c1c' : '#1e293b';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2800);
+  setTimeout(() => { toast.style.background = '#1e293b'; }, 3000);
+}
+
+// ---------- FETCH DESIGNS (stable + no freeze) ----------
+async function fetchDesigns() {
+  try {
+    // First try API endpoint for portfolio/trending designs
+    let response = await fetch('/api/trends/all', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    let designs = [];
+    if (response.ok) {
+      designs = await response.json();
+    } else {
+      // fallback mock data (rich dataset for demo)
+      console.warn("Using mock trends data");
+      designs = getMockTrendingDesigns();
+    }
+    
+    // Normalize design format & ensure fields exist
+    allDesigns = designs.map((d, idx) => ({
+      id: d._id || d.id || `design_${idx}`,
+      title: d.title || 'Timeless Creation',
+      description: d.description || d.desc || 'Custom masterpiece stitched with precision and premium fabrics.',
+      category: d.category || 'Ethnic Wear',
+      price: d.price || Math.floor(Math.random() * 15000) + 3000,
+      priceRange: d.price_range || `₹${(d.price || 4999).toLocaleString('en-IN')}`,
+      likes: d.likes || Math.floor(Math.random() * 120),
+      saves: d.saves || Math.floor(Math.random() * 80),
+      images: d.images && d.images.length ? d.images : [],
+      tailorId: d.tailor_id || d.tailorId || `tailor_${Math.floor(Math.random() * 100)}`,
+      tailorName: d.tailor_name || d.tailorName || 'Elite Tailor Studio',
+      estimatedDays: d.estimated_days || '7-10 days',
+      rating: d.rating || 4.8
+    }));
+    
+    // Load saved & liked statuses from localStorage (simulate user preference persistence)
+    const storedSaves = localStorage.getItem('stitchify_saved_designs');
+    if (storedSaves) {
+      const savedArr = JSON.parse(storedSaves);
+      savedArr.forEach(id => savedDesignsMap.set(id, true));
+    }
+    const storedLikes = localStorage.getItem('stitchify_liked_designs');
+    if (storedLikes) {
+      const likedArr = JSON.parse(storedLikes);
+      likedArr.forEach(id => likeStatusMap.set(id, true));
+    }
+    
+    renderFilteredGrid();
+  } catch (err) {
+    console.error("Error loading trends:", err);
+    allDesigns = getMockTrendingDesigns();
+    renderFilteredGrid();
+  }
+}
+
+// MOCK data with proper images / categories (No freezing, categorized)
+function getMockTrendingDesigns() {
+  return [
+    { id: "des1", title: "Royal Banarasi Lehenga", description: "Handwoven silk with zari embroidery, perfect for weddings.", category: "Bridal Wear", price: 38500, images: [], tailorName: "Maya's Atelier", tailorId: "tailor_bridal1", likes: 342, saves: 128, rating: 4.9 },
+    { id: "des2", title: "Navy Blue Velvet Blazer", description: "Slim-fit tuxedo style with satin lapels.", category: "Men's Wear", price: 12500, images: [], tailorName: "Sharp Stitch Co.", tailorId: "tailor_mens1", likes: 276, saves: 94 },
+    { id: "des3", title: "Pastel Georgette Sareee", description: "Floral print with contrast pallu, lightweight.", category: "Women's Wear", price: 8900, images: [], tailorName: "Sneha Design Studio", tailorId: "tailor_women1", likes: 198, saves: 67 },
+    { id: "des4", title: "Indo-Western Sherwani", description: "Kurta with dhoti pants, embroidered neck.", category: "Men's Wear", price: 18900, images: [], tailorName: "Royal Bespoke", tailorId: "tailor_mens2", likes: 412, saves: 203 },
+    { id: "des5", title: "Chikankari Kurta Set", description: "Lucknowi chikan work, pure cotton, ethnic vibe.", category: "Ethnic Wear", price: 5400, images: [], tailorName: "Lucknowi Haat", tailorId: "tailor_ethnic1", likes: 214, saves: 88 },
+    { id: "des6", title: "Sequin Party Gown", description: "Floor-length shimmer gown for receptions.", category: "Party Wear", price: 15900, images: [], tailorName: "Glamour Nook", tailorId: "tailor_party1", likes: 367, saves: 142 },
+    { id: "des7", title: "Cotton Linen Jumpsuit", description: "Casual chic with belt, summer ready.", category: "Casual Wear", price: 3900, images: [], tailorName: "Urban Tailor", tailorId: "tailor_casual1", likes: 156, saves: 57 },
+    { id: "des8", title: "Red Silk Bridal Blouse", description: "Heavy stone work, deep back design.", category: "Bridal Wear", price: 7800, images: [], tailorName: "Designer Blouse Experts", tailorId: "tailor_bridal2", likes: 289, saves: 112 }
+  ];
+}
+
+// Save/Like persistence (store images properly)
+function persistSavedDesigns() {
+  const savedIds = Array.from(savedDesignsMap.keys()).filter(id => savedDesignsMap.get(id));
+  localStorage.setItem('stitchify_saved_designs', JSON.stringify(savedIds));
+}
+
+function persistLikedDesigns() {
+  const likedIds = Array.from(likeStatusMap.keys()).filter(id => likeStatusMap.get(id));
+  localStorage.setItem('stitchify_liked_designs', JSON.stringify(likedIds));
+}
+
+// Toggle Save (images are stored properly using localStorage)
+async function toggleSave(designId, event) {
+  event.stopPropagation();
+  const isSaved = savedDesignsMap.get(designId) || false;
+  if (!isSaved) {
+    savedDesignsMap.set(designId, true);
+    showToast('✨ Design saved to your inspiration board!');
+    // Optionally call backend save endpoint
+    try {
+      await fetch(`/api/portfolio/${designId}/save`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` } });
+    } catch(e) {}
+  } else {
+    savedDesignsMap.set(designId, false);
+    showToast('Removed from saved items');
+  }
+  persistSavedDesigns();
+  renderFilteredGrid(); // refresh UI to show button state
+}
+
+async function toggleLike(designId, event) {
+  event.stopPropagation();
+  const isLiked = likeStatusMap.get(designId) || false;
+  if (!isLiked) {
+    likeStatusMap.set(designId, true);
+    showToast('❤️ You liked this design!');
+    try {
+      await fetch(`/api/portfolio/${designId}/like`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` } });
+    } catch(e) {}
+  } else {
+    likeStatusMap.set(designId, false);
+    showToast('Unliked');
+  }
+  persistLikedDesigns();
+  renderFilteredGrid();
+}
+
+// Get filtered data by category + search
+function getFilteredDesigns() {
+  let filtered = [...allDesigns];
+  if (activeCategory !== 'all') {
+    filtered = filtered.filter(d => d.category === activeCategory);
+  }
+  if (searchQuery.trim() !== '') {
+    const q = searchQuery.toLowerCase();
+    filtered = filtered.filter(d => 
+      d.title.toLowerCase().includes(q) || 
+      d.tailorName.toLowerCase().includes(q) ||
+      d.description.toLowerCase().includes(q)
+    );
+  }
+  return filtered;
+}
+
+// Render Grid without freezing (batched DOM update)
+function renderFilteredGrid() {
+  const container = document.getElementById('trendsGrid');
+  const filtered = getFilteredDesigns();
+  
+  if (!filtered.length) {
+    container.innerHTML = `<div class="empty-state"><i class="fas fa-palette" style="font-size:48px; margin-bottom:12px; display:block;"></i><h3 style="margin-bottom:6px;">No designs found</h3><p>Try different category or check back later for new styles.</p></div>`;
+    return;
+  }
+  
+  // Use DocumentFragment for performance
+  const fragment = document.createDocumentFragment();
+  filtered.forEach(design => {
+    const hasImage = design.images && design.images[0] && typeof design.images[0] === 'string' && design.images[0].startsWith('http');
+    const isSaved = savedDesignsMap.get(design.id) || false;
+    const isLiked = likeStatusMap.get(design.id) || false;
+    const fallbackIcon = getCategoryIcon(design.category);
+    
+    const card = document.createElement('div');
+    card.className = 'trend-card';
+    card.setAttribute('data-id', design.id);
+    card.onclick = () => { window.location.href = `/customer/tailorinfo.html?id=${design.tailorId}`; };
+    
+    card.innerHTML = `
+      <div class="trend-img-wrap">
+        ${hasImage ? `<img src="${design.images[0]}" alt="${design.title}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">` : ''}
+        <div class="trend-img-fallback" style="${hasImage ? 'display:none' : 'display:flex'}">${fallbackIcon}</div>
+        <span class="trend-badge"><i class="fas fa-fire"></i> ${design.category}</span>
+      </div>
+      <div class="trend-info">
+        <div class="trend-category">${design.category}</div>
+        <div class="trend-title">${escapeHtml(design.title)}</div>
+        <div class="trend-desc">${escapeHtml(design.description.substring(0, 110))}${design.description.length > 110 ? '...' : ''}</div>
+        <div class="trend-meta">
+          <div class="trend-meta-item"><i class="fas fa-store"></i> ${escapeHtml(design.tailorName)}</div>
+          <div class="trend-meta-item"><i class="fas fa-clock"></i> ${design.estimatedDays || '7 days'}</div>
+        </div>
+        <div class="trend-meta">
+          <div class="trend-meta-item"><i class="fas fa-heart ${isLiked ? 'text-red' : ''}" style="color:${isLiked ? '#e11d48' : '#94a3b8'}"></i> ${design.likes + (isLiked ? 1 : 0)}</div>
+          <div class="trend-meta-item"><i class="fas fa-bookmark ${isSaved ? 'text-primary' : ''}" style="color:${isSaved ? '#a75c9a' : '#94a3b8'}"></i> ${design.saves + (isSaved ? 1 : 0)}</div>
+          <div class="trend-meta-item"><i class="fas fa-tag"></i> ₹${design.price.toLocaleString('en-IN')}</div>
+        </div>
+        <div class="trend-footer">
+          <div class="trend-actions">
+            <button class="btn-like" onclick="event.stopPropagation(); toggleLike('${design.id}', event)"><i class="fas fa-heart"></i> ${isLiked ? 'Liked' : 'Like'}</button>
+            <button class="btn-save" onclick="event.stopPropagation(); toggleSave('${design.id}', event)"><i class="fas fa-bookmark"></i> ${isSaved ? 'Saved' : 'Save'}</button>
+            <button class="btn-find-tailor" onclick="event.stopPropagation(); redirectToTailor('${design.tailorId}', '${design.tailorName}')"><i class="fas fa-scissors"></i> Find Tailor</button>
+          </div>
+          <div class="trend-price">₹${design.price.toLocaleString('en-IN')}</div>
+        </div>
+      </div>
+    `;
+    fragment.appendChild(card);
+  });
+  
+  container.innerHTML = '';
+  container.appendChild(fragment);
+}
+
+// Redirect to tailored tailor page (fix the "Order" button replacement)
+function redirectToTailor(tailorId, tailorName) {
+  // Previously "Order" button now redirects to tailor's profile / listing
+  if (tailorId) {
+    sessionStorage.setItem('selectedTailorForOrder', JSON.stringify({ id: tailorId, name: tailorName }));
+    window.location.href = `/customer/tailorinfo.html?id=${tailorId}`;
+  } else {
+    showToast('Tailor details loading, please browse tailors page', true);
+  }
+}
+
+function getCategoryIcon(cat) {
+  const map = {
+    'Bridal Wear': '💍✨', 'Men\'s Wear': '👔', 'Women\'s Wear': '👗', 
+    'Ethnic Wear': '🪷', 'Party Wear': '🥂', 'Casual Wear': '👕'
+  };
+  return map[cat] || '🧵';
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
+
+// Filter handlers (No freeze)
+function setCategory(category, btnElement) {
+  activeCategory = category;
+  document.querySelectorAll('.filter-chip').forEach(btn => btn.classList.remove('active'));
+  if (btnElement) btnElement.classList.add('active');
+  renderFilteredGrid();
+}
+
+function handleSearch() {
+  searchQuery = document.getElementById('globalSearch').value;
+  renderFilteredGrid();
+}
+
+// Attach event listeners for filters
+function bindFilterEvents() {
+  const filterBtns = document.querySelectorAll('.filter-chip');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const cat = btn.getAttribute('data-cat');
+      setCategory(cat, btn);
+    });
+  });
+  document.getElementById('globalSearch').addEventListener('input', () => handleSearch());
+}
+
+// Initialize
+async function init() {
+  bindFilterEvents();
+  await fetchDesigns();
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stitchify – My Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<style>
+:root {
+  --primary:#0c7bb3; --primary-dark:#095f8a; --primary-soft:#e8f4fb;
+  --accent:#a75c9a; --accent-light:#f3e8fb;
+  --gradient:linear-gradient(135deg,#0c7bb3 0%,#a75c9a 100%);
+  --gradient-h:linear-gradient(90deg,#0c7bb3,#a75c9a);
+  --success:#16a34a; --success-bg:#f0fdf4;
+  --warning:#f59e0b; --danger:#ef4444; --danger-bg:#fef2f2;
+  --white:#ffffff; --bg:#f4f6fa; --border:#e0e7ef; --card:#ffffff;
+  --text:#1a1a2e; --text-main:#1a2340; --text-mid:#4a4a6a; --text-light:#9aaac4;
+  --shadow-sm:0 2px 10px rgba(12,123,179,0.07);
+  --shadow:0 4px 20px rgba(12,123,179,0.10);
+  --shadow-lg:0 14px 44px rgba(12,123,179,0.16);
+  --radius-sm:10px; --radius:16px; --radius-lg:24px;
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'DM Sans',sans-serif;
+  --tr:all 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* ── BRAND ── */
+.brand-bar{text-align:center;padding:14px 0 6px;background:var(--white);}
+.brand-name{font-size:34px;font-weight:700;letter-spacing:3px;font-family:var(--font-display);}
+.brand-stitch{color:var(--primary);}
+.brand-ify{color:var(--accent);}
+.brand-tagline{font-size:10px;color:var(--text-light);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+
+/* ── NAVBAR ── */
+.snav-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 32px;background:var(--white);border-bottom:1px solid var(--border);gap:16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(12,123,179,0.06);}
+.snav-search{display:flex;align-items:center;background:#f5f6fa;border:1.5px solid var(--border);border-radius:24px;padding:7px 18px;gap:8px;width:360px;flex-shrink:0;transition:border-color .2s,box-shadow .2s;}
+.snav-search:focus-within{border-color:var(--primary);background:var(--white);box-shadow:0 0 0 3px rgba(12,123,179,0.09);}
+.snav-search svg{color:var(--primary);flex-shrink:0;}
+.snav-search input{border:none;outline:none;font-size:13px;color:#444;background:transparent;width:100%;font-family:var(--font-body);}
+.snav-search input::placeholder{color:#b0b8c1;}
+.snav-links{display:flex;align-items:center;margin-left:auto;gap:2px;}
+.snav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 14px;border-radius:12px;text-decoration:none;cursor:pointer;transition:background .2s;position:relative;}
+.snav-item:hover{background:var(--primary-soft);}
+.snav-item:hover .snav-icon,.snav-item:hover .snav-lbl{color:var(--primary);}
+.snav-item.active .snav-icon,.snav-item.active .snav-lbl{color:var(--accent);font-weight:700;}
+.snav-item.active::after{content:'';position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);width:20px;height:2px;background:var(--gradient-h);border-radius:2px;}
+.snav-icon{font-size:16px;color:#9ca3af;transition:color .2s;}
+.snav-lbl{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#9ca3af;transition:color .2s;}
+
+/* ── LAYOUT ── */
+.page-wrap{max-width:1100px;margin:0 auto;padding:32px 40px;}
+.profile-layout{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start;}
+
+/* ── LEFT COLUMN ── */
+.profile-sidebar{display:flex;flex-direction:column;gap:20px;}
+
+/* Avatar Card */
+.avatar-card{background:var(--card);border-radius:var(--radius-lg);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;}
+.avatar-hero{background:var(--gradient);padding:32px 24px 20px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;}
+.avatar-wrap{position:relative;width:100px;height:100px;margin-bottom:16px;}
+.avatar-circle{width:100px;height:100px;border-radius:50%;border:4px solid rgba(255,255,255,0.6);background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:700;color:white;overflow:hidden;cursor:pointer;}
+.avatar-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.avatar-cam-btn{position:absolute;bottom:2px;right:2px;width:28px;height:28px;border-radius:50%;background:var(--primary);border:2.5px solid white;display:flex;align-items:center;justify-content:center;color:white;cursor:pointer;transition:var(--tr);}
+.avatar-cam-btn:hover{background:var(--primary-dark);transform:scale(1.1);}
+.avatar-cam-btn i{font-size:11px;}
+.avatar-name{font-size:20px;font-weight:700;color:white;margin-bottom:4px;}
+.avatar-email{font-size:12px;color:rgba(255,255,255,0.75);margin-bottom:10px;word-break:break-all;}
+.avatar-badge{background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.3);color:white;font-size:10px;font-weight:600;padding:3px 12px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;}
+.avatar-footer{padding:16px 20px;display:flex;gap:10px;}
+.avatar-stat{flex:1;text-align:center;}
+.avatar-stat-val{font-size:22px;font-weight:700;color:var(--primary);}
+.avatar-stat-lbl{font-size:10px;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.avatar-stat+.avatar-stat{border-left:1px solid var(--border);}
+
+/* Sidebar Info Card */
+.sidebar-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);}
+.sidebar-card-head{padding:16px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.sidebar-card-title{font-size:14px;font-weight:600;color:var(--text-main);display:flex;align-items:center;gap:8px;}
+.sidebar-card-title i{color:var(--primary);}
+.sidebar-card-body{padding:16px 20px;}
+.sidebar-info-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px dashed var(--border);}
+.sidebar-info-row:last-child{border-bottom:none;padding-bottom:0;}
+.si-icon{width:30px;height:30px;border-radius:8px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;color:var(--primary);flex-shrink:0;}
+.si-icon i{font-size:13px;}
+.si-lbl{font-size:10px;color:var(--text-light);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1px;}
+.si-val{font-size:13px;font-weight:500;color:var(--text-main);}
+
+/* ── RIGHT COLUMN ── */
+.profile-main{display:flex;flex-direction:column;gap:20px;}
+
+/* Section Card */
+.section-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);}
+.section-head{display:flex;align-items:center;justify-content:space-between;padding:18px 24px 14px;border-bottom:1px solid var(--border);}
+.section-title{font-size:15px;font-weight:600;color:var(--text-main);display:flex;align-items:center;gap:8px;}
+.section-title i{color:var(--primary);}
+.section-body{padding:20px 24px;}
+
+/* Measurements Grid */
+.meas-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.meas-card{background:var(--bg);border-radius:var(--radius-sm);padding:14px 12px;text-align:center;border:1px solid transparent;transition:var(--tr);}
+.meas-card:hover{background:var(--primary-soft);border-color:rgba(12,123,179,0.15);}
+.meas-icon{font-size:20px;margin-bottom:6px;}
+.meas-lbl{font-size:10px;color:var(--text-light);text-transform:uppercase;font-weight:600;letter-spacing:.5px;}
+.meas-val{font-size:18px;font-weight:700;color:var(--primary);margin-top:3px;}
+.meas-val.not-set{font-size:13px;color:var(--text-light);font-weight:400;}
+
+/* Favorites */
+.fav-list{display:flex;flex-direction:column;gap:10px;}
+.fav-card{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);transition:var(--tr);}
+.fav-card:hover{background:var(--accent-light);border-color:rgba(167,92,154,0.2);}
+.fav-avatar{width:44px;height:44px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:white;flex-shrink:0;}
+.fav-info{flex:1;min-width:0;}
+.fav-name{font-size:14px;font-weight:600;color:var(--text-main);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fav-meta{font-size:11px;color:var(--text-light);}
+.fav-rating{color:#f59e0b;font-size:11px;margin-right:4px;}
+.fav-actions{display:flex;gap:8px;flex-shrink:0;}
+.fav-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr);}
+.fav-btn.visit{color:var(--primary);}
+.fav-btn.visit:hover{background:var(--primary-soft);border-color:var(--primary);}
+.fav-btn.remove{color:var(--danger);}
+.fav-btn.remove:hover{background:var(--danger-bg);border-color:var(--danger);}
+.fav-empty{text-align:center;padding:36px 24px;color:var(--text-light);}
+.fav-empty i{font-size:40px;margin-bottom:12px;display:block;color:#d5dde8;}
+.fav-empty p{font-size:14px;}
+.fav-empty small{font-size:12px;}
+
+/* Search within favorites */
+.fav-search{display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:24px;padding:6px 14px;margin-bottom:14px;transition:border-color .2s;}
+.fav-search:focus-within{border-color:var(--primary);}
+.fav-search input{border:none;outline:none;font-size:12px;background:transparent;width:100%;font-family:var(--font-body);color:var(--text);}
+
+/* Account Settings */
+.settings-list{display:flex;flex-direction:column;gap:1px;}
+.settings-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:var(--tr);}
+.settings-item:last-child{border-bottom:none;padding-bottom:0;}
+.settings-item:hover .si-label{color:var(--primary);}
+.settings-icon{width:38px;height:38px;border-radius:10px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;color:var(--primary);flex-shrink:0;transition:var(--tr);}
+.settings-item:hover .settings-icon{background:var(--primary);color:white;}
+.settings-item.danger .settings-icon{background:#fee2e2;color:var(--danger);}
+.settings-item.danger:hover .settings-icon{background:var(--danger);color:white;}
+.settings-item.danger:hover .si-label{color:var(--danger);}
+.si-label{font-size:14px;font-weight:500;color:var(--text-main);flex:1;}
+.si-desc{font-size:11px;color:var(--text-light);margin-top:1px;}
+.si-arrow{color:var(--text-light);font-size:12px;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:50px;font-family:var(--font-body);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:var(--tr);}
+.btn-primary{background:var(--gradient);color:white;}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(12,123,179,0.3);}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text-mid);}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary);}
+.btn-sm{padding:6px 14px;font-size:12px;}
+
+/* ── MODALS ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,26,46,0.5);backdrop-filter:blur(4px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--white);border-radius:var(--radius-lg);max-width:500px;width:100%;max-height:88vh;overflow-y:auto;animation:mIn .25s ease;box-shadow:var(--shadow-lg);}
+@keyframes mIn{from{opacity:0;transform:scale(.95) translateY(-16px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-head{padding:20px 24px;background:var(--gradient);color:white;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1;}
+.modal-head h3{font-size:16px;font-weight:600;}
+.modal-x{background:rgba(255,255,255,0.2);border:none;color:white;width:30px;height:30px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:background .2s;}
+.modal-x:hover{background:rgba(255,255,255,0.35);}
+.modal-body{padding:24px;}
+.modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;margin-bottom:6px;font-size:12px;font-weight:600;color:var(--text-mid);text-transform:uppercase;letter-spacing:.5px;}
+.form-group input,.form-group select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:12px;font-family:var(--font-body);font-size:14px;color:var(--text);outline:none;transition:border-color .2s;}
+.form-group input:focus,.form-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(12,123,179,0.08);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* Avatar upload modal */
+.upload-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:32px;text-align:center;cursor:pointer;transition:var(--tr);position:relative;overflow:hidden;}
+.upload-zone:hover{border-color:var(--primary);background:var(--primary-soft);}
+.upload-zone.has-preview{border-style:solid;padding:0;}
+.upload-zone img{width:100%;height:200px;object-fit:cover;border-radius:calc(var(--radius) - 2px);}
+.upload-zone i{font-size:36px;color:var(--text-light);margin-bottom:10px;display:block;}
+.upload-hint{font-size:13px;color:var(--text-light);}
+.upload-hint strong{color:var(--primary);}
+
+/* Password strength */
+.strength-track{height:4px;background:var(--border);border-radius:4px;margin-top:6px;overflow:hidden;}
+.strength-fill{height:100%;border-radius:4px;transition:width .3s,background .3s;width:0;}
+.strength-label{font-size:11px;margin-top:3px;}
+
+/* Message box inside modal */
+.msg-box{padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;margin-top:8px;display:none;}
+.msg-box.success{background:var(--success-bg);color:var(--success);}
+.msg-box.error{background:var(--danger-bg);color:var(--danger);}
+
+/* Toast */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--text-main);color:white;padding:12px 24px;border-radius:50px;z-index:10000;transition:all .3s;opacity:0;pointer-events:none;font-weight:500;font-size:13px;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .page-wrap{padding:20px 16px;}
+  .profile-layout{grid-template-columns:1fr;}
+  .meas-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:600px){
+  .snav-search{width:160px;}
+  .snav-bar{padding:8px 14px;}
+  .meas-grid{grid-template-columns:repeat(2,1fr);}
+  .form-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- Brand -->
+<div class="brand-bar">
+  <div class="brand-name"><span class="brand-stitch">Stitch</span><span class="brand-ify">ify</span></div>
+  <div class="brand-tagline">My Profile</div>
+</div>
+
+<!-- Navbar -->
+<nav class="snav-bar" role="navigation">
+  <div class="snav-search">
+    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="search" placeholder="Search tailors, designs..."/>
+  </div>
+  <div class="snav-links">
+    <a class="snav-item" href="/customer"><i class="fas fa-home snav-icon"></i><span class="snav-lbl">Home</span></a>
+    <a class="snav-item" href="/customer/orders"><i class="fas fa-box snav-icon"></i><span class="snav-lbl">My Orders</span></a>
+    <a class="snav-item" href="/customer/chat"><i class="fas fa-comment-dots snav-icon"></i><span class="snav-lbl">Chat</span></a>
+    <a class="snav-item" href="/customer/trends"><i class="fas fa-fire snav-icon"></i><span class="snav-lbl">Trends</span></a>
+    <a class="snav-item active" href="/customer/profile"><i class="fas fa-user snav-icon"></i><span class="snav-lbl">Profile</span></a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="profile-layout">
+
+    <!-- ── LEFT SIDEBAR ── -->
+    <div class="profile-sidebar">
+
+      <!-- Avatar Card -->
+      <div class="avatar-card">
+        <div class="avatar-hero">
+          <div class="avatar-wrap">
+            <div class="avatar-circle" id="avatarCircle" onclick="openAvatarModal()" title="Change photo">
+              <span id="avatarInitial">C</span>
+            </div>
+            <div class="avatar-cam-btn" onclick="openAvatarModal()" title="Upload photo">
+              <i class="fas fa-camera"></i>
+            </div>
+          </div>
+          <div class="avatar-name" id="heroName">Loading…</div>
+          <div class="avatar-email" id="heroEmail">—</div>
+          <span class="avatar-badge">Customer</span>
+        </div>
+        <div class="avatar-footer">
+          <div class="avatar-stat">
+            <div class="avatar-stat-val" id="statOrders">0</div>
+            <div class="avatar-stat-lbl">Orders</div>
+          </div>
+          <div class="avatar-stat">
+            <div class="avatar-stat-val" id="statFavs">0</div>
+            <div class="avatar-stat-lbl">Favorites</div>
+          </div>
+          <div class="avatar-stat">
+            <div class="avatar-stat-val" id="statSince">—</div>
+            <div class="avatar-stat-lbl">Member yr</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Info Sidebar Card -->
+      <div class="sidebar-card">
+        <div class="sidebar-card-head">
+          <div class="sidebar-card-title"><i class="fas fa-id-card"></i> Contact Info</div>
+          <button class="btn btn-primary btn-sm" onclick="openEditProfileModal()"><i class="fas fa-pen"></i> Edit</button>
+        </div>
+        <div class="sidebar-card-body">
+          <div class="sidebar-info-row">
+            <div class="si-icon"><i class="fas fa-user"></i></div>
+            <div><div class="si-lbl">Full Name</div><div class="si-val" id="infoName">—</div></div>
+          </div>
+          <div class="sidebar-info-row">
+            <div class="si-icon"><i class="fas fa-phone"></i></div>
+            <div><div class="si-lbl">Phone</div><div class="si-val" id="infoPhone">—</div></div>
+          </div>
+          <div class="sidebar-info-row">
+            <div class="si-icon"><i class="fas fa-envelope"></i></div>
+            <div><div class="si-lbl">Email</div><div class="si-val" id="infoEmail" style="word-break:break-all;">—</div></div>
+          </div>
+          <div class="sidebar-info-row">
+            <div class="si-icon"><i class="fas fa-location-dot"></i></div>
+            <div><div class="si-lbl">Location</div><div class="si-val" id="infoLocation">—</div></div>
+          </div>
+          <div class="sidebar-info-row">
+            <div class="si-icon"><i class="fas fa-language"></i></div>
+            <div><div class="si-lbl">Language</div><div class="si-val" id="infoLang">English</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /sidebar -->
+
+    <!-- ── RIGHT MAIN ── -->
+    <div class="profile-main">
+
+      <!-- Body Measurements -->
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-title"><i class="fas fa-ruler-combined"></i> Body Measurements</div>
+          <button class="btn btn-primary btn-sm" onclick="openMeasurementsModal()"><i class="fas fa-edit"></i> Update</button>
+        </div>
+        <div class="section-body">
+          <div class="meas-grid">
+            <div class="meas-card"><div class="meas-icon">📏</div><div class="meas-lbl">Chest</div><div class="meas-val" id="measChest"><span class="not-set">Not set</span></div></div>
+            <div class="meas-card"><div class="meas-icon">📐</div><div class="meas-lbl">Waist</div><div class="meas-val" id="measWaist"><span class="not-set">Not set</span></div></div>
+            <div class="meas-card"><div class="meas-icon">📏</div><div class="meas-lbl">Hips</div><div class="meas-val" id="measHips"><span class="not-set">Not set</span></div></div>
+            <div class="meas-card"><div class="meas-icon">📐</div><div class="meas-lbl">Shoulder</div><div class="meas-val" id="measShoulder"><span class="not-set">Not set</span></div></div>
+            <div class="meas-card"><div class="meas-icon">📏</div><div class="meas-lbl">Inseam</div><div class="meas-val" id="measInseam"><span class="not-set">Not set</span></div></div>
+            <div class="meas-card"><div class="meas-icon">📐</div><div class="meas-lbl">Height (cm)</div><div class="meas-val" id="measHeight"><span class="not-set">Not set</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Favorite Tailors -->
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-title"><i class="fas fa-heart"></i> Favorite Tailors <span id="favBadge" style="font-size:11px;background:var(--accent-light);color:var(--accent);padding:2px 9px;border-radius:20px;font-weight:700;margin-left:4px;">0</span></div>
+          <button class="btn btn-outline btn-sm" onclick="openAddFavModal()"><i class="fas fa-plus"></i> Add Tailor</button>
+        </div>
+        <div class="section-body">
+          <div class="fav-search" id="favSearchBar" style="display:none;">
+            <i class="fas fa-search" style="color:var(--text-light);font-size:12px;"></i>
+            <input type="text" id="favSearchInput" placeholder="Search your favorites…" oninput="filterFavorites(this.value)"/>
+          </div>
+          <div id="favoritesList"></div>
+        </div>
+      </div>
+
+      <!-- Account Settings -->
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-title"><i class="fas fa-gear"></i> Account Settings</div>
+        </div>
+        <div class="section-body">
+          <div class="settings-list">
+            <div class="settings-item" onclick="openEditProfileModal()">
+              <div class="settings-icon"><i class="fas fa-user-pen"></i></div>
+              <div><div class="si-label">Edit Profile</div><div class="si-desc">Update your name, phone, and location</div></div>
+              <i class="fas fa-chevron-right si-arrow"></i>
+            </div>
+            <div class="settings-item" onclick="openMeasurementsModal()">
+              <div class="settings-icon"><i class="fas fa-ruler-combined"></i></div>
+              <div><div class="si-label">Update Measurements</div><div class="si-desc">Keep your tailoring measurements current</div></div>
+              <i class="fas fa-chevron-right si-arrow"></i>
+            </div>
+            <div class="settings-item" onclick="openAvatarModal()">
+              <div class="settings-icon"><i class="fas fa-image"></i></div>
+              <div><div class="si-label">Change Profile Photo</div><div class="si-desc">Upload a new profile picture</div></div>
+              <i class="fas fa-chevron-right si-arrow"></i>
+            </div>
+            <div class="settings-item" onclick="openChangePasswordModal()">
+              <div class="settings-icon"><i class="fas fa-lock"></i></div>
+              <div><div class="si-label">Change Password</div><div class="si-desc">Update your account password</div></div>
+              <i class="fas fa-chevron-right si-arrow"></i>
+            </div>
+            <div class="settings-item danger" onclick="handleLogout()">
+              <div class="settings-icon"><i class="fas fa-right-from-bracket"></i></div>
+              <div><div class="si-label" style="color:var(--danger);">Logout</div><div class="si-desc">Sign out of your account</div></div>
+              <i class="fas fa-chevron-right si-arrow"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /main -->
+  </div><!-- /layout -->
+</div><!-- /page-wrap -->
+
+<!-- ═══ MODALS ═══ -->
+
+<!-- Edit Profile -->
+<div class="modal-overlay" id="editProfileModal">
+  <div class="modal">
+    <div class="modal-head"><h3><i class="fas fa-user-edit"></i> Edit Profile</h3><button class="modal-x" onclick="closeModal('editProfileModal')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Full Name</label><input type="text" id="editName" placeholder="Your full name"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="editPhone" placeholder="+91 98765 43210"/></div>
+        <div class="form-group"><label>Location</label><input type="text" id="editLocation" placeholder="City, State"/></div>
+      </div>
+      <div class="form-group"><label>Language</label>
+        <select id="editLang"><option value="en">English</option><option value="hi">Hindi</option><option value="kn">Kannada</option><option value="ta">Tamil</option><option value="te">Telugu</option></select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('editProfileModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProfile()"><i class="fas fa-check"></i> Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Measurements -->
+<div class="modal-overlay" id="measurementsModal">
+  <div class="modal">
+    <div class="modal-head"><h3><i class="fas fa-ruler-combined"></i> Body Measurements</h3><button class="modal-x" onclick="closeModal('measurementsModal')">×</button></div>
+    <div class="modal-body">
+      <p style="font-size:12px;color:var(--text-light);margin-bottom:16px;">All measurements in inches unless stated otherwise.</p>
+      <div class="form-row">
+        <div class="form-group"><label>Chest (in)</label><input type="number" id="mChest" placeholder="e.g. 40" step="0.5" min="0"/></div>
+        <div class="form-group"><label>Waist (in)</label><input type="number" id="mWaist" placeholder="e.g. 32" step="0.5" min="0"/></div>
+        <div class="form-group"><label>Hips (in)</label><input type="number" id="mHips" placeholder="e.g. 38" step="0.5" min="0"/></div>
+        <div class="form-group"><label>Shoulder (in)</label><input type="number" id="mShoulder" placeholder="e.g. 18" step="0.5" min="0"/></div>
+        <div class="form-group"><label>Inseam (in)</label><input type="number" id="mInseam" placeholder="e.g. 30" step="0.5" min="0"/></div>
+        <div class="form-group"><label>Height (cm)</label><input type="number" id="mHeight" placeholder="e.g. 170" step="0.5" min="0"/></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('measurementsModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMeasurements()"><i class="fas fa-check"></i> Save Measurements</button>
+    </div>
+  </div>
+</div>
+
+<!-- Change Password -->
+<div class="modal-overlay" id="passwordModal">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-head"><h3><i class="fas fa-lock"></i> Change Password</h3><button class="modal-x" onclick="closeModal('passwordModal')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Current Password</label>
+        <div style="position:relative;">
+          <input type="password" id="currentPwd" placeholder="••••••••" style="padding-right:40px;"/>
+          <button type="button" onclick="togglePwd('currentPwd','pwdIcon1')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);border:none;background:none;cursor:pointer;color:var(--text-light);"><i class="fas fa-eye" id="pwdIcon1"></i></button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>New Password</label>
+        <div style="position:relative;">
+          <input type="password" id="newPwd" placeholder="Min. 6 characters" oninput="checkPwdStrength(this.value)" style="padding-right:40px;"/>
+          <button type="button" onclick="togglePwd('newPwd','pwdIcon2')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);border:none;background:none;cursor:pointer;color:var(--text-light);"><i class="fas fa-eye" id="pwdIcon2"></i></button>
+        </div>
+        <div class="strength-track"><div class="strength-fill" id="strengthFill"></div></div>
+        <div class="strength-label" id="strengthLabel" style="color:var(--text-light);"></div>
+      </div>
+      <div class="form-group">
+        <label>Confirm New Password</label>
+        <div style="position:relative;">
+          <input type="password" id="confirmPwd" placeholder="Re-enter password" style="padding-right:40px;"/>
+          <button type="button" onclick="togglePwd('confirmPwd','pwdIcon3')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);border:none;background:none;cursor:pointer;color:var(--text-light);"><i class="fas fa-eye" id="pwdIcon3"></i></button>
+        </div>
+      </div>
+      <div class="msg-box" id="pwdMsg"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('passwordModal')">Cancel</button>
+      <button class="btn btn-primary" id="pwdBtn" onclick="changePassword()"><i class="fas fa-key"></i> Update Password</button>
+    </div>
+  </div>
+</div>
+
+<!-- Avatar Upload Modal -->
+<div class="modal-overlay" id="avatarModal">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-head"><h3><i class="fas fa-image"></i> Update Profile Photo</h3><button class="modal-x" onclick="closeModal('avatarModal')">×</button></div>
+    <div class="modal-body">
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('avatarFileInput').click()">
+        <i class="fas fa-cloud-upload-alt" id="uploadIcon"></i>
+        <div class="upload-hint"><strong>Click to upload</strong> or drag & drop</div>
+        <div style="font-size:11px;color:var(--text-light);margin-top:4px;">PNG, JPG, WEBP — max 5 MB</div>
+      </div>
+      <input type="file" id="avatarFileInput" accept="image/png,image/jpeg,image/webp" style="display:none;" onchange="handleAvatarFile(this)"/>
+      <div style="display:flex;gap:10px;margin-top:16px;" id="avatarActions">
+        <button class="btn btn-outline" style="flex:1;" onclick="removeAvatar()" id="removeAvatarBtn"><i class="fas fa-trash"></i> Remove Photo</button>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('avatarModal')">Cancel</button>
+      <button class="btn btn-primary" id="avatarSaveBtn" onclick="saveAvatar()" disabled><i class="fas fa-check"></i> Save Photo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Favorite Tailor Modal -->
+<div class="modal-overlay" id="addFavModal">
+  <div class="modal" style="max-width:440px;">
+    <div class="modal-head"><h3><i class="fas fa-heart"></i> Add Favorite Tailor</h3><button class="modal-x" onclick="closeModal('addFavModal')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Tailor Name *</label>
+        <input type="text" id="favTailorName" placeholder="e.g. Priya Creations"/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Speciality</label>
+          <select id="favSpeciality">
+            <option value="">Select speciality</option>
+            <option>Bridal Wear</option><option>Casual Wear</option><option>Formal Wear</option>
+            <option>Party Wear</option><option>Alterations</option><option>Kids Wear</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Rating (1–5)</label>
+          <input type="number" id="favRating" min="1" max="5" step="0.1" placeholder="e.g. 4.8"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Location</label>
+        <input type="text" id="favLocation" placeholder="e.g. Koramangala, Bengaluru"/>
+      </div>
+      <div class="form-group">
+        <label>Notes (optional)</label>
+        <input type="text" id="favNotes" placeholder="e.g. Great embroidery work"/>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('addFavModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="addFavorite()"><i class="fas fa-heart"></i> Add to Favorites</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+/* ════════════════════════════════════
+   STATE
+════════════════════════════════════ */
+const token = localStorage.getItem('token');
+const user  = JSON.parse(localStorage.getItem('user') || '{}');
+
+let profileData   = {};
+let avatarDataUrl = null;   // pending upload
+let pendingAvatar = null;   // saved data url
+let favoritesData = [];     // local favorites list
+
+if (!token || !user.id) window.location.href = '/';
+
+/* ════════════════════════════════════
+   FETCH PROFILE
+════════════════════════════════════ */
+async function fetchProfile() {
+  try {
+    const res = await fetch(`/api/customer/profile/${user.id}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) profileData = await res.json();
+  } catch(_) {
+    /* Use mock data so the page always renders */
+    profileData = {
+      name: user.name || 'Customer',
+      email: user.email || '',
+      phone: '+91 98765 43210',
+      location: 'Bengaluru, Karnataka',
+      member_since: '2024-01-15',
+      language: 'en',
+      measurements: { chest:38, waist:32, hips:36, shoulder:17, inseam:30, height:170 },
+      favorite_tailors: [
+        { tailor_id:'t1', tailor_name:'Priya Creations', speciality:'Bridal Wear', rating:4.9, location:'Koramangala', added_at: new Date().toISOString(), notes:'Amazing embroidery' },
+        { tailor_id:'t2', tailor_name:'Royal Threads',   speciality:'Formal Wear', rating:4.7, location:'Indiranagar',  added_at: new Date().toISOString(), notes:'' },
+      ],
+      orders_count: 7,
+    };
+  }
+  favoritesData = profileData.favorite_tailors || [];
+
+  /* Restore saved avatar from localStorage if present */
+  const savedAvatar = localStorage.getItem('customerAvatar_' + user.id);
+  if (savedAvatar) applyAvatarToDOM(savedAvatar);
+
+  renderAll();
+}
+
+/* ════════════════════════════════════
+   RENDER ALL
+════════════════════════════════════ */
+function renderAll() {
+  const name  = profileData.name  || user.name  || 'Customer';
+  const email = profileData.email || user.email || '';
+
+  /* Hero */
+  document.getElementById('heroName').textContent = name;
+  document.getElementById('heroEmail').textContent = email;
+  const initial = document.getElementById('avatarInitial');
+  if (initial) initial.textContent = name.charAt(0).toUpperCase();
+
+  /* Stats */
+  document.getElementById('statOrders').textContent = profileData.orders_count || 0;
+  document.getElementById('statFavs').textContent   = favoritesData.length;
+  if (profileData.member_since) {
+    document.getElementById('statSince').textContent = new Date(profileData.member_since).getFullYear();
+  }
+
+  /* Sidebar */
+  document.getElementById('infoName').textContent     = name;
+  document.getElementById('infoEmail').textContent    = email;
+  document.getElementById('infoPhone').textContent    = profileData.phone    || 'Not set';
+  document.getElementById('infoLocation').textContent = profileData.location || 'Not set';
+  const langMap = { en:'English', hi:'Hindi', kn:'Kannada', ta:'Tamil', te:'Telugu' };
+  document.getElementById('infoLang').textContent = langMap[profileData.language] || 'English';
+
+  /* Measurements */
+  const m = profileData.measurements || {};
+  const measFields = [
+    { id:'measChest',    key:'chest',    unit:'"' },
+    { id:'measWaist',    key:'waist',    unit:'"' },
+    { id:'measHips',     key:'hips',     unit:'"' },
+    { id:'measShoulder', key:'shoulder', unit:'"' },
+    { id:'measInseam',   key:'inseam',   unit:'"' },
+    { id:'measHeight',   key:'height',   unit:' cm' },
+  ];
+  measFields.forEach(({ id, key, unit }) => {
+    const el = document.getElementById(id);
+    if (m[key]) {
+      el.textContent = m[key] + unit;
+      el.classList.remove('not-set');
+    } else {
+      el.innerHTML = '<span class="not-set">Not set</span>';
+    }
+  });
+
+  renderFavorites();
+}
+
+/* ════════════════════════════════════
+   FAVORITES  (functional — Fix #3)
+════════════════════════════════════ */
+function renderFavorites(filter = '') {
+  const container = document.getElementById('favoritesList');
+  const badge     = document.getElementById('favBadge');
+  const searchBar = document.getElementById('favSearchBar');
+
+  badge.textContent = favoritesData.length;
+  document.getElementById('statFavs').textContent = favoritesData.length;
+
+  /* Show search bar only if >2 favorites */
+  searchBar.style.display = favoritesData.length > 2 ? 'flex' : 'none';
+
+  const list = filter
+    ? favoritesData.filter(f => f.tailor_name.toLowerCase().includes(filter.toLowerCase()) || (f.speciality||'').toLowerCase().includes(filter.toLowerCase()))
+    : favoritesData;
+
+  if (!list.length) {
+    container.innerHTML = `<div class="fav-empty">
+      <i class="fas fa-heart-crack"></i>
+      <p>${filter ? 'No matches found.' : 'No favorite tailors yet.'}</p>
+      <small>${filter ? '' : 'Browse tailors and save the ones you love!'}</small>
+    </div>`;
+    return;
+  }
+
+  container.innerHTML = `<div class="fav-list">${list.map(f => {
+    const initial = f.tailor_name.charAt(0).toUpperCase();
+    const rating  = f.rating ? parseFloat(f.rating).toFixed(1) : '—';
+    const date    = new Date(f.added_at).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+    const stars   = f.rating ? '★'.repeat(Math.round(f.rating)) + '☆'.repeat(5 - Math.round(f.rating)) : '';
+    return `<div class="fav-card">
+      <div class="fav-avatar">${initial}</div>
+      <div class="fav-info">
+        <div class="fav-name">${f.tailor_name}</div>
+        <div class="fav-meta">
+          <span class="fav-rating">${stars}</span>
+          ${rating !== '—' ? `<strong>${rating}</strong> · ` : ''}
+          ${f.speciality || ''}${f.location ? ' · ' + f.location : ''}
+        </div>
+        ${f.notes ? `<div style="font-size:11px;color:var(--text-light);margin-top:2px;font-style:italic;">"${f.notes}"</div>` : ''}
+        <div style="font-size:10px;color:var(--text-light);margin-top:2px;">Saved ${date}</div>
+      </div>
+      <div class="fav-actions">
+        <button class="fav-btn visit" title="View tailor" onclick="visitTailor('${f.tailor_id}')"><i class="fas fa-arrow-up-right-from-square" style="font-size:12px;"></i></button>
+        <button class="fav-btn remove" title="Remove favorite" onclick="removeFavorite('${f.tailor_id}')"><i class="fas fa-heart-crack" style="font-size:12px;"></i></button>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function filterFavorites(q) { renderFavorites(q); }
+
+function openAddFavModal() {
+  ['favTailorName','favLocation','favNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('favSpeciality').value = '';
+  document.getElementById('favRating').value = '';
+  openModal('addFavModal');
+}
+
+async function addFavorite() {
+  const name = document.getElementById('favTailorName').value.trim();
+  if (!name) { showToast('❌ Tailor name is required'); return; }
+
+  const newFav = {
+    tailor_id:   'fav_' + Date.now(),
+    tailor_name: name,
+    speciality:  document.getElementById('favSpeciality').value,
+    rating:      parseFloat(document.getElementById('favRating').value) || null,
+    location:    document.getElementById('favLocation').value.trim(),
+    notes:       document.getElementById('favNotes').value.trim(),
+    added_at:    new Date().toISOString(),
+  };
+
+  /* Optimistic local update */
+  favoritesData.push(newFav);
+  renderFavorites();
+  closeModal('addFavModal');
+  showToast('❤️ Added to favorites!');
+
+  /* Persist to API */
+  try {
+    await fetch(`/api/customer/favorites/${user.id}/add`, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':`Bearer ${token}` },
+      body: JSON.stringify(newFav),
+    });
+  } catch(_) {}
+
+  saveFavoritesLocally();
+}
+
+async function removeFavorite(tid) {
+  if (!confirm('Remove this tailor from favorites?')) return;
+  favoritesData = favoritesData.filter(f => f.tailor_id !== tid);
+  renderFavorites();
+  showToast('Removed from favorites');
+
+  try {
+    await fetch(`/api/customer/favorite/remove/${user.id}/${tid}`, {
+      method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
+    });
+  } catch(_) {}
+
+  saveFavoritesLocally();
+}
+
+function visitTailor(id) {
+  /* Navigate to the tailor's public profile */
+  window.location.href = `/tailor/${id}`;
+}
+
+function saveFavoritesLocally() {
+  /* Persist favorites locally so they survive API failures */
+  try { localStorage.setItem('customerFavs_' + user.id, JSON.stringify(favoritesData)); } catch(_) {}
+}
+
+function loadFavoritesLocally() {
+  try {
+    const saved = localStorage.getItem('customerFavs_' + user.id);
+    if (saved) favoritesData = JSON.parse(saved);
+  } catch(_) {}
+}
+
+/* ════════════════════════════════════
+   PROFILE EDIT
+════════════════════════════════════ */
+function openEditProfileModal() {
+  document.getElementById('editName').value     = profileData.name     || user.name || '';
+  document.getElementById('editPhone').value    = profileData.phone    || '';
+  document.getElementById('editLocation').value = profileData.location || '';
+  document.getElementById('editLang').value     = profileData.language || 'en';
+  openModal('editProfileModal');
+}
+
+async function saveProfile() {
+  const name = document.getElementById('editName').value.trim();
+  if (!name) { showToast('❌ Name is required'); return; }
+
+  const data = {
+    name,
+    phone:    document.getElementById('editPhone').value.trim(),
+    location: document.getElementById('editLocation').value.trim(),
+    language: document.getElementById('editLang').value,
+  };
+
+  /* Optimistic update */
+  Object.assign(profileData, data);
+  user.name = name;
+  localStorage.setItem('user', JSON.stringify(user));
+  renderAll();
+  closeModal('editProfileModal');
+  showToast('✅ Profile updated!');
+
+  /* Persist */
+  try {
+    await fetch(`/api/customer/profile/${user.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type':'application/json', 'Authorization':`Bearer ${token}` },
+      body: JSON.stringify(data),
+    });
+  } catch(_) {}
+}
+
+/* ════════════════════════════════════
+   MEASUREMENTS
+════════════════════════════════════ */
+function openMeasurementsModal() {
+  const m = profileData.measurements || {};
+  document.getElementById('mChest').value    = m.chest    || '';
+  document.getElementById('mWaist').value    = m.waist    || '';
+  document.getElementById('mHips').value     = m.hips     || '';
+  document.getElementById('mShoulder').value = m.shoulder || '';
+  document.getElementById('mInseam').value   = m.inseam   || '';
+  document.getElementById('mHeight').value   = m.height   || '';
+  openModal('measurementsModal');
+}
+
+async function saveMeasurements() {
+  const fields = ['chest','waist','hips','shoulder','inseam','height'];
+  const ids    = ['mChest','mWaist','mHips','mShoulder','mInseam','mHeight'];
+  const data   = {};
+  fields.forEach((f, i) => {
+    const v = document.getElementById(ids[i]).value;
+    if (v) data[f] = parseFloat(v);
+  });
+
+  profileData.measurements = { ...(profileData.measurements || {}), ...data };
+  renderAll();
+  closeModal('measurementsModal');
+  showToast('✅ Measurements updated!');
+
+  try {
+    await fetch(`/api/customer/measurements/${user.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type':'application/json', 'Authorization':`Bearer ${token}` },
+      body: JSON.stringify(data),
+    });
+  } catch(_) {}
+}
+
+/* ════════════════════════════════════
+   AVATAR UPLOAD  (Fix #2)
+════════════════════════════════════ */
+function openAvatarModal() {
+  avatarDataUrl = null;
+  /* Reset upload zone */
+  const zone    = document.getElementById('uploadZone');
+  zone.className = 'upload-zone';
+  zone.innerHTML = `<i class="fas fa-cloud-upload-alt" id="uploadIcon"></i>
+    <div class="upload-hint"><strong>Click to upload</strong> or drag & drop</div>
+    <div style="font-size:11px;color:var(--text-light);margin-top:4px;">PNG, JPG, WEBP — max 5 MB</div>`;
+  document.getElementById('avatarFileInput').value = '';
+  document.getElementById('avatarSaveBtn').disabled = true;
+  openModal('avatarModal');
+}
+
+function handleAvatarFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { showToast('❌ File too large (max 5 MB)'); return; }
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    avatarDataUrl = e.target.result;
+    const zone = document.getElementById('uploadZone');
+    zone.className = 'upload-zone has-preview';
+    zone.innerHTML = `<img src="${avatarDataUrl}" alt="Preview"/>`;
+    document.getElementById('avatarSaveBtn').disabled = false;
+  };
+  reader.readAsDataURL(file);
+}
+
+/* Drag & drop support */
+(function () {
+  document.addEventListener('DOMContentLoaded', () => {
+    const zone = document.getElementById('uploadZone');
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = 'var(--primary)'; });
+    zone.addEventListener('dragleave', () => { zone.style.borderColor = ''; });
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.style.borderColor = '';
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        const inp = document.getElementById('avatarFileInput');
+        inp.files = dt.files;
+        handleAvatarFile(inp);
+      }
+    });
+  });
+})();
+
+function saveAvatar() {
+  if (!avatarDataUrl) return;
+  pendingAvatar = avatarDataUrl;
+  /* Store in localStorage for persistence across sessions */
+  try { localStorage.setItem('customerAvatar_' + user.id, avatarDataUrl); } catch(_) {}
+  applyAvatarToDOM(avatarDataUrl);
+  closeModal('avatarModal');
+  showToast('✅ Profile photo updated!');
+
+  /* Upload to server in background */
+  try {
+    fetch(`/api/customer/profile/${user.id}/avatar`, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':`Bearer ${token}` },
+      body: JSON.stringify({ image_base64: avatarDataUrl }),
+    }).catch(() => {});
+  } catch(_) {}
+}
+
+function applyAvatarToDOM(dataUrl) {
+  const circle = document.getElementById('avatarCircle');
+  circle.innerHTML = `<img src="${dataUrl}" alt="Profile photo"/>`;
+}
+
+function removeAvatar() {
+  localStorage.removeItem('customerAvatar_' + user.id);
+  pendingAvatar = null;
+  const circle = document.getElementById('avatarCircle');
+  const name   = profileData.name || user.name || 'C';
+  circle.innerHTML = `<span id="avatarInitial">${name.charAt(0).toUpperCase()}</span>`;
+  closeModal('avatarModal');
+  showToast('Profile photo removed');
+  try {
+    fetch(`/api/customer/profile/${user.id}/avatar`, {
+      method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
+    }).catch(() => {});
+  } catch(_) {}
+}
+
+/* ════════════════════════════════════
+   PASSWORD
+════════════════════════════════════ */
+function openChangePasswordModal() {
+  ['currentPwd','newPwd','confirmPwd'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('strengthFill').style.width = '0';
+  document.getElementById('strengthLabel').textContent = '';
+  const msg = document.getElementById('pwdMsg');
+  msg.style.display = 'none';
+  msg.className = 'msg-box';
+  openModal('passwordModal');
+}
+
+function togglePwd(inputId, iconId) {
+  const inp  = document.getElementById(inputId);
+  const icon = document.getElementById(iconId);
+  inp.type   = inp.type === 'password' ? 'text' : 'password';
+  icon.className = inp.type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+}
+
+function checkPwdStrength(val) {
+  let score = 0;
+  if (val.length >= 6)          score++;
+  if (val.length >= 10)         score++;
+  if (/[A-Z]/.test(val))        score++;
+  if (/[0-9]/.test(val))        score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  const lvls = [
+    { w:'0%',   c:'#e0e7ef', t:'' },
+    { w:'25%',  c:'#ef4444', t:'Weak' },
+    { w:'50%',  c:'#f97316', t:'Fair' },
+    { w:'75%',  c:'#eab308', t:'Good' },
+    { w:'90%',  c:'#22c55e', t:'Strong' },
+    { w:'100%', c:'#16a34a', t:'Very strong' },
+  ];
+  const l = lvls[Math.min(score, 5)];
+  const fill  = document.getElementById('strengthFill');
+  const label = document.getElementById('strengthLabel');
+  fill.style.width      = l.w;
+  fill.style.background = l.c;
+  label.textContent     = l.t;
+  label.style.color     = l.c;
+}
+
+function showPwdMsg(text, ok) {
+  const el = document.getElementById('pwdMsg');
+  el.textContent  = text;
+  el.className    = 'msg-box ' + (ok ? 'success' : 'error');
+  el.style.display = 'block';
+}
+
+async function changePassword() {
+  const current = document.getElementById('currentPwd').value;
+  const newPwd  = document.getElementById('newPwd').value;
+  const confirm = document.getElementById('confirmPwd').value;
+  const btn     = document.getElementById('pwdBtn');
+
+  document.getElementById('pwdMsg').style.display = 'none';
+
+  if (!current || !newPwd || !confirm) { showPwdMsg('❌ All fields are required', false); return; }
+  if (newPwd.length < 6)              { showPwdMsg('❌ Password must be at least 6 characters', false); return; }
+  if (newPwd !== confirm)             { showPwdMsg('❌ Passwords do not match', false); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating…';
+
+  try {
+    const res  = await fetch('/api/auth/change-password', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':`Bearer ${token}` },
+      body: JSON.stringify({ current_password: current, new_password: newPwd }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showPwdMsg('✅ Password updated! Logging out in 3 s…', true);
+      setTimeout(() => { localStorage.clear(); window.location.href = '/'; }, 3000);
+    } else {
+      showPwdMsg('❌ ' + (data.error || data.message || 'Incorrect current password'), false);
+    }
+  } catch(_) {
+    showPwdMsg('❌ Server error. Please try again.', false);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-key"></i> Update Password';
+  }
+}
+
+/* ════════════════════════════════════
+   MODAL HELPERS
+════════════════════════════════════ */
+function openModal(id)  { document.getElementById(id).classList.add('open');    document.body.style.overflow = 'hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) closeModal(o.id); });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+});
+
+/* ════════════════════════════════════
+   MISC
+════════════════════════════════════ */
+function handleLogout() {
+  if (!confirm('Sign out of your account?')) return;
+  localStorage.clear();
+  window.location.href = '/';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ════════════════════════════════════
+   INIT
+════════════════════════════════════ */
+loadFavoritesLocally();
+fetchProfile();
+</script>
+</body>
+</html>

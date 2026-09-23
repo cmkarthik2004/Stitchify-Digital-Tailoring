@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stitchify – Tailor Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Sora:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<style>
+:root {
+  --primary:#0c7bb3;--primary-dk:#095e8a;--primary-lt:#e8f4fb;
+  --accent:#a75c9a;--accent-lt:#f3e8fb;
+  --gradient:linear-gradient(135deg,#0c7bb3,#a75c9a);
+  --success:#16a34a;--warning:#f59e0b;--danger:#ef4444;
+  --white:#fff;--bg:#f4f6fa;--border:#e0e7ef;
+  --text:#1a1a2e;--text-main:#1a2340;--text-mid:#4a4a6a;--text-light:#9aaac4;
+  --shadow:0 4px 20px rgba(12,123,179,0.08);--shadow-lg:0 12px 40px rgba(12,123,179,0.14);
+  --radius-sm:10px;--radius:16px;--radius-lg:22px;
+  --font-display:'Playfair Display',serif;
+  --font-body:'DM Sans','Sora',sans-serif;
+  --font-accent:'Outfit',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.5}
+
+.header{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:12px 32px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:28px;font-weight:700;font-family:var(--font-display)}.brand-s{color:var(--primary)}.brand-i{color:var(--accent)}
+.back-btn{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:30px;background:var(--primary-lt);color:var(--primary);text-decoration:none;font-size:13px;font-weight:600}
+.back-btn:hover{background:var(--primary);color:white}
+
+.hero-section{background:var(--gradient);padding:48px 56px;position:relative}
+.hero-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:30px}
+.tailor-avatar{width:120px;height:120px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:700;color:var(--primary);border:4px solid white;box-shadow:0 8px 28px rgba(0,0,0,0.15);overflow:hidden}
+.tailor-avatar img{width:100%;height:100%;object-fit:cover}
+.tailor-info{flex:1;color:white}
+.tailor-info h1{font-size:32px;margin-bottom:8px}
+.tailor-info .shop{font-size:18px;opacity:0.9;margin-bottom:12px}
+.tailor-meta{display:flex;flex-wrap:wrap;gap:20px;margin-top:16px}
+.tailor-meta span{display:flex;align-items:center;gap:6px;font-size:13px;background:rgba(255,255,255,0.15);padding:6px 14px;border-radius:30px}
+.hero-stats{display:flex;gap:30px}
+.stat-box{text-align:center;background:rgba(255,255,255,0.12);border-radius:16px;padding:16px 24px;min-width:100px}
+.stat-num{font-size:28px;font-weight:700}
+.stat-label{font-size:11px;opacity:0.8;margin-top:4px}
+
+.content{max-width:1200px;margin:0 auto;padding:40px 32px}
+.section-title{font-size:20px;font-weight:700;color:var(--text-main);display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.section-title i{color:var(--primary)}
+
+.about-card{background:var(--white);border-radius:var(--radius);padding:28px;margin-bottom:32px;border:1px solid var(--border)}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:16px}
+.info-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg);border-radius:12px}
+.info-item i{width:32px;font-size:18px;color:var(--primary)}
+.info-item .label{font-size:11px;color:var(--text-light);text-transform:uppercase}
+.info-item .value{font-size:14px;font-weight:600;color:var(--text-main)}
+.specialties{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.specialty-tag{padding:6px 14px;border-radius:30px;background:linear-gradient(135deg,var(--primary-lt),var(--accent-lt));color:var(--primary);font-size:12px;font-weight:500}
+
+.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-bottom:40px}
+.portfolio-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--border);transition:all .3s ease;cursor:pointer}
+.portfolio-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg)}
+.portfolio-img{height:240px;overflow:hidden;position:relative;background:var(--primary-lt)}
+.portfolio-img img{width:100%;height:100%;object-fit:cover}
+.portfolio-img .no-img{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:50px;color:var(--primary);opacity:0.3}
+.portfolio-badge{position:absolute;top:12px;right:12px;padding:5px 12px;background:rgba(0,0,0,0.7);color:white;font-size:10px;font-weight:600;border-radius:20px}
+.portfolio-info{padding:16px}
+.portfolio-info h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.portfolio-info .cat{font-size:11px;color:var(--primary);font-weight:600;text-transform:uppercase;margin-bottom:8px}
+.portfolio-meta{display:flex;gap:12px;margin-bottom:10px}
+.portfolio-meta span{font-size:11px;color:var(--text-mid);display:flex;align-items:center;gap:3px}
+.portfolio-price{font-size:14px;font-weight:700;color:var(--primary);margin-top:8px}
+.portfolio-actions{display:flex;gap:8px;margin-top:12px}
+.btn-buy{flex:1;padding:10px;border-radius:30px;background:var(--gradient);color:white;border:none;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-buy:hover{opacity:0.9;transform:translateY(-1px)}
+
+.reviews-section{margin-top:32px}
+.review-card{background:var(--white);border-radius:var(--radius);padding:20px;margin-bottom:16px;border:1px solid var(--border)}
+.review-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.reviewer{display:flex;align-items:center;gap:12px}
+.reviewer-avatar{width:40px;height:40px;border-radius:50%;background:var(--primary-lt);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--primary)}
+.reviewer-name{font-weight:600;font-size:14px}
+.review-date{font-size:10px;color:var(--text-light)}
+.review-stars{color:var(--warning);font-size:12px}
+.review-text{font-size:13px;color:var(--text-mid);line-height:1.6;margin-top:8px}
+
+.empty-state{text-align:center;padding:60px;background:var(--white);border-radius:var(--radius);border:1px solid var(--border)}
+.empty-state i{font-size:48px;color:var(--text-light);margin-bottom:16px}
+
+/* Order Modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal-content{background:var(--white);border-radius:24px;max-width:550px;width:100%;max-height:90vh;overflow-y:auto}
+.modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-header h3{font-size:18px;font-weight:700}
+.modal-close{background:none;border:none;font-size:24px;cursor:pointer;color:var(--text-mid)}
+.modal-body{padding:24px}
+.design-preview{display:flex;gap:16px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.design-preview-img{width:100px;height:100px;border-radius:12px;background:var(--primary-lt);object-fit:cover}
+.design-preview-info h4{font-size:14px;margin-bottom:4px}
+.design-preview-info .price{color:var(--primary);font-weight:700;font-size:16px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--text-mid);margin-bottom:6px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:12px;font-family:var(--font-body);font-size:14px}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--primary);outline:none}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-footer{display:flex;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+.btn-cancel{flex:1;padding:12px;border-radius:50px;border:1.5px solid var(--border);background:transparent;font-weight:600;cursor:pointer}
+.btn-confirm{flex:1;padding:12px;border-radius:50px;background:var(--gradient);color:white;border:none;font-weight:600;cursor:pointer}
+
+.loading{text-align:center;padding:60px}
+.loading i{font-size:40px;color:var(--primary);animation:spin 1s linear infinite}
+@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--text-main);color:white;padding:12px 24px;border-radius:50px;z-index:9999;opacity:0;transition:opacity .3s}
+.toast.show{opacity:1}
+
+@media(max-width:768px){
+  .hero-section{padding:32px 24px}
+  .hero-inner{flex-direction:column;text-align:center}
+  .content{padding:24px 16px}
+  .portfolio-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand"><span class="brand-s">Stitch</span><span class="brand-i">ify</span></div>
+  <a href="#" class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back</a>
+</header>
+
+<div id="loadingState" class="loading"><i class="fas fa-spinner fa-pulse"></i><p>Loading tailor profile...</p></div>
+
+<div id="profileContent" style="display:none">
+  <div class="hero-section">
+    <div class="hero-inner">
+      <div class="tailor-avatar" id="tailorAvatar">👤</div>
+      <div class="tailor-info">
+        <h1 id="tailorName">Loading...</h1>
+        <div class="shop" id="shopName"></div>
+        <div class="tailor-meta">
+          <span><i class="fas fa-map-marker-alt"></i> <span id="location">-</span></span>
+          <span><i class="fas fa-star" style="color:#f59e0b"></i> <span id="rating">0</span> (<span id="reviewCount">0</span> reviews)</span>
+          <span><i class="fas fa-briefcase"></i> <span id="experience">0</span> years</span>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-box"><div class="stat-num" id="statDesigns">0</div><div class="stat-label">Designs</div></div>
+        <div class="stat-box"><div class="stat-num" id="statOrders">0</div><div class="stat-label">Orders</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="about-card">
+      <div class="section-title"><i class="fas fa-store"></i> About the Artisan</div>
+<div class="info-grid">
+  <div class="info-item"><i class="fas fa-phone"></i><div><div class="label">Phone</div><div class="value" id="phone">-</div></div></div>
+  <div class="info-item"><i class="fas fa-envelope"></i><div><div class="label">Email</div><div class="value" id="email">-</div></div></div>
+  <div class="info-item"><i class="fas fa-location-dot"></i><div><div class="label">Address</div><div class="value" id="address">-</div></div></div>  <!-- ADD THIS LINE -->
+  <div class="info-item"><i class="fas fa-clock"></i><div><div class="label">Working Hours</div><div class="value" id="hours">-</div></div></div>
+  <div class="info-item"><i class="fas fa-tag"></i><div><div class="label">Price Range</div><div class="value" id="priceRange">-</div></div></div>
+</div>
+      <div class="specialties" id="specialties"></div>
+    </div>
+
+    <div class="section-title"><i class="fas fa-images"></i> Portfolio & Designs</div>
+    <div class="portfolio-grid" id="portfolioGrid"></div>
+
+<div class="reviews-section">
+  <div class="section-title">
+    <i class="fas fa-comments"></i> Customer Reviews
+    <button id="writeReviewBtn"
+      style="margin-left:auto; background:var(--gradient); color:white; border:none; padding:8px 20px; border-radius:30px; cursor:pointer; display:flex; align-items:center; gap:6px;">
+      <i class="fas fa-pen"></i> Write a Review
+    </button>
+  </div>
+  <div id="reviewsGrid"></div>
+</div>
+<!-- Order Modal -->
+<div id="orderModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3><i class="fas fa-shopping-bag"></i> Place Order</h3>
+      <button class="modal-close" onclick="closeOrderModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="design-preview" id="designPreview">
+        <img id="previewImg" class="design-preview-img" src="" alt="Design">
+        <div class="design-preview-info">
+          <h4 id="previewTitle">Design Name</h4>
+          <p class="price" id="previewPrice">₹0</p>
+          <p><small id="previewTailor">Tailor Name</small></p>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Quantity</label>
+          <input type="number" id="orderQuantity" value="1" min="1" onchange="updateTotal()">
+        </div>
+        <div class="form-group">
+          <label>Total Amount</label>
+          <input type="text" id="totalAmount" readonly style="background:#f5f5f5;font-weight:700;color:var(--primary)">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Select Item / Service *</label>
+        <select id="orderItem" required>
+          <option value="">-- Select an item --</option>
+          <option value="Custom Suit">Custom Suit</option>
+          <option value="Bridal Lehenga">Bridal Lehenga</option>
+          <option value="Sherwani">Sherwani</option>
+          <option value="Designer Blouse">Designer Blouse</option>
+          <option value="Salwar Kameez">Salwar Kameez</option>
+          <option value="Kurta Pajama">Kurta Pajama</option>
+          <option value="Formal Shirt">Formal Shirt</option>
+          <option value="Alterations">Alterations</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>Fabric Preference</label>
+        <select id="orderFabric">
+          <option value="">-- Select fabric --</option>
+          <option>Silk</option><option>Cotton</option><option>Velvet</option>
+          <option>Linen</option><option>Georgette</option><option>Chiffon</option><option>Net</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>Special Instructions</label>
+        <textarea id="orderNotes" rows="3" placeholder="Any specific requirements, measurements, or design preferences..."></textarea>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeOrderModal()">Cancel</button>
+        <button class="btn-confirm" onclick="submitOrder()"><i class="fas fa-check"></i> Confirm Order</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const token = localStorage.getItem('token');
+const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+if (!token || !user.id) {
+  window.location.href = '/login-page';
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+const tailorId = urlParams.get('id');
+
+if (!tailorId) {
+  window.location.href = '/customer';
+}
+
+let currentTailor = null;
+let selectedDesign = null;
+
+async function loadTailorProfile() {
+  try {
+    const response = await fetch(`/api/tailor/public-profile/${tailorId}`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    if (!response.ok) throw new Error('Failed to load profile');
+    
+    const data = await response.json();
+    currentTailor = data;
+    
+    document.getElementById('tailorName').textContent = data.owner_name || data.shop_name;
+    document.getElementById('shopName').textContent = data.shop_name;
+    document.getElementById('address').textContent = data.address || 'Not specified';
+    document.getElementById('location').textContent = data.location || 'Not specified';
+    document.getElementById('rating').textContent = data.rating || 'New';
+    document.getElementById('reviewCount').textContent = data.total_reviews || 0;
+    document.getElementById('experience').textContent = data.experience || 0;
+    document.getElementById('statDesigns').textContent = data.portfolio?.length || 0;
+    document.getElementById('statOrders').textContent = data.total_orders || 0;
+    document.getElementById('phone').textContent = data.phone || 'Not shared';
+    document.getElementById('email').textContent = data.email || '-';
+    document.getElementById('hours').textContent = data.working_hours || 'Mon-Sat: 10AM - 8PM';
+    
+    const minPrice = data.price_range?.min || 500;
+    const maxPrice = data.price_range?.max || 25000;
+    document.getElementById('priceRange').textContent = `₹${minPrice.toLocaleString('en-IN')} - ₹${maxPrice.toLocaleString('en-IN')}`;
+    
+    const specialtiesDiv = document.getElementById('specialties');
+    if (data.specializations && data.specializations.length) {
+      specialtiesDiv.innerHTML = data.specializations.map(s => `<span class="specialty-tag">${s}</span>`).join('');
+    } else {
+      specialtiesDiv.innerHTML = '<span class="specialty-tag">Custom Tailoring</span><span class="specialty-tag">Bridal Wear</span><span class="specialty-tag">Men\'s Wear</span>';
+    }
+    
+    // ✅ FIX: Display profile photo if available
+    const avatarDiv = document.getElementById('tailorAvatar');
+    if (data.profile_photo || data.avatar_url) {
+      const photoUrl = data.profile_photo || data.avatar_url;
+      avatarDiv.innerHTML = `<img src="${photoUrl}" alt="${data.owner_name || data.shop_name}" />`;
+    } else {
+      // Fallback: show initials
+      const initial = (data.owner_name || data.shop_name || 'T').charAt(0).toUpperCase();
+      avatarDiv.innerHTML = initial;
+    }
+    
+    renderPortfolio(data.portfolio || []);
+   // Fetch fresh reviews separately so they always include latest
+try {
+  const revRes = await fetch(`/api/reviews/${tailorId}`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  const freshReviews = revRes.ok ? await revRes.json() : (data.reviews || []);
+  renderReviews(freshReviews);
+} catch(_) {
+  renderReviews(data.reviews || []);
+}
+    
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('profileContent').style.display = 'block';
+    
+  } catch (error) {
+    console.error('Error:', error);
+    document.getElementById('loadingState').innerHTML = '<i class="fas fa-exclamation-triangle"></i><p>Failed to load profile.</p><button onclick="location.reload()" style="margin-top:16px;padding:10px 20px;background:var(--primary);color:white;border:none;border-radius:8px">Retry</button>';
+  }
+}
+
+function renderPortfolio(portfolio) {
+  const grid = document.getElementById('portfolioGrid');
+  
+  if (!portfolio || portfolio.length === 0) {
+    grid.innerHTML = `<div class="empty-state"><i class="fas fa-tshirt"></i><p>No designs uploaded yet. Check back soon!</p></div>`;
+    return;
+  }
+  
+  grid.innerHTML = portfolio.map(item => `
+    <div class="portfolio-card">
+      <div class="portfolio-img">
+        ${item.images && item.images[0] && item.images[0].length > 100 ? 
+          `<img src="${item.images[0]}" alt="${item.title}" loading="lazy">` : 
+          `<div class="no-img"><i class="fas fa-tshirt"></i></div>`
+        }
+        <span class="portfolio-badge">${item.category || 'Design'}</span>
+      </div>
+      <div class="portfolio-info">
+        <h3>${item.title || 'Untitled'}</h3>
+        <div class="cat">${item.category || 'Custom Design'}</div>
+        <div class="portfolio-meta">
+          <span><i class="fas fa-heart"></i> ${item.likes || 0}</span>
+          <span><i class="fas fa-bookmark"></i> ${item.saves || 0}</span>
+          <span><i class="fas fa-clock"></i> ${item.estimated_days || 7} days</span>
+        </div>
+        <div class="portfolio-price">${item.price_range || `₹${(item.price || 5000).toLocaleString('en-IN')}`}</div>
+        <div class="portfolio-actions">
+          <button class="btn-buy" onclick="openOrderModalForDesign('${item._id}')">
+            <i class="fas fa-shopping-cart"></i> Buy Now
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderReviews(reviews) {
+  const container = document.getElementById('reviewsGrid');
+
+  if (!reviews || reviews.length === 0) {
+    container.innerHTML = `<div class="empty-state"><i class="fas fa-star"></i><p>No reviews yet. Be the first to review!</p></div>`;
+    return;
+  }
+
+  container.innerHTML = reviews.map(r => {
+    const stars   = '★'.repeat(Math.floor(r.rating || 0)) + '☆'.repeat(5 - Math.floor(r.rating || 0));
+    const dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) : 'Recently';
+    const initials = (r.customer_name || 'U').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+    const comments = r.comments || [];
+
+    return `
+    <div class="review-card" style="border-radius:16px;border:1px solid var(--border);margin-bottom:16px;overflow:hidden;background:white;">
+      <div class="review-header" style="display:flex;align-items:center;gap:12px;padding:14px 16px 10px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--primary-lt);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--primary);font-size:15px;flex-shrink:0;">${initials}</div>
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:14px;">${r.customer_name || 'Customer'}</div>
+          <div style="color:#f59e0b;font-size:13px;letter-spacing:1px;">${stars}</div>
+          <div style="font-size:11px;color:var(--text-light);">${dateStr}</div>
+        </div>
+      </div>
+
+      <div style="padding:0 16px 12px;font-size:14px;color:var(--text-mid);line-height:1.65;">${r.comment || ''}</div>
+
+      ${r.tailor_reply ? `
+      <div style="margin:0 16px 14px;padding:10px 14px;background:var(--primary-lt);border-radius:10px;border-left:3px solid var(--primary);">
+        <div style="font-size:10px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;"><i class="fas fa-store"></i> Tailor's Reply</div>
+        <div style="font-size:13px;color:var(--text-mid);">${r.tailor_reply}</div>
+      </div>` : ''}
+
+      <div style="padding:8px 16px 10px;border-top:1px solid var(--border);display:flex;align-items:center;gap:16px;">
+        <span style="font-size:12px;color:var(--text-light);"><i class="fas fa-heart" style="color:#fca5a5;margin-right:4px;"></i>${r.likes || 0} likes</span>
+        <button onclick="toggleReviewComments('${r._id}')"
+          style="background:none;border:none;font-size:12px;color:var(--primary);cursor:pointer;font-family:var(--font-body);padding:0;">
+          <i class="far fa-comment"></i> ${comments.length} comment${comments.length !== 1 ? 's' : ''} — click to view
+        </button>
+      </div>
+
+      <div id="rc-comments-${r._id}" style="display:none;padding:0 16px 14px;">
+        ${comments.map(c => `
+          <div style="display:flex;gap:8px;margin-bottom:8px;">
+            <div style="width:26px;height:26px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--primary);flex-shrink:0;">
+              ${(c.author_name||'U').charAt(0).toUpperCase()}
+            </div>
+            <div style="background:var(--bg);border-radius:12px;padding:7px 12px;flex:1;">
+              <div style="font-size:12px;font-weight:700;color:var(--text);">${c.author_name || 'User'}</div>
+              <div style="font-size:13px;color:var(--text-mid);">${c.text}</div>
+              <div style="font-size:10px;color:var(--text-light);margin-top:2px;">${c.created_at ? new Date(c.created_at).toLocaleDateString() : ''}</div>
+            </div>
+          </div>`).join('')}
+        ${token && user.id ? `
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <input id="ci-ti-${r._id}" placeholder="Add a comment…"
+              style="flex:1;border:1.5px solid var(--border);border-radius:30px;padding:7px 14px;font-size:13px;outline:none;font-family:var(--font-body);"
+              onkeydown="if(event.key==='Enter')postTailorinfoComment('${r._id}', this.value)"/>
+            <button onclick="postTailorinfoComment('${r._id}', document.getElementById('ci-ti-${r._id}').value)"
+              style="width:34px;height:34px;border-radius:50%;background:var(--primary);color:white;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <i class="fas fa-paper-plane" style="font-size:12px;"></i>
+            </button>
+          </div>` : `<p style="font-size:12px;color:var(--text-light);padding:4px 0;">
+            <a href="/" style="color:var(--primary);">Login</a> to comment
+          </p>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleReviewComments(reviewId) {
+  const el = document.getElementById('rc-comments-' + reviewId);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+async function postTailorinfoComment(reviewId, text) {
+  text = (text || '').trim();
+  if (!text) return;
+  const input = document.getElementById('ci-ti-' + reviewId);
+  if (input) input.value = '';
+  try {
+    await fetch('/api/reviews/comment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ review_id: reviewId, author_id: user.id, author_name: user.name || 'User', text })
+    });
+    // Reload profile to show new comment
+    await loadTailorProfile();
+  } catch(_) { showToast('Could not post comment'); }
+}
+
+function openOrderModalForDesign(designId) {
+  selectedDesign = currentTailor?.portfolio?.find(p => p._id === designId);
+  if (!selectedDesign) {
+    showToast('Design not found');
+    return;
+  }
+  
+  // Get the actual price from the design
+  const designPrice = selectedDesign.price || 5000;
+  const priceText = selectedDesign.price_range || `₹${designPrice.toLocaleString('en-IN')}`;
+  
+  console.log('Selected Design:', selectedDesign);
+  console.log('Design Price:', designPrice);
+  
+  // Set preview values
+  document.getElementById('previewTitle').textContent = selectedDesign.title || 'Design';
+  document.getElementById('previewPrice').textContent = priceText;
+  document.getElementById('previewTailor').textContent = currentTailor?.shop_name || 'Tailor';
+  
+  // Set the total amount with the actual price
+  document.getElementById('totalAmount').value = `₹${designPrice.toLocaleString('en-IN')}`;
+  document.getElementById('orderQuantity').value = '1';
+  
+  // Store the price in a data attribute for later use
+  document.getElementById('orderModal').setAttribute('data-design-price', designPrice);
+  document.getElementById('orderModal').setAttribute('data-design-id', designId);
+  
+  // Set default item name
+  const itemSelect = document.getElementById('orderItem');
+  if (itemSelect) {
+    // Check if the design title exists as an option, if not add it
+    let optionExists = false;
+    for(let i = 0; i < itemSelect.options.length; i++) {
+      if(itemSelect.options[i].value === selectedDesign.title) {
+        optionExists = true;
+        break;
+      }
+    }
+    if(!optionExists && selectedDesign.title) {
+      const newOption = document.createElement('option');
+      newOption.value = selectedDesign.title;
+      newOption.textContent = selectedDesign.title;
+      itemSelect.appendChild(newOption);
+    }
+    itemSelect.value = selectedDesign.title || '';
+  }
+  
+  document.getElementById('orderFabric').value = '';
+  document.getElementById('orderNotes').value = '';
+  
+  // Set preview image
+  const previewImg = document.getElementById('previewImg');
+  if (selectedDesign.images && selectedDesign.images[0] && selectedDesign.images[0].length > 100) {
+    previewImg.src = selectedDesign.images[0];
+    previewImg.style.display = 'block';
+  } else {
+    previewImg.style.display = 'none';
+  }
+  
+  document.getElementById('orderModal').classList.add('open');
+}
+
+function closeOrderModal() {
+  document.getElementById('orderModal').classList.remove('open');
+  selectedDesign = null;
+}
+
+function updateTotal() {
+  const qty = parseInt(document.getElementById('orderQuantity').value) || 1;
+  const designPrice = parseInt(document.getElementById('orderModal').getAttribute('data-design-price')) || 5000;
+  const total = designPrice * qty;
+  document.getElementById('totalAmount').value = `₹${total.toLocaleString('en-IN')}`;
+}
+
+async function submitOrder() {
+  if (!selectedDesign) {
+    showToast('Please select a design first');
+    return;
+  }
+  
+  const qty = parseInt(document.getElementById('orderQuantity').value) || 1;
+  const designPrice = parseInt(document.getElementById('orderModal').getAttribute('data-design-price')) || selectedDesign.price || 5000;
+  const totalAmount = designPrice * qty;
+  
+  let itemName = document.getElementById('orderItem').value;
+  if (!itemName || itemName === '') {
+    itemName = selectedDesign.title || 'Custom Design';
+  }
+  
+  const fabric = document.getElementById('orderFabric').value;
+  const notes = document.getElementById('orderNotes').value;
+  
+  console.log('Submitting order:', {
+    designPrice: designPrice,
+    qty: qty,
+    totalAmount: totalAmount,
+    itemName: itemName
+  });
+  
+  const orderData = {
+    customer_id: user.id,
+    customer_name: user.name,
+    customer_phone: user.phone || '',
+    customer_email: user.email || '',
+    tailor_id: currentTailor?.tailor_id || tailorId,
+    tailor_name: currentTailor?.shop_name || 'Tailor',
+    items: [{
+      name: itemName,
+      quantity: qty,
+      price: designPrice,
+      design_id: selectedDesign._id,
+      design_title: selectedDesign.title
+    }],
+    total_amount: totalAmount,
+    fabric_preference: fabric,
+    special_instructions: notes
+  };
+  
+  showToast('Placing order...');
+  
+  try {
+    const response = await fetch('/api/orders/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(orderData)
+    });
+    
+    const result = await response.json();
+    
+    if (response.ok) {
+      showToast(`✅ Order placed successfully! Total: ₹${totalAmount.toLocaleString('en-IN')}`);
+      closeOrderModal();
+      setTimeout(() => {
+        window.location.href = '/customer/orders';
+      }, 1500);
+    } else {
+      showToast('❌ Failed to place order: ' + (result.error || 'Unknown error'));
+      console.error('Order error:', result);
+    }
+  } catch (error) {
+    console.error('Order error:', error);
+    showToast('❌ Error placing order. Please try again.');
+  }
+}
+
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeOrderModal();
+  }
+});
+
+document.getElementById('writeReviewBtn').addEventListener('click', function() {
+  window.location.href = '/customer/reviews?tailor_id=' + tailorId;
+});
+
+loadTailorProfile();
+</script>
+</body>
+</html>

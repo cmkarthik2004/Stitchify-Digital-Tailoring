@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Stitchify – Manage Orders</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+<style>
+:root{
+  --primary:#0c7bb3;--primary-dk:#095e8a;--primary-lt:#e8f4fb;
+  --accent:#a75c9a;--accent-lt:#f3e8fb;
+  --gradient:linear-gradient(135deg,#0c7bb3,#a75c9a);
+  --success:#16a34a;--warning:#f59e0b;--danger:#ef4444;
+  --white:#fff;--bg:#f4f6fa;--border:#e0e7ef;
+  --text-main:#1a2340;--text-mid:#4a4a6a;--text-light:#9aaac4;
+  --shadow:0 4px 20px rgba(12,123,179,0.08);
+  --shadow-lg:0 12px 40px rgba(12,123,179,0.14);
+  --radius:16px;--radius-lg:22px;
+  --font-display:'Playfair Display',serif;
+  --font-body:'DM Sans',sans-serif;
+  --font-accent:'Outfit',sans-serif;
+  --tr:all 0.25s ease;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text-main);min-height:100vh}
+
+/* ── HEADER ── */
+.header{
+  background:var(--white);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:56px;gap:16px;
+}
+.brand{font-size:22px;font-weight:700;letter-spacing:1.5px;font-family:var(--font-display);white-space:nowrap;flex-shrink:0}
+.brand-s{color:var(--primary)}.brand-i{color:var(--accent)}
+.header-nav{display:flex;align-items:center;gap:2px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.header-nav::-webkit-scrollbar{display:none}
+.nav-link{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;text-decoration:none;color:var(--text-mid);font-size:12px;font-weight:600;white-space:nowrap;transition:var(--tr)}
+.nav-link i{font-size:13px}
+.nav-link:hover{background:var(--primary-lt);color:var(--primary)}
+.nav-link.active{background:var(--gradient);color:white}
+
+/* ── PAGE HEADER ── */
+.page-hdr{
+  background:var(--white);border-bottom:1px solid var(--border);
+  padding:28px 48px 0;
+}
+.page-title{font-size:24px;font-weight:700;color:var(--text-main);font-family:var(--font-accent);display:flex;align-items:center;gap:10px}
+.page-sub{font-size:13px;color:var(--text-light);margin-top:4px}
+
+/* ── TAB BAR ── */
+.tab-bar{
+  display:flex;align-items:stretch;margin-top:24px;
+  border-top:1px solid var(--border);
+  overflow-x:auto;scrollbar-width:none;
+}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;padding:14px 16px;border:none;background:transparent;
+  cursor:pointer;font-family:var(--font-body);position:relative;
+  transition:var(--tr);min-width:120px;white-space:nowrap;
+  border-bottom:3px solid transparent;
+}
+.tab-btn+.tab-btn::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);height:30px;width:1px;background:var(--border)}
+.tab-row{display:flex;align-items:center;gap:7px}
+.tab-label{font-size:12px;font-weight:700;color:var(--text-light);letter-spacing:.3px}
+.tab-count{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:20px;height:20px;border-radius:10px;padding:0 5px;
+  font-size:10px;font-weight:800;background:var(--bg);color:var(--text-light);
+}
+.tab-icon-wrap{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;background:var(--bg);color:var(--text-light);transition:var(--tr)}
+
+.tab-btn:hover .tab-label{color:var(--text-mid)}
+.tab-btn:hover .tab-icon-wrap{background:var(--primary-lt);color:var(--primary)}
+
+.tab-btn.tab-new.active{border-bottom-color:var(--warning)}
+.tab-btn.tab-new.active .tab-label{color:#b45309}
+.tab-btn.tab-new.active .tab-count{background:#fef3c7;color:#b45309}
+.tab-btn.tab-new.active .tab-icon-wrap{background:#fef3c7;color:#b45309}
+
+.tab-btn.tab-confirmed.active{border-bottom-color:var(--primary)}
+.tab-btn.tab-confirmed.active .tab-label{color:var(--primary)}
+.tab-btn.tab-confirmed.active .tab-count{background:var(--primary-lt);color:var(--primary)}
+.tab-btn.tab-confirmed.active .tab-icon-wrap{background:var(--primary-lt);color:var(--primary)}
+
+.tab-btn.tab-completed.active{border-bottom-color:var(--success)}
+.tab-btn.tab-completed.active .tab-label{color:var(--success)}
+.tab-btn.tab-completed.active .tab-count{background:#d1fae5;color:var(--success)}
+.tab-btn.tab-completed.active .tab-icon-wrap{background:#d1fae5;color:var(--success)}
+
+.tab-btn.tab-cancelled.active{border-bottom-color:var(--danger)}
+.tab-btn.tab-cancelled.active .tab-label{color:var(--danger)}
+.tab-btn.tab-cancelled.active .tab-count{background:#fee2e2;color:var(--danger)}
+.tab-btn.tab-cancelled.active .tab-icon-wrap{background:#fee2e2;color:var(--danger)}
+
+/* ── CONTENT ── */
+.content{padding:28px 48px 64px;max-width:1200px;margin:0 auto}
+.orders-list{display:flex;flex-direction:column;gap:16px}
+
+/* ── ORDER CARD ── */
+.order-card{
+  background:var(--white);border-radius:var(--radius-lg);
+  border:1px solid var(--border);box-shadow:var(--shadow);
+  transition:var(--tr);overflow:hidden;
+}
+.order-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.order-card.new-order{border-left:4px solid var(--warning)}
+.order-card.confirmed-order{border-left:4px solid var(--primary)}
+.order-card.completed-order{border-left:4px solid var(--success)}
+.order-card.cancelled-order{border-left:4px solid var(--danger)}
+
+.card-inner{padding:20px 24px}
+.oc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.oc-cust{display:flex;align-items:center;gap:14px}
+.oc-av{
+  width:46px;height:46px;border-radius:12px;
+  background:var(--gradient);display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:800;font-size:16px;flex-shrink:0;font-family:var(--font-accent);
+}
+.oc-name{font-size:15px;font-weight:700;color:var(--text-main)}
+.oc-type{font-size:11px;color:var(--text-mid);margin-top:2px}
+.oc-order-id{font-size:10px;color:var(--text-light);margin-top:2px}
+
+.status-badge{padding:5px 13px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+.badge-new{background:#fef3c7;color:#b45309}
+.badge-accepted{background:#dbeafe;color:#2563eb}
+.badge-cutting{background:#ede9fe;color:#7c3aed}
+.badge-stitching{background:var(--accent-lt);color:var(--accent)}
+.badge-ready{background:#d1fae5;color:#059669}
+.badge-completed{background:#d1fae5;color:var(--success)}
+.badge-cancelled{background:#fee2e2;color:var(--danger)}
+
+/* ── PORTFOLIO STRIP (tailor view) ── */
+.portfolio-strip{
+  display:flex;gap:8px;margin-bottom:14px;
+  overflow-x:auto;padding-bottom:4px;
+}
+.portfolio-strip::-webkit-scrollbar{height:3px}
+.portfolio-strip::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.portfolio-img-wrap{
+  flex-shrink:0;width:70px;height:70px;border-radius:8px;overflow:hidden;
+  border:1.5px solid var(--border);cursor:pointer;transition:var(--tr);position:relative;
+  background:#f8fafc;
+}
+.portfolio-img-wrap:hover{border-color:var(--primary);transform:scale(1.05)}
+.portfolio-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.portfolio-img-wrap .img-label{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(0,0,0,0.6));
+  color:#fff;font-size:8px;font-weight:600;padding:8px 4px 3px;text-align:center;
+}
+.img-skeleton{
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,#f0f4f8 25%,#e8eef4 50%,#f0f4f8 75%);
+  background-size:200% 100%;animation:shimmer 1.4s infinite;
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── INFO CHIPS ── */
+.oc-info-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.oc-info-chip{
+  background:var(--bg);border:1px solid var(--border);border-radius:10px;
+  padding:8px 14px;display:flex;flex-direction:column;gap:2px;flex:1;min-width:100px;
+}
+.chip-label{font-size:9px;color:var(--text-light);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.chip-val{font-size:13px;font-weight:700;color:var(--text-main)}
+
+/* ── NOTES ── */
+.oc-notes{
+  background:#f8f9ff;border-radius:10px;padding:10px 14px;
+  margin-bottom:14px;font-size:12px;color:var(--text-mid);
+  display:flex;gap:8px;border-left:3px solid var(--primary);
+}
+
+/* ── PROGRESS ── */
+.progress-section{background:var(--bg);border-radius:12px;padding:16px;margin-bottom:14px;}
+.progress-title{font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px}
+.pt-row{display:flex;align-items:flex-start}
+.pt-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;min-width:60px}
+.pt-step:not(:last-child)::after{
+  content:'';position:absolute;top:17px;left:50%;width:100%;height:2px;
+  background:var(--border);z-index:0;
+}
+.pt-step.done:not(:last-child)::after{background:linear-gradient(90deg,var(--success),var(--primary))}
+.pt-dot{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;border:2px solid var(--border);
+  background:var(--white);color:var(--text-light);position:relative;z-index:1;
+  transition:var(--tr);
+}
+.pt-step.done .pt-dot{background:linear-gradient(135deg,var(--success),#15803d);border-color:var(--success);color:#fff}
+.pt-step.active-step .pt-dot{
+  background:var(--gradient);border-color:var(--primary);color:#fff;
+  animation:pulse-dot 1.8s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(12,123,179,0.4)}50%{box-shadow:0 0 0 6px rgba(12,123,179,0)}}
+.pt-label{font-size:9px;font-weight:700;color:var(--text-light);margin-top:6px;text-align:center;line-height:1.2}
+.pt-step.done .pt-label{color:var(--success)}
+.pt-step.active-step .pt-label{color:var(--primary)}
+.pt-date{font-size:8px;color:var(--text-light);margin-top:2px;text-align:center}
+
+/* ── ACTIONS ── */
+.oc-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{
+  display:flex;align-items:center;gap:6px;
+  padding:9px 18px;border-radius:10px;font-size:12px;font-weight:700;
+  cursor:pointer;border:none;transition:var(--tr);font-family:var(--font-body);
+  white-space:nowrap;
+}
+.btn-accept{background:var(--gradient);color:#fff}
+.btn-accept:hover{opacity:.9;transform:translateY(-1px)}
+.btn-reject{background:#fef2f2;color:var(--danger);border:1.5px solid #fecaca}
+.btn-reject:hover{background:var(--danger);color:#fff}
+.btn-progress{background:var(--primary-lt);color:var(--primary);border:1.5px solid #bae0f5}
+.btn-progress:hover{background:var(--primary);color:#fff}
+.btn-msg{background:var(--bg);color:var(--text-mid);border:1.5px solid var(--border)}
+.btn-msg:hover{background:var(--primary-lt);color:var(--primary);border-color:var(--primary)}
+.btn-delivered{background:#d1fae5;color:var(--success);border:1.5px solid #a7f3d0}
+.btn-delivered:hover{background:var(--success);color:#fff}
+
+/* ── EMPTY ── */
+.empty-state{
+  text-align:center;padding:64px;background:var(--white);
+  border-radius:var(--radius-lg);border:1px dashed var(--border);
+}
+.empty-state i{font-size:48px;color:var(--text-light);opacity:.5;margin-bottom:14px;display:block}
+.empty-state h3{font-size:16px;font-weight:700;color:var(--text-mid);margin-bottom:6px}
+.empty-state p{font-size:12px;color:var(--text-light)}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  background:var(--text-main);color:#fff;padding:11px 24px;border-radius:50px;
+  z-index:9999;opacity:0;pointer-events:none;transition:opacity .3s;font-size:13px;font-weight:500;
+}
+.toast.show{opacity:1}
+
+/* ── MODALS ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(20,30,60,0.55);
+  backdrop-filter:blur(6px);z-index:300;display:none;
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal-box{background:#fff;border-radius:var(--radius-lg);width:100%;max-width:480px;box-shadow:0 24px 80px rgba(0,0,0,.25);overflow:hidden;}
+.modal-hdr{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-size:16px;font-weight:700;color:var(--text-main)}
+.modal-close{
+  width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);
+  background:var(--bg);cursor:pointer;font-size:12px;color:var(--text-mid);
+  display:flex;align-items:center;justify-content:center;transition:var(--tr);
+}
+.modal-close:hover{background:var(--danger);color:#fff;border-color:var(--danger)}
+.modal-body{padding:20px 22px}
+.modal-footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:8px}
+.m-field{margin-bottom:14px}
+.m-field label{font-size:11px;font-weight:700;color:var(--text-mid);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.m-field input,.m-field select,.m-field textarea{
+  width:100%;padding:9px 13px;border:1.5px solid var(--border);
+  border-radius:10px;font-size:13px;font-family:var(--font-body);
+  color:var(--text-main);transition:var(--tr);outline:none;
+}
+.m-field input:focus,.m-field select:focus,.m-field textarea:focus{border-color:var(--primary)}
+.m-field textarea{resize:vertical;min-height:70px}
+.btn-cancel{padding:9px 18px;border-radius:10px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:var(--text-mid)}
+.btn-confirm{flex:1;padding:9px 18px;border-radius:10px;background:var(--gradient);color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:700;font-family:var(--font-body)}
+
+@media(max-width:900px){
+  .header{padding:0 16px}
+  .nav-link span{display:none}
+  .nav-link{padding:6px 10px}
+  .page-hdr{padding:20px 20px 0}
+  .content{padding:20px 16px 48px}
+  .tab-btn{min-width:90px;padding:12px 10px}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand"><span class="brand-s">Stitch</span><span class="brand-i">ify</span></div>
+  <nav class="header-nav">
+    <a class="nav-link" href="/tailor"><i class="fas fa-home"></i><span>Home</span></a>
+    <a class="nav-link active" href="/tailor/orders"><i class="fas fa-box"></i><span>Orders</span></a>
+    <a class="nav-link" href="/tailor/chat"><i class="fas fa-comment-dots"></i><span>Chat</span></a>
+    <a class="nav-link" href="/tailor/schedule"><i class="fas fa-calendar"></i><span>Schedule</span></a>
+    <a class="nav-link" href="/tailor/profile"><i class="fas fa-user"></i><span>Profile</span></a>
+  </nav>
+</header>
+
+<div class="page-hdr">
+  <div class="page-title"><i class="fas fa-box-open" style="font-size:20px;color:var(--primary)"></i> Manage Orders</div>
+  <div class="page-sub">Accept, track and manage all your customer orders</div>
+
+  <div class="tab-bar">
+    <button class="tab-btn tab-new active" onclick="switchTab('new', this)">
+      <div class="tab-icon-wrap"><i class="fas fa-bell"></i></div>
+      <div class="tab-row">
+        <span class="tab-label">New Orders</span>
+        <span class="tab-count" id="count-new">0</span>
+      </div>
+    </button>
+    <button class="tab-btn tab-confirmed" onclick="switchTab('confirmed', this)">
+      <div class="tab-icon-wrap"><i class="fas fa-tasks"></i></div>
+      <div class="tab-row">
+        <span class="tab-label">Confirmed</span>
+        <span class="tab-count" id="count-confirmed">0</span>
+      </div>
+    </button>
+    <button class="tab-btn tab-completed" onclick="switchTab('completed', this)">
+      <div class="tab-icon-wrap"><i class="fas fa-check-circle"></i></div>
+      <div class="tab-row">
+        <span class="tab-label">Completed</span>
+        <span class="tab-count" id="count-completed">0</span>
+      </div>
+    </button>
+    <button class="tab-btn tab-cancelled" onclick="switchTab('cancelled', this)">
+      <div class="tab-icon-wrap"><i class="fas fa-times-circle"></i></div>
+      <div class="tab-row">
+        <span class="tab-label">Cancelled</span>
+        <span class="tab-count" id="count-cancelled">0</span>
+      </div>
+    </button>
+  </div>
+</div>
+
+<div class="content">
+  <div class="orders-list" id="ordersContainer">
+    <div class="empty-state"><i class="fas fa-spinner fa-pulse"></i><h3>Loading orders…</h3></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- Accept Modal -->
+<div id="acceptModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <span class="modal-title">✅ Accept Order</span>
+      <button class="modal-close" onclick="closeModal('acceptModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="m-field"><label>Expected Delivery Date *</label><input type="date" id="deliveryDate" required></div>
+      <div class="m-field"><label>Note to Customer</label><textarea id="acceptNote" placeholder="Any instructions or details for the customer…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('acceptModal')">Cancel</button>
+      <button class="btn-confirm" onclick="confirmAccept()">Accept Order</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reject Modal -->
+<div id="rejectModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <span class="modal-title">❌ Reject Order</span>
+      <button class="modal-close" onclick="closeModal('rejectModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="m-field"><label>Reason for Rejection *</label><textarea id="rejectReason" rows="3" placeholder="Explain why you cannot take this order…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('rejectModal')">Cancel</button>
+      <button class="btn-confirm" style="background:linear-gradient(135deg,var(--danger),#b91c1c)" onclick="confirmReject()">Reject Order</button>
+    </div>
+  </div>
+</div>
+
+<!-- Update Status Modal -->
+<div id="updateModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <span class="modal-title">📌 Update Progress</span>
+      <button class="modal-close" onclick="closeModal('updateModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="m-field"><label>New Status</label>
+        <select id="newStatus">
+          <option value="cutting">✂️ Cutting Started</option>
+          <option value="stitching">🪡 Stitching Started</option>
+          <option value="ready">✅ Ready for Pickup</option>
+        </select>
+      </div>
+      <div class="m-field"><label>Progress Note</label><textarea id="updateNote" placeholder="Add details about progress…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('updateModal')">Cancel</button>
+      <button class="btn-confirm" onclick="confirmUpdate()">Update Status</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   AUTH — redirect to login if not authenticated
+══════════════════════════════════════════════ */
+const token = localStorage.getItem('token');
+const user  = JSON.parse(localStorage.getItem('user') || '{}');
+if (!token || !user.id) window.location.href = '/login-page';
+
+let allOrders    = [];
+let currentTab   = 'new';
+let currentOrderId = null;
+let pollingInterval = null;
+
+/* ══════════════════════════════════════════════
+   STATUS CONFIG — matches customer page exactly
+══════════════════════════════════════════════ */
+const CONFIRMED_STATUSES = ['accepted','cutting','stitching','ready'];
+
+const STATUS_LABELS = {
+  pending:   'New Order',
+  accepted:  'Accepted',
+  cutting:   'Cutting',
+  stitching: 'Stitching',
+  ready:     'Ready',
+  picked_up: 'Delivered',
+  cancelled: 'Cancelled',
+};
+
+const STATUS_BADGE = {
+  pending:   'badge-new',
+  accepted:  'badge-accepted',
+  cutting:   'badge-cutting',
+  stitching: 'badge-stitching',
+  ready:     'badge-ready',
+  picked_up: 'badge-completed',
+  cancelled: 'badge-cancelled',
+};
+
+/* ══════════════════════════════════════════════
+   PORTFOLIO IMAGES — same logic as customer page
+   so reference images always display
+══════════════════════════════════════════════ */
+const DESIGN_IMAGES = {
+  suit:     [
+    { url:'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=200&q=80', label:'Reference' },
+    { url:'https://images.unsplash.com/photo-1555069519-127aadedf1ee?w=200&q=80',  label:'Style' },
+  ],
+  kurta:    [
+    { url:'https://images.unsplash.com/photo-1583391733981-8498408ee4b6?w=200&q=80', label:'Reference' },
+    { url:'https://images.unsplash.com/photo-1594938298603-c8148c4b4f7a?w=200&q=80', label:'Pattern' },
+  ],
+  sherwani: [
+    { url:'https://images.unsplash.com/photo-1609205807107-a8b3bef9eb83?w=200&q=80', label:'Reference' },
+  ],
+  dress:    [
+    { url:'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=200&q=80', label:'Reference' },
+    { url:'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?w=200&q=80', label:'Drape' },
+  ],
+  lehenga:  [
+    { url:'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=200&q=80', label:'Reference' },
+  ],
+  default:  [
+    { url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&q=80', label:'Reference' },
+    { url:'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=200&q=80', label:'Style' },
+  ],
+};
+
+function getDesignImages(itemName) {
+  const n = (itemName || '').toLowerCase();
+  if (n.includes('suit') || n.includes('blazer') || n.includes('jacket')) return DESIGN_IMAGES.suit;
+  if (n.includes('sherwani'))                                              return DESIGN_IMAGES.sherwani;
+  if (n.includes('kurta') || n.includes('salwar') || n.includes('dupatta')) return DESIGN_IMAGES.kurta;
+  if (n.includes('lehenga') || n.includes('saree') || n.includes('blouse')) return DESIGN_IMAGES.lehenga;
+  if (n.includes('dress') || n.includes('gown') || n.includes('anarkali')) return DESIGN_IMAGES.dress;
+  return DESIGN_IMAGES.default;
+}
+
+function buildPortfolioStrip(order) {
+  const uploaded = [
+    ...(order.design_images    || []),
+    ...(order.reference_images || []),
+  ];
+  const primaryItem = (order.items && order.items[0]) ? order.items[0].name : '';
+  const refImgs = getDesignImages(primaryItem);
+
+  let html = '<div class="portfolio-strip">';
+
+  uploaded.forEach(url => {
+    html += `<div class="portfolio-img-wrap" title="Customer upload">
+      <div class="img-skeleton"></div>
+      <img src="${url}" alt="Customer reference" loading="lazy"
+        onload="this.previousElementSibling.style.display='none'"
+        onerror="this.previousElementSibling.style.display='none';this.style.display='none'"/>
+      <div class="img-label">Upload</div>
+    </div>`;
+  });
+
+  refImgs.forEach(img => {
+    html += `<div class="portfolio-img-wrap" title="${img.label}">
+      <div class="img-skeleton"></div>
+      <img src="${img.url}" alt="${img.label}" loading="lazy"
+        onload="this.previousElementSibling.style.display='none'"
+        onerror="this.previousElementSibling.style.display='none';this.style.display='none'"/>
+      <div class="img-label">${img.label}</div>
+    </div>`;
+  });
+
+  html += '</div>';
+  return html;
+}
+
+/* ══════════════════════════════════════════════
+   API HELPER
+══════════════════════════════════════════════ */
+async function api(url, opts = {}) {
+  try {
+    const r = await fetch(url, {
+      ...opts,
+      headers: { ...opts.headers, Authorization: 'Bearer ' + token }
+    });
+    const d = await r.json();
+    return { ok: r.ok, data: d };
+  } catch(e) {
+    console.error('API error', url, e);
+    return { ok: false, data: null };
+  }
+}
+
+/* ══════════════════════════════════════════════
+   FETCH ORDERS
+   Endpoint: GET /api/tailor/orders-list/:tailorId
+   Returns array of orders with customer_name, customer_id,
+   items[], total_amount, status, special_instructions,
+   design_images[], reference_images[]
+   — same shape as /api/customer/orders/:customerId
+══════════════════════════════════════════════ */
+async function fetchOrders() {
+  const { ok, data } = await api('/api/tailor/orders-list/' + user.id);
+  if (ok && Array.isArray(data)) {
+    allOrders = data;
+    updateCounts();
+    renderOrders();
+    if (!pollingInterval) pollingInterval = setInterval(pollOrders, 15000);
+  } else {
+    /* Fallback: show mock data so UI is never blank during dev */
+    loadMockOrders();
+  }
+}
+
+async function pollOrders() {
+  const { ok, data } = await api('/api/tailor/orders-list/' + user.id);
+  if (ok && Array.isArray(data)) {
+    if (JSON.stringify(data) !== JSON.stringify(allOrders)) {
+      allOrders = data;
+      updateCounts();
+      renderOrders();
+      showToast('📦 Orders updated!');
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════
+   MOCK DATA — mirrors customer mock exactly
+   so both pages show consistent demo data
+══════════════════════════════════════════════ */
+function loadMockOrders() {
+  const now = Date.now();
+  allOrders = [
+    {
+      _id: 'ord1', order_id: 'ORD20241201001',
+      status: 'stitching', total_amount: 3500,
+      items: [{ name: 'Custom Suit', quantity: 1, price: 3500 }],
+      tailor_name: 'Sahil Designer Tailors', tailor_id: user.id || 'tailor_001',
+      customer_name: 'Priya Sharma',  customer_id: 'cust_001',
+      created_at: new Date(now - 5*86400000).toISOString(),
+      expected_delivery_date: new Date(now + 2*86400000).toISOString(),
+      special_instructions: 'Slim fit, double-button cuffs',
+      design_images: [], reference_images: [],
+    },
+    {
+      _id: 'ord2', order_id: 'ORD20241215002',
+      status: 'ready', total_amount: 1800,
+      items: [{ name: 'Silk Kurta', quantity: 2, price: 900 }],
+      tailor_name: 'Sahil Designer Tailors', tailor_id: user.id || 'tailor_001',
+      customer_name: 'Amit Verma',    customer_id: 'cust_002',
+      created_at: new Date(now - 10*86400000).toISOString(),
+      expected_delivery_date: new Date(now).toISOString(),
+      design_images: [], reference_images: [],
+    },
+    {
+      _id: 'ord3', order_id: 'ORD20241218003',
+      status: 'picked_up', total_amount: 2200,
+      items: [{ name: 'Anarkali Dress', quantity: 1, price: 2200 }],
+      tailor_name: 'Sahil Designer Tailors', tailor_id: user.id || 'tailor_001',
+      customer_name: 'Sneha Reddy',   customer_id: 'cust_003',
+      created_at: new Date(now - 20*86400000).toISOString(),
+      expected_delivery_date: new Date(now - 3*86400000).toISOString(),
+      design_images: [], reference_images: [],
+    },
+    {
+      _id: 'ord4', order_id: 'ORD20241220004',
+      status: 'cancelled', total_amount: 950,
+      items: [{ name: 'Cotton Shirt', quantity: 1, price: 950 }],
+      tailor_name: 'Sahil Designer Tailors', tailor_id: user.id || 'tailor_001',
+      customer_name: 'Ravi Kumar',    customer_id: 'cust_004',
+      created_at: new Date(now - 7*86400000).toISOString(),
+      expected_delivery_date: null,
+      design_images: [], reference_images: [],
+    },
+    {
+      _id: 'ord5', order_id: 'ORD20241222005',
+      status: 'pending', total_amount: 4200,
+      items: [
+        { name: 'Wedding Sherwani', quantity: 1, price: 3500 },
+        { name: 'Matching Dupatta',  quantity: 1, price: 700  },
+      ],
+      tailor_name: 'Sahil Designer Tailors', tailor_id: user.id || 'tailor_001',
+      customer_name: 'Karan Mehta',   customer_id: 'cust_005',
+      created_at: new Date(now - 86400000).toISOString(),
+      expected_delivery_date: new Date(now + 14*86400000).toISOString(),
+      special_instructions: 'Use gold zari border, tight embroidery on collar',
+      design_images: [], reference_images: [],
+    },
+  ];
+  updateCounts();
+  renderOrders();
+}
+
+/* ══════════════════════════════════════════════
+   COUNTS
+══════════════════════════════════════════════ */
+function updateCounts() {
+  document.getElementById('count-new').textContent =
+    allOrders.filter(o => o.status === 'pending').length;
+  document.getElementById('count-confirmed').textContent =
+    allOrders.filter(o => CONFIRMED_STATUSES.includes(o.status)).length;
+  document.getElementById('count-completed').textContent =
+    allOrders.filter(o => o.status === 'picked_up').length;
+  document.getElementById('count-cancelled').textContent =
+    allOrders.filter(o => o.status === 'cancelled').length;
+}
+
+/* ══════════════════════════════════════════════
+   TABS & FILTER
+══════════════════════════════════════════════ */
+function switchTab(tab, btn) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderOrders();
+}
+
+function filterOrders() {
+  if (currentTab === 'new')       return allOrders.filter(o => o.status === 'pending');
+  if (currentTab === 'confirmed') return allOrders.filter(o => CONFIRMED_STATUSES.includes(o.status));
+  if (currentTab === 'completed') return allOrders.filter(o => o.status === 'picked_up');
+  if (currentTab === 'cancelled') return allOrders.filter(o => o.status === 'cancelled');
+  return [];
+}
+
+const EMPTY_MSGS = {
+  new:       { icon:'fa-bell-slash',   title:'No new orders yet',   sub:'New customer orders will appear here.' },
+  confirmed: { icon:'fa-tasks',        title:'No confirmed orders', sub:'Accepted orders in progress will appear here.' },
+  completed: { icon:'fa-check-circle', title:'No completed orders', sub:'Delivered orders will appear here.' },
+  cancelled: { icon:'fa-times-circle', title:'No cancelled orders', sub:'Rejected or cancelled orders will appear here.' },
+};
+
+/* ══════════════════════════════════════════════
+   RENDER
+══════════════════════════════════════════════ */
+function renderOrders() {
+  const container = document.getElementById('ordersContainer');
+  const orders = filterOrders();
+
+  if (!orders.length) {
+    const m = EMPTY_MSGS[currentTab];
+    container.innerHTML = `<div class="empty-state"><i class="fas ${m.icon}"></i><h3>${m.title}</h3><p>${m.sub}</p></div>`;
+    return;
+  }
+  container.innerHTML = orders.map(o => renderCard(o)).join('');
+}
+
+function cardClass(status) {
+  if (status === 'pending')                return 'new-order';
+  if (CONFIRMED_STATUSES.includes(status)) return 'confirmed-order';
+  if (status === 'picked_up')              return 'completed-order';
+  if (status === 'cancelled')              return 'cancelled-order';
+  return '';
+}
+
+function renderCard(order) {
+  const initials    = (order.customer_name || 'C').substring(0,2).toUpperCase();
+  const statusLabel = STATUS_LABELS[order.status] || order.status;
+  const badgeClass  = STATUS_BADGE[order.status] || '';
+  const isConfirmed = CONFIRMED_STATUSES.includes(order.status);
+
+  const orderDate  = new Date(order.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+  const delivDate  = order.expected_delivery_date
+    ? new Date(order.expected_delivery_date).toLocaleDateString('en-IN',{day:'numeric',month:'short'})
+    : 'TBD';
+
+  /* Chat URL carries customer_id so the chat page opens the right thread */
+  const customerId = order.customer_id || '';
+  const chatUrl    = customerId
+    ? `/tailor/chat?customer_id=${encodeURIComponent(customerId)}&order_id=${encodeURIComponent(order.order_id || order._id)}`
+    : '/tailor/chat';
+
+  return `
+<div class="order-card ${cardClass(order.status)}">
+  <div class="card-inner">
+
+    <div class="oc-top">
+      <div class="oc-cust">
+        <div class="oc-av">${initials}</div>
+        <div>
+          <div class="oc-name">${order.customer_name || 'Customer'}</div>
+          <div class="oc-type">${order.items?.[0]?.name || 'Custom Order'} · ${order.items?.length || 1} item${(order.items?.length || 1) > 1 ? 's' : ''}</div>
+          <div class="oc-order-id">Order #${order.order_id || order._id?.slice(-6)}</div>
+        </div>
+      </div>
+      <span class="status-badge ${badgeClass}">${statusLabel}</span>
+    </div>
+
+    ${buildPortfolioStrip(order)}
+
+    <div class="oc-info-row">
+      <div class="oc-info-chip">
+        <div class="chip-label">Order Date</div>
+        <div class="chip-val">${orderDate}</div>
+      </div>
+      <div class="oc-info-chip">
+        <div class="chip-label">Amount</div>
+        <div class="chip-val">₹${(order.total_amount||0).toLocaleString('en-IN')}</div>
+      </div>
+      <div class="oc-info-chip">
+        <div class="chip-label">Delivery By</div>
+        <div class="chip-val">${delivDate}</div>
+      </div>
+    </div>
+
+    ${order.special_instructions ? `<div class="oc-notes"><i class="fas fa-sticky-note" style="color:var(--primary);flex-shrink:0;margin-top:1px"></i><span>${order.special_instructions}</span></div>` : ''}
+
+    ${isConfirmed ? renderProgress(order) : ''}
+
+    <div class="oc-actions">
+      ${order.status === 'pending' ? `
+        <button class="btn btn-accept" onclick="openAcceptModal('${order._id}')"><i class="fas fa-check"></i> Accept</button>
+        <button class="btn btn-reject" onclick="openRejectModal('${order._id}')"><i class="fas fa-times"></i> Reject</button>
+      ` : ''}
+      ${order.status === 'accepted' ? `
+        <button class="btn btn-progress" onclick="openUpdateModal('${order._id}','cutting')"><i class="fas fa-cut"></i> Start Cutting</button>
+      ` : ''}
+      ${order.status === 'cutting' ? `
+        <button class="btn btn-progress" onclick="openUpdateModal('${order._id}','stitching')"><i class="fas fa-tshirt"></i> Start Stitching</button>
+      ` : ''}
+      ${order.status === 'stitching' ? `
+        <button class="btn btn-progress" onclick="openUpdateModal('${order._id}','ready')"><i class="fas fa-check-circle"></i> Mark Ready</button>
+      ` : ''}
+      ${order.status === 'ready' ? `
+        <button class="btn btn-delivered" onclick="markDelivered('${order._id}')"><i class="fas fa-truck"></i> Mark Delivered</button>
+      ` : ''}
+      <button class="btn btn-msg"
+        data-chat-url="${chatUrl}"
+        onclick="window.location.href=this.getAttribute('data-chat-url')">
+        <i class="fas fa-comment-dots"></i> Message
+      </button>
+    </div>
+
+  </div>
+</div>`;
+}
+
+function renderProgress(order) {
+  const steps = ['accepted','cutting','stitching','ready','picked_up'];
+  const stepLabels = { accepted:'Accepted', cutting:'Cutting', stitching:'Stitching', ready:'Ready', picked_up:'Delivered' };
+  const stepIcons  = { accepted:'fa-check', cutting:'fa-cut', stitching:'fa-tshirt', ready:'fa-box-open', picked_up:'fa-truck' };
+  const currentIdx = steps.indexOf(order.status);
+
+  const stepsHtml = steps.map((step, idx) => {
+    const done   = idx < currentIdx;
+    const active = idx === currentIdx;
+    const dateEntry = (order.status_history || []).find(h => h.status === step);
+    const dateStr = dateEntry
+      ? new Date(dateEntry.timestamp).toLocaleDateString('en-IN',{day:'numeric',month:'short'})
+      : '';
+    return `
+      <div class="pt-step ${done?'done':''} ${active?'active-step':''}">
+        <div class="pt-dot">${done ? '<i class="fas fa-check"></i>' : `<i class="fas ${stepIcons[step]}" style="font-size:10px"></i>`}</div>
+        <div class="pt-label">${stepLabels[step]}</div>
+        <div class="pt-date">${dateStr}</div>
+      </div>`;
+  }).join('');
+
+  return `<div class="progress-section">
+    <div class="progress-title"><i class="fas fa-route"></i> Order Progress</div>
+    <div class="pt-row">${stepsHtml}</div>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════
+   ACCEPT
+   API: PUT /api/tailor/orders/:id/update-status
+   Body: { status, note, delivery_date }
+   This same endpoint is called by customer page at
+   PUT /api/orders/:id/update-status — backend must
+   handle both routes and update the shared order doc.
+══════════════════════════════════════════════ */
+function openAcceptModal(id) {
+  currentOrderId = id;
+  document.getElementById('deliveryDate').value = '';
+  document.getElementById('acceptNote').value = '';
+  document.getElementById('acceptModal').classList.add('open');
+}
+
+async function confirmAccept() {
+  const date = document.getElementById('deliveryDate').value;
+  if (!date) { showToast('Please select a delivery date'); return; }
+  const note = document.getElementById('acceptNote').value.trim()
+    || `Order accepted. Expected delivery: ${new Date(date).toLocaleDateString('en-IN')}`;
+
+  const { ok } = await api('/api/tailor/orders/' + currentOrderId + '/update-status', {
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ status:'accepted', note, delivery_date: date })
+  });
+  if (ok) { showToast('✅ Order accepted!'); closeModal('acceptModal'); fetchOrders(); }
+  else showToast('Failed to accept order');
+}
+
+/* ══════════════════════════════════════════════
+   REJECT
+══════════════════════════════════════════════ */
+function openRejectModal(id) {
+  currentOrderId = id;
+  document.getElementById('rejectReason').value = '';
+  document.getElementById('rejectModal').classList.add('open');
+}
+
+async function confirmReject() {
+  const reason = document.getElementById('rejectReason').value.trim();
+  if (!reason) { showToast('Please provide a reason'); return; }
+
+  const { ok } = await api('/api/tailor/orders/' + currentOrderId + '/update-status', {
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ status:'cancelled', note: reason })
+  });
+  if (ok) { showToast('Order rejected'); closeModal('rejectModal'); fetchOrders(); }
+  else showToast('Failed to reject order');
+}
+
+/* ══════════════════════════════════════════════
+   UPDATE STATUS
+══════════════════════════════════════════════ */
+function openUpdateModal(id, targetStatus) {
+  currentOrderId = id;
+  document.getElementById('newStatus').value = targetStatus;
+  document.getElementById('updateNote').value = '';
+  document.getElementById('updateModal').classList.add('open');
+}
+
+async function confirmUpdate() {
+  const status = document.getElementById('newStatus').value;
+  const note   = document.getElementById('updateNote').value.trim()
+    || `Status updated to ${STATUS_LABELS[status]}`;
+
+  const { ok } = await api('/api/tailor/orders/' + currentOrderId + '/update-status', {
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ status, note })
+  });
+  const msgs = { cutting:'✂️ Cutting started!', stitching:'🪡 Stitching started!', ready:'📦 Marked ready for pickup!' };
+  if (ok) { showToast(msgs[status] || '✅ Updated!'); closeModal('updateModal'); fetchOrders(); }
+  else showToast('Failed to update status');
+}
+
+/* ══════════════════════════════════════════════
+   MARK DELIVERED
+══════════════════════════════════════════════ */
+async function markDelivered(id) {
+  if (!confirm('Mark this order as delivered to customer?')) return;
+  const { ok } = await api('/api/tailor/orders/' + id + '/update-status', {
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ status:'picked_up', note:'Order delivered to customer' })
+  });
+  if (ok) { showToast('🎉 Order marked as delivered!'); fetchOrders(); }
+  else showToast('Failed to update');
+}
+
+/* ── HELPERS ── */
+function closeModal(id) { document.getElementById(id).classList.remove('open') }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+['acceptModal','rejectModal','updateModal'].forEach(id => {
+  document.getElementById(id).addEventListener('click', function(e) {
+    if (e.target === this) closeModal(id);
+  });
+});
+
+window.addEventListener('beforeunload', () => { if (pollingInterval) clearInterval(pollingInterval) });
+
+fetchOrders();
+</script>
+</body>
+</html>
